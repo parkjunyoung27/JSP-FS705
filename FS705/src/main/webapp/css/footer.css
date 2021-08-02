@@ -1,0 +1,20 @@
+@charset "UTF-8";
+#footer {width:100%;background-color:#5499C7;margin:0 auto;text-align:center;clear:both;}
+	#footer .footerText{width:1200px;margin:0 auto;}
+		.footerText .mainFooter{width:100%;overflow:hidden;padding-top:50px;}
+			.mainFooter li{float:left;width:240px;}
+
+		.footerText .sitemap{width:100%;overflow:hidden;padding:40px 0 60px;}
+			.sitemap li{float:left;width:240px;}
+
+		.footerText .copy{width:100%;overflow:hidden;padding-bottom:30px;}
+			.footerText .copy li{float:left;padding-right:7px;color:#eee;}
+				.copy li.c_logo {width:80px;height:32px;}
+					.copy li.c_logo a{display:block;width:100%;height:100%}
+						.copy li.c_logo a img{width:100%;height:100%;}
+				.copy li.sns{float:right;width:168px;height:32px;padding:0;}
+					.copy li.sns p{float:right;width:32px;height:32px;padding-left:10px;}
+						.copy li.sns p a{display:block;width:100%;height:100%;}
+							.copy li.sns p a img{width:100%;height:100%;}
+
+					li.vati {line-height:45px;font-size:14px;}
