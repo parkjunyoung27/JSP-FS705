@@ -2,13 +2,7 @@ package com.FS705.dto;
 
 public class LogDTO {
 	
-	private LogDTO() {}
-	private static LogDTO instance = new LogDTO();
-	public static LogDTO getInstance() {
-		return instance;
-	}
-	
-	private int logNo, no;
+	private int logNo, totalCount;
 	private String logIp, logDate, logTarget, logdId, logEtc, logMethod;
 	
 	public int getLogNo() {
@@ -16,12 +10,6 @@ public class LogDTO {
 	}
 	public void setLogNo(int logNo) {
 		this.logNo = logNo;
-	}
-	public int getNo() {
-		return no;
-	}
-	public void setNo(int no) {
-		this.no = no;
 	}
 	public String getLogIp() {
 		return logIp;
@@ -59,6 +47,13 @@ public class LogDTO {
 	public void setLogMethod(String logMethod) {
 		this.logMethod = logMethod;
 	}
+	public int getTotalCount() {
+		return totalCount;
+	}
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
+	
 	
 	
 }

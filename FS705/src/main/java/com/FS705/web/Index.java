@@ -35,6 +35,7 @@ public class Index extends HttpServlet {
 	}
 	request.setAttribute("page", page);
 	
+	//-----------------log남기기----------------------------------------
 	//Session 불러오기
 	HttpSession session = request.getSession();
 	String id = "";
@@ -42,8 +43,7 @@ public class Index extends HttpServlet {
 		id = (String)session.getAttribute("id");
 	}
 	
-	//-----------------log남기기----------------------------------------
-	LogDTO logDto = LogDTO.getInstance();
+	LogDTO logDto = new LogDTO();
 	
 	logDto.setLogIp(Util.getIP(request));
 	logDto.setLogTarget("index");
