@@ -1,6 +1,7 @@
 package com.FS705.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
@@ -12,12 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
+import com.FS705.dao.LogDAO;
+import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 
-
-/**
- * Servlet implementation class Index
- */
 @WebServlet("/index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -27,12 +26,15 @@ public class Index extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	response.setContentType("text/html;charset=UTF-8");
+
 	//Paging
 	int page = 1;
 	if(request.getParameter("page") != null) {
 		page = Util.str2Int2(request.getParameter("page"));
 	}
-		
+	request.setAttribute("page", page);
+	
 	//Session 불러오기
 	HttpSession session = request.getSession();
 	String id = "";
@@ -40,19 +42,22 @@ public class Index extends HttpServlet {
 		id = (String)session.getAttribute("id");
 	}
 	
-	//log남기기
-	HashMap<String, Object>log = new HashMap<String, Object>();
-	log.put("ip", Util.getIP(request));
-	log.put("id", id);
-	log.put("target", "index");
-	log.put("etc", request.getHeader("User-Agent"));
-	//LogDAO.insertLog(log);
+	//-----------------log남기기----------------------------------------
+	LogDTO logDto = LogDTO.getInstance();
+	
+	logDto.setLogIp(Util.getIP(request));
+	logDto.setLogTarget("index");
+	logDto.setLogdId((String)session.getAttribute(id));
+	logDto.setLogEtc(request.getHeader("User-Agent"));
+	logDto.setLogMethod("get");
+
+	LogDAO.insertLog(logDto);
+	
 	
 	//RD에 붙이기 
 	RequestDispatcher rd = request.getRequestDispatcher("./index.jsp"); // index.jsp가 열리면서 해당 내용이 뜸 
 	rd.forward(request, response);
 	}
-
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
