@@ -3,12 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-    
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Admin Log</title>
+<title>Admin Board</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style type="text/css">
 /*------------------------------- reset css -------------------------------*/
@@ -119,15 +119,7 @@ tr:hover{
 </style>
 <script type="text/javascript">
 
-function select(){
-	//value값을 가져오고 싶다면 ?
-	//alert("!");
-	var ip = document.getElementById("ip").value;
-	var target = document.getElementById("target").value;
-	//값 오는 것이 확인된다면 서블릿을 보내서 해당 ip것만 받도록 합니다.
-	//location.href='admin?ip=' + ip + '&page=' + ${page };
-	location.href='admin?ip='+ip+'&target='+ target + '&page=' + 1;
-	}
+
 </script>
 
 </head>
@@ -136,73 +128,49 @@ function select(){
 	<c:import url="header.jsp"/>
 	<div id="container">
 		<div id="adminMenu">
-			&ensp; <a href='./admin'><b>로그관리</b></a>  | 
+			&ensp; <a href='./admin'>로그관리</a>  | 
 			<a href='./memberm'> 회원 관리</a>  |  
-			<a href='./boardm'>게시글관리</a>
+			<a href='./boardm'><b>게시글관리</b></a>
 		</div>
 		<div id = "adminMain">
-			<h1>로그관리 </h1>
-			<form action="admin" method="get" id ="orderform">
+			<h1>게시글관리 </h1>
+			<form action="boardm" method="get" id ="orderform">
 			<select name="order" id ="order">
 				<option value='old' selected>오래된순</option>
 				<option value='new'>최신순</option>
 			</select>
 			</form>	 
-		
-			<c:choose>
-			<c:when test="${fn:length(list) > 0}">
+					
 			<table>
 				<tr>
-					<th>번호&ensp;<input type="checkbox" name="${l.getLogNo() }" value="${l.getLogNo() } "></th>
-					<th>
-					<select onchange="select()" id="ip">
-					<option value="" selected>ip 선택</option>
-						<c:forEach items="${ipList }" var="i">
-							<c:if test="${i eq ip }"> <!-- ip가 같으면 선택됨  -->
-								<option value="${i }" selected>${i }</option>
-							</c:if>
-							<c:if test="${i ne ip }">
-								<option value="${i }">${i }</option>
-							</c:if>
-						</c:forEach>
-					</select>
-					</th>
+					<th>글번호&ensp;<input type="checkbox" name="${l.getLogNo() }" value="${l.getLogNo() } "></th>
+					<th>카테고리</th>
+					<th>서브카테고리</th>
+					<th>제목</th>
+					<th>내용</th>
 					<th>날짜</th>
-					<th>
-					<select onchange="select()" id="target">
-						<option value="" selected>target 선택</option>
-						<c:forEach items="${targetList }" var="t">
-							<c:if test="${target eq t }">
-								<option value="${t }" selected>${t }</option>
-							</c:if>
-							<c:if test="${target ne t }">
-								<option value="${t }">${t }</option>
-							</c:if>
-						</c:forEach>
-					</select>
-					</th>
-					<th>아이디</th>
-					<th>기타</th>
-					<th>Method</th>
+					<th>조회수</th>
+					<th>회원번호</th>
+					<th>사진파일</th>
+					<th>좋아요</th>
+					<th>싫어요</th>
+					<th>댓글 수</th>
 				</tr> 
+				
 				<c:forEach items='${list }' var="l">
 				<tr>
-					<td>${l.getLogNo() } <input type="checkbox" name="${l.getLogNo() }" value="${l.getLogNo() } "> </td>
-					<td>${l.getLogIp() }</td>
-					<td>${l.getLogDate() }</td>
-					<td>${l.getLogTarget() }</td>
-					<td>
-					<c:choose>
-					<c:when test="${l.getLogdId() != null }">
-					${l.getLogdId() }
-					</c:when>
-					<c:otherwise>
-					null
-					</c:otherwise>
-					</c:choose>
-					</td>		
-					<td>${fn:substring(l.getLogEtc(), 0, 15 )}</td>
-					<td>${l.getLogMethod() }</td>
+					<td>${l.getBno() } <input type="checkbox" name="${l.getBno() }" value="${l.getBno() } "> </td>
+					<td>${l.getBcategory() }</td>
+					<td>${l.getSubCategory() }</td>
+					<td>${l.getBtitle() }</td>
+					<td>${fn:substring(l.getBcontent(), 0, 15 )}</td>
+					<td>${l.getBdate() }</td>
+					<td>${l.getBcount() }</td>
+					<td>${l.getNo() }</td>
+					<td>${l.getBthumbnail() }</td>
+					<td>${l.getBlike() }</td>
+					<td>${l.getBdislike() }</td>
+					<td>${l.getCommentCount() }</td>
 				</tr>				
 				</c:forEach>
 				
@@ -225,20 +193,6 @@ function select(){
 			<button type="submit">검색</button>
 		</form>	 
 
-	<div id="Paging">
-		<c:set var="pageName" value="admin" scope="request"/>
-		<!-- 한 쪽당 데이터 20개씩 나열 -->
-		<c:set var="PAGENUMBER" value="20" scope="request"/> 
-		<!-- 한 쪽당 페이지 10개씩 나열  -->
-		<c:set var="LIMIT" value="5" scope="request"/>
-		<c:import url="paging.jsp"/>
-	</div>
-
-	</c:when>
-	<c:otherwise>
-		<h2>출력할 로그가 없습니다.</h2>
-	</c:otherwise>
-	</c:choose>
 
 	</div>
 	
@@ -248,13 +202,4 @@ function select(){
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
 

@@ -30,9 +30,9 @@ public class Admin extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		//grade가 있어야 됨 grade=9 는 관리자 등급 
-		if((int) session.getAttribute("grade") != 9) {
-			response.sendRedirect("./error");
-		}
+		//if((int) session.getAttribute("grade") != 9) {
+		//	response.sendRedirect("./error");
+		//}
 		
 		//-----------------log남기기----------------------------------------
 		//Session 불러오기
@@ -135,11 +135,17 @@ public class Admin extends HttpServlet {
 		}
 		request.setAttribute("page", page);
 
+		//---------------------- 값 받아오기 --------------------------
 		String searchName = request.getParameter("searchname");//검색 종류
 		String search = request.getParameter("adminsearch");//설치입력값
-		
-		ArrayList<LogDTO> logList = logDao.search(searchName, search, page);
-		
+
+		ArrayList<LogDTO> logList = null;
+		if(searchName.equals("all")) {
+			logList = logDao.searchAll(searchName, search, (page-1)*20);
+		}
+		else {
+		logList = logDao.search(searchName, search, (page-1)*20);
+		}
 		RequestDispatcher rd = request.getRequestDispatcher("admin.jsp");
 		request.setAttribute("list", logList);
 		

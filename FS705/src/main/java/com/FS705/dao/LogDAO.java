@@ -218,12 +218,15 @@ public class LogDAO {
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;	
-		String sql = "SELECT (SELECT count(*) FROM log WHERE log"
-				+searchName
+		System.out.println(searchName);
+	//	System.out.println(search);
+		String sql = "SELECT (SELECT count(*) FROM log WHERE "
+				+ searchName
 				+" LIKE CONCAT('%',?,'%')) as totalcount, "
-				+"logNo, logIp, logDate, logId, logEtc, logTarget "
-				+"FROM log WHERE log"+searchName
+				+"logNo, logIp, logDate, logId, logEtc, logTarget ,logMethod"
+				+" FROM log WHERE " + searchName
 				+" LIKE CONCAT('%',?,'%') limit ?, 20";
+		 
 		//where 0 은 전체가 나온다 
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -251,4 +254,42 @@ public class LogDAO {
 		return list;
 	}
 
+	
+
+
+	public ArrayList<LogDTO> searchAll(String searchName, String search, int page) {
+		ArrayList<LogDTO> list = new ArrayList<LogDTO>();
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		String sql = "SELECT(SELECT count(*) FROM log WHERE MATCH(logIp, logId, logEtc, logTarget, logMethod) "
+				+ "AGAINST(? IN BOOLEAN MODE)) as totalcount, logNo, logIp, logDate, logId, logEtc, logTarget, logMethod "
+				+ "FROM log WHERE MATCH(logIp, logId, logEtc, logTarget, logMethod) " 
+				+ "AGAINST(? IN BOOLEAN MODE) limit ?,20;";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, search);
+			pstmt.setString(2, search);
+			pstmt.setInt(3, page);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				LogDTO dto = new LogDTO();
+				dto.setLogNo(rs.getInt("logNo"));
+				dto.setLogIp(rs.getString("logIp"));
+				dto.setLogDate(rs.getString("logDate"));
+				dto.setLogTarget(rs.getString("logTarget"));
+				dto.setLogdId(rs.getString("logId"));
+				dto.setLogEtc(rs.getString("logEtc"));
+				dto.setLogMethod(rs.getString("logMethod"));
+				dto.setTotalCount(rs.getInt("totalcount"));
+				list.add(dto);
+				}	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
+		}
+		return list;
+	}
 }

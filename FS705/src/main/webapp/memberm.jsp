@@ -3,12 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-    
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Admin Log</title>
+<title>Admin Member</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style type="text/css">
 /*------------------------------- reset css -------------------------------*/
@@ -83,7 +83,7 @@ h1{ /* 제목*/
 
 tr:hover{
 	transition: 1s;
-	transition-delay: 0.5s;
+	transition-delay: 0.5s; 
 	background-color: #D0E5E0;
 }
 
@@ -115,29 +115,24 @@ tr:hover{
 #dbutton{
 	margin: 10px 50px;
 }
-
 </style>
 <script type="text/javascript">
 
 function select(){
-	//value값을 가져오고 싶다면 ?
-	//alert("!");
-	var ip = document.getElementById("ip").value;
-	var target = document.getElementById("target").value;
-	//값 오는 것이 확인된다면 서블릿을 보내서 해당 ip것만 받도록 합니다.
-	//location.href='admin?ip=' + ip + '&page=' + ${page };
-	location.href='admin?ip='+ip+'&target='+ target + '&page=' + 1;
+	var grade = document.getElementById("grade").value;
+	var gender = document.getElementById("gender").value;
+	location.href='memberm?grade='+grade+'&gender='+gender+'&page=' + 1;
 	}
 </script>
-
 </head>
+
 <body>
 <div id="wrapper">
 	<c:import url="header.jsp"/>
 	<div id="container">
 		<div id="adminMenu">
-			&ensp; <a href='./admin'><b>로그관리</b></a>  | 
-			<a href='./memberm'> 회원 관리</a>  |  
+			&ensp; <a href='./admin'>로그관리</a>  | 
+			<a href='./memberm'><b>회원 관리</b></a>  |  
 			<a href='./boardm'>게시글관리</a>
 		</div>
 		<div id = "adminMain">
@@ -154,55 +149,57 @@ function select(){
 			<table>
 				<tr>
 					<th>번호&ensp;<input type="checkbox" name="${l.getLogNo() }" value="${l.getLogNo() } "></th>
-					<th>
-					<select onchange="select()" id="ip">
-					<option value="" selected>ip 선택</option>
-						<c:forEach items="${ipList }" var="i">
-							<c:if test="${i eq ip }"> <!-- ip가 같으면 선택됨  -->
-								<option value="${i }" selected>${i }</option>
-							</c:if>
-							<c:if test="${i ne ip }">
-								<option value="${i }">${i }</option>
-							</c:if>
-						</c:forEach>
-					</select>
-					</th>
-					<th>날짜</th>
-					<th>
-					<select onchange="select()" id="target">
-						<option value="" selected>target 선택</option>
-						<c:forEach items="${targetList }" var="t">
-							<c:if test="${target eq t }">
-								<option value="${t }" selected>${t }</option>
-							</c:if>
-							<c:if test="${target ne t }">
-								<option value="${t }">${t }</option>
-							</c:if>
-						</c:forEach>
-					</select>
-					</th>
+					<th>이름</th>
 					<th>아이디</th>
-					<th>기타</th>
-					<th>Method</th>
+					<th>패스워드</th>
+					<th><c:out value="${gender }"></c:out>
+					<select onchange="select()" id="gender">
+					<option value="" selected>성별 전체</option>
+						<c:forEach items="${genderList}" var="g">
+							<c:if test="${g eq gender }"> <!-- ip가 같으면 선택됨  -->
+								<option value="${g }" selected>${g }</option>
+							</c:if>
+							<c:if test="${g ne gender }">
+								<option value="${g }">${g }</option>
+							</c:if>
+						</c:forEach>
+					</select>
+					</th>
+					<th>이메일</th>
+					<th>가입일</th>
+					<th>생일</th>
+					<th><c:out value="${grade }"></c:out>
+					<select onchange="select()" id="grade">
+					<option value="" selected>등급 전체</option>
+						<c:forEach items="${gradeList}" var="g">
+							<c:if test="${g eq grade }"> <!-- ip가 같으면 선택됨  -->
+								<option value="${g }" selected>${g }</option>
+							</c:if>
+							<c:if test="${g ne grade }">
+								<option value="${g }">${g }</option>
+							</c:if>
+						</c:forEach>
+					</select>
+					</th>
+					<th>힌트</th>
+					<th>답</th>
+					<th>사진</th>
 				</tr> 
+				
 				<c:forEach items='${list }' var="l">
 				<tr>
-					<td>${l.getLogNo() } <input type="checkbox" name="${l.getLogNo() }" value="${l.getLogNo() } "> </td>
-					<td>${l.getLogIp() }</td>
-					<td>${l.getLogDate() }</td>
-					<td>${l.getLogTarget() }</td>
-					<td>
-					<c:choose>
-					<c:when test="${l.getLogdId() != null }">
-					${l.getLogdId() }
-					</c:when>
-					<c:otherwise>
-					null
-					</c:otherwise>
-					</c:choose>
-					</td>		
-					<td>${fn:substring(l.getLogEtc(), 0, 15 )}</td>
-					<td>${l.getLogMethod() }</td>
+					<td>${l.getNo() } <input type="checkbox" name="${l.getNo() }" value="${l.getNo() } "> </td>
+					<td>${l.getName() }</td>
+					<td>${l.getId() }</td>
+					<td>${l.getPw() }</td>
+					<td>${l.getSex() }</td>
+					<td>${l.getEmail() }</td>
+					<td>${l.getJoindate() }</td>
+					<td>${l.getBirthdate() }</td>
+					<td>${l.getGrade() }</td>
+					<td>${l.getHint() }</td>
+					<td>${l.getHintAnswer() }</td>
+					<td>${l.getProfile() }</td>
 				</tr>				
 				</c:forEach>
 				
@@ -248,13 +245,3 @@ function select(){
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
