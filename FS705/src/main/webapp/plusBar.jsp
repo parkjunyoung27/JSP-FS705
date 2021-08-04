@@ -44,7 +44,7 @@ $(function(){
 <body>
 <div id="plusBar">
 	<div id="login">
-		<form action="" method="post">
+		<form action="./login" method="post">
 			<p class="your">
 				<span class="ye_span">아이디</span>			
 				<input type="text" name="id" id="id">
