@@ -30,7 +30,7 @@ public class FoodWrite extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("./foodWrite.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("./food/foodWrite.jsp");
 		rd.forward(request, response);
 	}
 
@@ -38,57 +38,56 @@ public class FoodWrite extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String path = request.getServletContext().getRealPath("/");
-		String savePath = path + "foodUpload/"; // food 파일 저장 경로
+		String savePath = path + "/upload/foodUpload/"; // food 파일 저장 경로
 		int maxSize = 1024 * 1024 * 10; // 파일 업로드 사이즈 설정
 
 		MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8",
 				new DefaultFileRenamePolicy());
 
-		if (request.getSession().getAttribute("id") != null && request.getSession().getAttribute("name") != null) {
-			int test = 1;
-			if (test == 1) {
-				String title = Util.replace(multi.getParameter("title"));
-				String content = Util.replace(multi.getParameter("content"));
-				String subCategory = multi.getParameter("subCategory");
-				String saveFile = null;
-				String thumbnail = null;
-				if (multi.getOriginalFileName("file1") != null) {
-					saveFile = multi.getFilesystemName("file1"); // 파일 저장 이름
+//		if (request.getSession().getAttribute("id") != null && request.getSession().getAttribute("name") != null) {
+		int test = 1;
+		if (test == 1) {
+			String title = Util.replace(multi.getParameter("title"));
+			String content = Util.replace(multi.getParameter("content"));
+			String subCategory = multi.getParameter("semiCate");
+			String saveFile = null;
+			String thumbnail = null;
+			if (multi.getOriginalFileName("file1") != null) {
+				saveFile = multi.getFilesystemName("file1"); // 파일 저장 이름
 
-					thumbnail = path + "foodThumbnail/";
-					BufferedImage inputImg = ImageIO.read(new File(savePath + saveFile));
+				thumbnail = path + "/upload/foodThumbnail/";
+				BufferedImage inputImg = ImageIO.read(new File(savePath + saveFile));
 
-					int width = 240;
-					int height = 180;
+				int width = 240;
+				int height = 180;
 
-					String[] imgs = { "png", "gif", "jpg", "jpeg" };
-					for (String format : imgs) {
-						BufferedImage outputImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+				String[] imgs = { "png", "gif", "jpg", "jpeg" };
+				for (String format : imgs) {
+					BufferedImage outputImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
-						Graphics2D gr2d = outputImg.createGraphics();
-						gr2d.drawImage(inputImg, 0, 0, width, height, null);
+					Graphics2D gr2d = outputImg.createGraphics();
+					gr2d.drawImage(inputImg, 0, 0, width, height, null);
 
-						// 파일쓰기
-						File thumb = new File(thumbnail + saveFile);
-						FileOutputStream fos = new FileOutputStream(thumb);
-						ImageIO.write(outputImg, format, thumb);
-						fos.close();
-					}
+					// 파일쓰기
+					File thumb = new File(thumbnail + saveFile);
+					FileOutputStream fos = new FileOutputStream(thumb);
+					ImageIO.write(outputImg, format, thumb);
+					fos.close();
 				}
-				FoodBoardDTO dto = new FoodBoardDTO();
-				dto.setId((String) request.getSession().getAttribute("id"));
-				dto.setBtitle(title);
-				dto.setBcontent(content);
-				dto.setSubCategory(subCategory);
-				dto.setBfile(saveFile);
+			}
+			FoodBoardDTO dto = new FoodBoardDTO();
+			dto.setId((String) request.getSession().getAttribute("id"));
+			dto.setBtitle(title);
+			dto.setBcontent(content);
+			dto.setSubCategory(subCategory);
+			dto.setBfile(saveFile);
 
-				int result = FoodBoardDAO.getInstance().boardWrite(dto);
+			int result = FoodBoardDAO.getInstance().boardWrite(dto);
 
-				if (result == 1) {
-					response.sendRedirect("./foodBoard");
-				} else {
-					response.sendRedirect("./error?code=foodWriteError1");
-				}
+			if (result == 1) {
+				response.sendRedirect("./foodBoard");
+			} else {
+				response.sendRedirect("./error?code=foodWriteError1");
 			}
 
 		} else if (multi.getParameter("title") == null && multi.getParameter("content") == null) {

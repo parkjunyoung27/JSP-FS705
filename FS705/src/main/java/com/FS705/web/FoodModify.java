@@ -30,7 +30,7 @@ public class FoodModify extends HttpServlet {
 		// id = (String) request.getSession().getAttribute("id");
 		String id = "an";
 		FoodBoardDTO modifyImport = FoodBoardDAO.getInstance().modifyImport(Util.str2Int(request.getParameter("bno")), id);		
-		RequestDispatcher rd = request.getRequestDispatcher("./foodModify.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("./food/foodModify.jsp");
 		request.setAttribute("modifyImport", modifyImport);
 		rd.forward(request, response);
 	}else {
@@ -43,7 +43,7 @@ public class FoodModify extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String path = request.getServletContext().getRealPath("/");
-		String savePath = path + "foodUpload/"; // food 파일 저장 경로
+		String savePath = path + "./upload/foodUpload/"; // food 파일 저장 경로
 		int maxSize = 1024 * 1024 * 10; //파일 업로드 사이즈 설정
 		
 		MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8", new DefaultFileRenamePolicy());
@@ -56,7 +56,7 @@ public class FoodModify extends HttpServlet {
 			int bno = Util.str2Int(multi.getParameter("bno"));
 			String title = Util.replace(multi.getParameter("title"));
 			String content = Util.replace(multi.getParameter("content"));
-			String subCategory = multi.getParameter("subCategory");
+			String subCategory = multi.getParameter("semiCate");
 //			String saveFile = null;
 //			String thumbnail = null;
 //			if(multi.getOriginalFileName("file1") != null && multi.getOriginalFileName("file1") != multi.getOriginalFileName("file2")) {

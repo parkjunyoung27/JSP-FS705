@@ -53,7 +53,7 @@ public class Util {
 		content = content.replaceAll(">", "&gt;"); //html처리
 		content = content.replaceAll("<", "&lt;");
 		content = content.replaceAll("/", "&#47;");
-		content = content.replaceAll("\n", "<br>;"); // 엔터키 처리
+		content = content.replaceAll("\n", "<br>"); // 엔터키 처리 <br>; -> <br> 수정 (엔터키 처리시 ; 추가되어 수정) 
 				
 		return content;
 	}
