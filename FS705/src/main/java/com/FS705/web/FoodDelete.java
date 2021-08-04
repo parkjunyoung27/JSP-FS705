@@ -30,7 +30,7 @@ public class FoodDelete extends HttpServlet {
 			int bno = Util.str2Int(request.getParameter("bno"));
 			result = FoodBoardDAO.getInstance().FoodDelete(bno, id);
 			if(result == 1) {
-				response.sendRedirect("./foodBoard.jsp");
+				response.sendRedirect("./foodBoard");
 			} else {
 				response.sendRedirect("./error?code=foodDeleteError1");				
 			}

@@ -20,7 +20,7 @@ public class FoodBoard extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 RequestDispatcher rd = request.getRequestDispatcher("./foodBoard.jsp");	
+		 RequestDispatcher rd = request.getRequestDispatcher("./food/foodBoard.jsp");	
 		 request.setAttribute("dto", FoodBoardDAO.getInstance().boardList());
 		 rd.forward(request, response); 
 	}

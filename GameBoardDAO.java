@@ -7,33 +7,30 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.FS705.db.DBConnection;
-import com.FS705.dto.FoodBoardDTO;
-import com.FS705.dto.FoodCommentDTO;
+import com.FS705.dto.GameBoardDTO;
 import com.FS705.util.Util;
 
-public class FoodBoardDAO {
-	private FoodBoardDAO() {		
+public class GameBoardDAO {
+	private GameBoardDAO() {	
 	}
-	private static FoodBoardDAO instance = new FoodBoardDAO();
+	private static GameBoardDAO instance = new GameBoardDAO();
 	
-	public static FoodBoardDAO getInstance() {
+	public static GameBoardDAO getInstance() {
 		return instance;
 	}
-	public ArrayList<FoodBoardDTO> boardList(){
-		ArrayList<FoodBoardDTO> boardList = new ArrayList<FoodBoardDTO>();		
+	public ArrayList<GameBoardDTO> boardList(){
+		ArrayList<GameBoardDTO> boardList = new ArrayList<GameBoardDTO>();		
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM foodboardview";
+		String sql = "SELECT * FROM gameboardview";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
 			if(rs != null ) {
 				while(rs.next()) {
-					FoodBoardDTO dto = new FoodBoardDTO();
-					dto.setFoodboardcount(rs.getInt("foodboardcount"));
-					dto.setFoodcommentcount(rs.getInt("foodcommentcount"));
+					GameBoardDTO dto = new GameBoardDTO();
 					dto.setBno(rs.getInt("bno"));
 					dto.setBtitle(rs.getString("btitle"));
 					dto.setSubCategory(rs.getString("subCategory"));
@@ -59,22 +56,21 @@ public class FoodBoardDAO {
 		
 		return boardList;		
 	}
-	public FoodBoardDTO boardView(int bno) {
-		FoodBoardDTO view = null;
+	
+	public GameBoardDTO boardView(int bno) {
+		GameBoardDTO view = null;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM foodboardview WHERE bno=?";
+		String sql = "SELECT * FROM gameboardview WHERE bno=?";
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, bno);
 			rs = pstmt.executeQuery();
 			if(rs != null) {
-				view = new FoodBoardDTO();
+				view = new GameBoardDTO();
 				if(rs.next()) {
-					view.setFoodboardcount(rs.getInt("foodboardcount"));
-					view.setFoodcommentcount(rs.getInt("foodcommentcount"));
 					view.setBno(rs.getInt("bno"));
 					view.setBtitle(rs.getString("btitle"));
 					view.setBcontent(rs.getString("bcontent"));
@@ -95,19 +91,19 @@ public class FoodBoardDAO {
 		}		
 		return view;
 	}
-	public int boardWrite(FoodBoardDTO dto) {
+	
+	public int boardWrite(GameBoardDTO dto) {
 		int result = 0;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		String sql = "INSERT INTO board (bcategory, btitle, bcontent, no, subCategory, bfile)"
-				+ "VALUES ('food', ?, ?,(SELECT no FROM member WHERE id=?), ?, ?)" ;
+				+ "VALUES ('game', ?, ?,(SELECT no FROM member WHERE id=?), ?, ?)" ;
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getBtitle());
 			pstmt.setString(2, dto.getBcontent());
-			//pstmt.setString(3, dto.getId());
-			pstmt.setString(3, "an");
+			pstmt.setString(3, dto.getId());
 			pstmt.setString(4, dto.getSubCategory());
 			pstmt.setString(5, dto.getBfile());
 			result = pstmt.executeUpdate();
@@ -118,8 +114,8 @@ public class FoodBoardDAO {
 		}		
 		return result;
 	}
-	public FoodBoardDTO modifyImport(int bno, String id) {
-		FoodBoardDTO modifyImport = null;
+	public GameBoardDTO modifyImport(int bno, String id) {
+		GameBoardDTO modifyImport = null;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -133,7 +129,7 @@ public class FoodBoardDAO {
 			rs = pstmt.executeQuery();
 			if(rs != null) {
 				if(rs.next()) {
-					modifyImport = new FoodBoardDTO();
+					modifyImport = new GameBoardDTO();
 					modifyImport.setBno(rs.getInt("bno"));
 					modifyImport.setBtitle(rs.getString("btitle"));
 					modifyImport.setBcontent(rs.getString("bcontent"));
@@ -147,7 +143,7 @@ public class FoodBoardDAO {
 		}				
 		return modifyImport;				
 	}
-	public int modifyContent(FoodBoardDTO dto) {
+	public int modifyContent(GameBoardDTO dto) {
 		int result = 0;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -168,7 +164,7 @@ public class FoodBoardDAO {
 		}				
 		return result;
 	}
-	public int FoodDelete(int bno, String id) {
+	public int GameDelete(int bno, String id) {
 		int result = 0;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -185,41 +181,5 @@ public class FoodBoardDAO {
 			Util.closeAll(null, pstmt, conn);			
 		}		
 		return result;
-	}
-	
-	public ArrayList<FoodCommentDTO> boardCommentList(int bno) {
-		ArrayList<FoodCommentDTO> cmt = new ArrayList<FoodCommentDTO>();
-		Connection conn = DBConnection.dbconn();
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String sql = "SELECT * FROM comment WHERE bno=?";
-		
-		try {
-			pstmt=conn.prepareStatement(sql);
-			pstmt.setInt(1, bno);
-			rs = pstmt.executeQuery();
-			
-			if(rs != null) {
-				while(rs.next()) {
-					FoodCommentDTO dto = new FoodCommentDTO();
-					dto.setBno(rs.getInt("bno"));
-					dto.setCno(rs.getInt("cno"));					
-					dto.setCcontent(rs.getString("ccontent"));
-					dto.setCip(rs.getString("cip"));
-					dto.setNo(rs.getInt("no"));
-					dto.setClike(rs.getInt("clike"));
-					dto.setCdislike(rs.getInt("cdislike"));
-					//cmtdto.setId(rs.getString("id"));
-					//cmtdto.setName(rs.getString("name"));
-					cmt.add(dto);
-				}				
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			Util.closeAll(rs, pstmt, conn);
-		}
-		return cmt;
 	}	
 }
