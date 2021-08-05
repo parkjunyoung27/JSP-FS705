@@ -28,7 +28,7 @@ public class FoodDelete extends HttpServlet {
 			int result = 0;
 			String id = "an";
 			int bno = Util.str2Int(request.getParameter("bno"));
-			result = FoodBoardDAO.getInstance().FoodDelete(bno, id);
+			result = FoodBoardDAO.getInstance().boardDelete(bno, id);
 			if(result == 1) {
 				response.sendRedirect("./foodBoard");
 			} else {

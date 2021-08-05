@@ -16,27 +16,30 @@ import com.FS705.dto.FoodBoardDTO;
 import com.FS705.dto.FoodCommentDTO;
 import com.FS705.util.Util;
 
-@WebServlet("/foodDetail")
-public class FoodDetail extends HttpServlet {
+@WebServlet("/foodView")
+public class FoodView extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public FoodDetail() {
+    public FoodView() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0) {
-		RequestDispatcher rd = request.getRequestDispatcher("./food/foodDetail.jsp");
-		FoodBoardDTO dto = FoodBoardDAO.getInstance().boardView(Util.str2Int(request.getParameter("bno")));
+		RequestDispatcher rd = request.getRequestDispatcher("./food/foodView.jsp");		
+		//게시글 조회수 카운트
+		FoodBoardDAO.getInstance().boardViewCount(Util.str2Int(request.getParameter("bno")));
+		FoodBoardDTO dto = FoodBoardDAO.getInstance().boardView(Util.str2Int(request.getParameter("bno")));		
 		request.setAttribute("dto", dto);
 		//댓글 존재하면 불러오기
 		if(dto.getFoodcommentcount()>0) {
 			ArrayList<FoodCommentDTO> cmtdto = FoodCommentDAO.getInstance().boardCommentList((dto.getBno()));
 			request.setAttribute("cmtdto", cmtdto);			
 		}
+		
 		rd.forward(request, response);
 		} else {
-			response.sendRedirect("./error?code=foodDetailError");
+			response.sendRedirect("./error?code=foodViewError");
 		}
 	}
 

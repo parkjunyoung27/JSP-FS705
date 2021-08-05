@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import com.FS705.db.DBConnection;
 import com.FS705.dto.FoodBoardDTO;
-import com.FS705.dto.FoodCommentDTO;
 import com.FS705.util.Util;
 
 public class FoodBoardDAO {
@@ -118,7 +117,7 @@ public class FoodBoardDAO {
 		}		
 		return result;
 	}
-	public FoodBoardDTO modifyImport(int bno, String id) {
+	public FoodBoardDTO boardModifyImport(int bno, String id) {
 		FoodBoardDTO modifyImport = null;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -147,7 +146,7 @@ public class FoodBoardDAO {
 		}				
 		return modifyImport;				
 	}
-	public int modifyContent(FoodBoardDTO dto) {
+	public int boardModifyContent(FoodBoardDTO dto) {
 		int result = 0;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -168,7 +167,7 @@ public class FoodBoardDAO {
 		}				
 		return result;
 	}
-	public int FoodDelete(int bno, String id) {
+	public int boardDelete(int bno, String id) {
 		int result = 0;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -186,40 +185,36 @@ public class FoodBoardDAO {
 		}		
 		return result;
 	}
-	
-	public ArrayList<FoodCommentDTO> boardCommentList(int bno) {
-		ArrayList<FoodCommentDTO> cmt = new ArrayList<FoodCommentDTO>();
+	public void boardViewCount(int bno) {	
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String sql = "SELECT * FROM comment WHERE bno=?";
-		
+		String sql = "UPDATE board SET bcount=bcount+1 WHERE bno=?";
+	
 		try {
-			pstmt=conn.prepareStatement(sql);
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, bno);
-			rs = pstmt.executeQuery();
-			
-			if(rs != null) {
-				while(rs.next()) {
-					FoodCommentDTO dto = new FoodCommentDTO();
-					dto.setBno(rs.getInt("bno"));
-					dto.setCno(rs.getInt("cno"));					
-					dto.setCcontent(rs.getString("ccontent"));
-					dto.setCip(rs.getString("cip"));
-					dto.setNo(rs.getInt("no"));
-					dto.setClike(rs.getInt("clike"));
-					dto.setCdislike(rs.getInt("cdislike"));
-					//cmtdto.setId(rs.getString("id"));
-					//cmtdto.setName(rs.getString("name"));
-					cmt.add(dto);
-				}				
-			}
-			
+			pstmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			Util.closeAll(rs, pstmt, conn);
-		}
-		return cmt;
-	}	
+			Util.closeAll(null, pstmt, conn);			
+		}		
+	}
+	public int boardViewVote(int bno, String vote) {
+		int result = 0;
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		String sql = "UPDATE board SET "+vote+"="+vote+"+1 WHERE bno=?";
+	
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Util.closeAll(null, pstmt, conn);			
+		}			
+		return result;		
+	}
 }

@@ -29,7 +29,7 @@ public class FoodModify extends HttpServlet {
 		//&& request.getSession().getAttribute("id")){
 		// id = (String) request.getSession().getAttribute("id");
 		String id = "an";
-		FoodBoardDTO modifyImport = FoodBoardDAO.getInstance().modifyImport(Util.str2Int(request.getParameter("bno")), id);		
+		FoodBoardDTO modifyImport = FoodBoardDAO.getInstance().boardModifyImport(Util.str2Int(request.getParameter("bno")), id);		
 		RequestDispatcher rd = request.getRequestDispatcher("./food/foodModify.jsp");
 		request.setAttribute("modifyImport", modifyImport);
 		rd.forward(request, response);
@@ -43,7 +43,7 @@ public class FoodModify extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String path = request.getServletContext().getRealPath("/");
-		String savePath = path + "./upload/foodUpload/"; // food 파일 저장 경로
+		String savePath = path + "upload/foodUpload/"; // food 파일 저장 경로
 		int maxSize = 1024 * 1024 * 10; //파일 업로드 사이즈 설정
 		
 		MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8", new DefaultFileRenamePolicy());
@@ -89,7 +89,7 @@ public class FoodModify extends HttpServlet {
 			dto.setSubCategory(subCategory);
 			dto.setId(id);			
 			
-			result = FoodBoardDAO.getInstance().modifyContent(dto);
+			result = FoodBoardDAO.getInstance().boardModifyContent(dto);
 			if(result == 1) {
 //			RequestDispatcher rd = request.getRequestDispatcher("./foodDetail?bno="+bno);
 //			rd.forward(request, response);
