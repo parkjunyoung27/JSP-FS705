@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>welcome</title>
+<link rel="icon" href="img/favi.png"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style type="text/css">
 /*------------------------------- reset css -------------------------------*/
