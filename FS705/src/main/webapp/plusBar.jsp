@@ -44,6 +44,14 @@ $(function(){
 <body>
 <div id="plusBar">
 	<div id="login">
+		<c:choose>
+		<c:when test="${sessionScope.id ne null}">
+		Lv. ${sessionScope.grade }
+		${sessionScope.name }<small>(${sessionScope.id })</small> 님<br> 
+		어서오세요.<br>
+		<button onclick="location='./logout'" name="logout">로그아웃</button>
+		</c:when>
+		<c:otherwise>
 		<form action="./login" method="post">
 			<p class="your">
 				<span class="ye_span">아이디</span>			
@@ -54,8 +62,10 @@ $(function(){
 				<input type="password" name="pw" id="pw">
 			</p>
 			<button type="submit" class="submit">로그인</button>
-			<p class="newCrew"><a href="">ID/PW 찾기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="">회원가입</a></p>
+			<p class="newCrew"><a href="">ID/PW 찾기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="./join.jsp">회원가입</a></p>
 		</form>
+		</c:otherwise>
+		</c:choose>
 	</div>
 </div>
 <div id="goToTop" onclick="window.scrollTo(0,0);">▲<br>TOP</div>

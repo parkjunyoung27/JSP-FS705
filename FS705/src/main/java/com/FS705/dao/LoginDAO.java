@@ -12,12 +12,12 @@ public class LoginDAO {
 	//싱글턴
 	private LoginDAO(){}
 	
-	public static LoginDAO instance = new LoginDAO(); 
+	private static LoginDAO instance = new LoginDAO(); 
 	
 	public static LoginDAO getInstance() {
 		return instance;
 	}
-	//로그인 기능S
+	//로그인 기능
 	public LoginDTO login(LoginDTO dto) {
 		//dto
 		LoginDTO login = new LoginDTO();
