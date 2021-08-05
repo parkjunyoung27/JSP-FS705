@@ -55,8 +55,8 @@ $(function(){
 			<h2><img alt="맛집" src="./img/food.png"> 맛집</h2>
 			<!-- 구간반복지점 -->
 			<c:forEach items="${dto }" var="dto">
-				<ul class="main" onclick="location.href=''">
-					<li class="title"><a href="foodDetail?bno=${dto.bno }">[${dto.subCategory }] ${dto.btitle }  [${dto.foodcommentcount }]</a></li>
+				<ul class="main" onclick="">
+					<li class="title"><a href="foodView?bno=${dto.bno }">[${dto.subCategory }] ${dto.btitle }  [${dto.foodcommentcount }]</a></li>
 					<li>${dto.id }(${dto.name })</li>					
 					<li><img alt="좋아요" src="./img/like.png"> ${dto.blike }</li>
 					<li>${dto.bdate }</li>
