@@ -26,10 +26,6 @@
 </style>
 <script>
 $(function(){
-
-	$("#submit").click(function(){
-		history.back();
-	   });
 	$("input").focus(function(){
 		$(this).prev("span").css({"top":"5px", "font-size":"12px"});
 	});
@@ -59,7 +55,7 @@ $(function(){
 		<c:when test="${sessionScope.id ne null}">
 		Lv. ${sessionScope.grade }
 		${sessionScope.name }<small>(${sessionScope.id })</small> 님<br> 
-		어서오세요.<br>
+		어서오세요.
 		<button onclick="location='./logout'" name="logout">로그아웃</button>
 		</c:when>
 		<c:otherwise>
