@@ -63,8 +63,49 @@ public class Boardm extends HttpServlet {
 		
 		//첫화면 일때  grade 아직 설정 안할 때 
 		boardList = BoardDAO.boardList((page-1) * 20);
+		String category = request.getParameter("category");
+		String subCategory = request.getParameter("subCategory");  
 		
+		//첫화면 일때  category, subCategory 아직 설정 안할 때 
+		if(request.getParameter("category") == null 
+				&& request.getParameter("subCategory") == null) {
+			boardList = BoardDAO.boardList((page-1) * 20);
+		}
+		//ip와 target이 전체가 선택될때 
+		else if(request.getParameter("category") == "" 
+				&& request.getParameter("subCategory") == "") {
+			boardList = BoardDAO.boardList((page-1) * 20);
+		
+		//ip와 target 둘 다 null값이 아닐때 
+		}else if(request.getParameter("category") != "" 
+				&& request.getParameter("subCategory") != "") {
+			boardList = BoardDAO.selectCategorySub(category, subCategory,(page-1) * 20);
+			
+		//ip값만 null이 아닐때 
+		}else if(request.getParameter("category") != ""
+				&& request.getParameter("subCategory") == "") {
+			boardList = BoardDAO.selectCategory(category, (page-1) * 20);
+		//target값만 null이 아닐때 
+		}else if(request.getParameter("category") != ""
+				&& request.getParameter("subCategory") == "") {
+			boardList = BoardDAO.selectSubCategory(subCategory, (page-1) * 20);
+		}
 		request.setAttribute("list", boardList);
+		
+		
+		//옵션에 붙을 목록 설정
+		ArrayList<String> categoryList = BoardDAO.optionList("bcategory");
+		request.setAttribute("categoryList", categoryList);
+		ArrayList<String> subCategoryList = BoardDAO.optionList("subCategory");
+		request.setAttribute("subCategoryList", subCategoryList);
+		//category, target 값 
+		request.setAttribute("category", request.getParameter("category")); // ip 
+		request.setAttribute("subCategory", request.getParameter("subCategory")); // ip 
+
+		//total
+		if(boardList != null && boardList.size() > 0) {
+			request.setAttribute("totalCount", boardList.get(0).getTotalCount());
+		}
 		
 		//RD에 붙이기 
 		RequestDispatcher rd = request.getRequestDispatcher("./boardm.jsp"); // index.jsp가 열리면서 해당 내용이 뜸 	

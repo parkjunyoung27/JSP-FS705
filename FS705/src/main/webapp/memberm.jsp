@@ -194,7 +194,7 @@ function select(){
 					<td>${l.getPw() }</td>
 					<td>${l.getSex() }</td>
 					<td>${l.getEmail() }</td>
-					<td>${l.getJoindate() }</td>
+					<td>${fn:substring(l.getJoindate(), 0, 19 )}</td>
 					<td>${l.getBirthdate() }</td>
 					<td>${l.getGrade() }</td>
 					<td>${l.getHint() }</td>
@@ -208,6 +208,11 @@ function select(){
 				 <button type="submit">선택 삭제</button>			
 				 <button type="submit">전체 삭제</button>	
 			</div>		 
+			</c:when>
+				<c:otherwise>
+					<h2>출력할 로그가 없습니다.</h2>
+				</c:otherwise>
+			</c:choose>
 		</div>
 		&emsp;&emsp;전체 글 수 : ${totalCount } 개 / 현재 페이지 : ${page }	
 		
@@ -231,11 +236,6 @@ function select(){
 		<c:import url="paging.jsp"/>
 	</div>
 
-	</c:when>
-	<c:otherwise>
-		<h2>출력할 로그가 없습니다.</h2>
-	</c:otherwise>
-	</c:choose>
 
 	</div>
 	

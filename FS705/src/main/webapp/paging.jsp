@@ -9,8 +9,8 @@
 <%//System.out.println("페이징에 넘어간 target:"+request.getParameter("target")); %>
 
 <c:choose>
-	<c:when test="${ip ne null || target ne null}">
-		<c:set var = "pageName" value="${pageName }?ip=${ip }&target=${target }&" scope="request"/>
+	<c:when test="${ip ne null || target ne null || searchname ne null}">
+		<c:set var = "pageName" value="${pageName }?ip=${ip }&target=${target }&searchname=${searchname }&adminsearch=${adminsearch }&" scope="request"/>
 	</c:when>
 	<c:otherwise>
 		<c:set var = "pageName" value="${pageName }?" scope="request"/>	

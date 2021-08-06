@@ -2,7 +2,7 @@ package com.FS705.dto;
 
 public class BoardDTO {
 
-	private int bno, bcount, no, blike, bdislike, commentCount;
+	private int bno, bcount, no, blike, bdislike, commentCount, totalCount;
 	
 	private String btitle, bcontent, bcategory, bdate, bthumbnail, subCategory, bfile;
 
@@ -110,6 +110,15 @@ public class BoardDTO {
 		this.bfile = bfile;
 	}
 
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
+	}
+
+	
 
 	
 }

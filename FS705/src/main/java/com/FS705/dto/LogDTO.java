@@ -1,9 +1,12 @@
 package com.FS705.dto;
 
+import java.util.Date;
+
 public class LogDTO {
 	
 	private int logNo, totalCount;
-	private String logIp, logDate, logTarget, logdId, logEtc, logMethod;
+	private String logIp, logTarget, logdId, logEtc, logMethod;
+	private Date logDate;
 	
 	public int getLogNo() {
 		return logNo;
@@ -17,10 +20,11 @@ public class LogDTO {
 	public void setLogIp(String logIp) {
 		this.logIp = logIp;
 	}
-	public String getLogDate() {
+	
+	public Date getLogDate() {
 		return logDate;
 	}
-	public void setLogDate(String logDate) {
+	public void setLogDate(Date logDate) {
 		this.logDate = logDate;
 	}
 	public String getLogTarget() {

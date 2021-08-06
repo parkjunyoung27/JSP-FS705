@@ -116,10 +116,29 @@ tr:hover{
 	margin: 10px 50px;
 }
 
+#searchBox{ width:720px; height:480px; border:5px solid #5499C7; position:absolute; 
+         left:50%; top:50%; transform:translate(-50%, -50%);
+         box-shadow:10px 10px 10px rgba(0,0,0,0.5);
+         padding:10px;
+         background-color:white;
+         z-index:99;
+         display:none;
+         overflow:auto;
+      }
+.searchResult{width:100%;height:34px;border-bottom:1px solid #eee;border-right:1px solid #eee;cursor:pointer;transition:0.3s;}
+
+#searchBack{width:100%; height:100%; background-color:rgba(0,0,0,0.5); position:fixed; left:0; top:0;z-index:98;display:none;}
+
+             
 </style>
 <script type="text/javascript">
 
-
+function select(){
+	var category = document.getElementById("category").value;
+	var subCategory = document.getElementById("subCategory").value;
+	location.href='boardm?category='+category+'&subCategory='+ subCategory + '&page=' + 1;
+	}
+	
 </script>
 
 </head>
@@ -140,45 +159,93 @@ tr:hover{
 				<option value='new'>최신순</option>
 			</select>
 			</form>	 
+			
+			<c:choose>
+				<c:when test="${fn:length(list) > 0 }">
+				<table>
+					<tr>
+						<th>글번호&ensp;<input type="checkbox" name="${l.getLogNo() }" value="${l.getLogNo() } "></th>
+						<th>카테고리
+							<select onchange="select()" id="category">
+								<option value="" selected>카테고리</option>
+								<c:forEach items="${categoryList }" var="c">
+									<c:if test="${category eq c }">
+										<option value="${c }" selected>${c }</option>
+									</c:if>
+									<c:if test="${category ne c }">
+										<option value="${c }">${c }</option>
+									</c:if>
+								</c:forEach>
+							</select>
+						</th>
+						<th>서브카테고리
+						<c:choose>
+						<c:when test="${category ne '' }">
+							<select onchange="select()" id="subCategory">
+								<option value="" selected>target 선택</option>
+								<c:forEach items="${subCategoryList }" var="s">
+									<c:if test="${subCategory eq s }">
+										<option value="${t }" selected>${s }</option>
+									</c:if>
+									<c:if test="${subCategory ne s }">
+										<option value="${s }">${s }</option>
+									</c:if>
+								</c:forEach>
+							</select>
+						</c:when>	
+						<c:otherwise>
+							<select onchange="select()" id="subCategory" disabled>
+								<option value="" selected>target 선택</option>
+								<c:forEach items="${subCategoryList }" var="s">
+									<c:if test="${subCategory eq s }">
+										<option value="${t }" selected>${s }</option>
+									</c:if>
+									<c:if test="${subCategory ne s }">
+										<option value="${s }">${s }</option>
+									</c:if>
+								</c:forEach>
+							</select>
+						</c:otherwise>
+						</c:choose>
+						</th>
+						<th>제목</th>
+						<th>내용</th>
+						<th>날짜</th>
+						<th>조회수</th>
+						<th>회원번호</th>
+						<th>사진파일</th>
+						<th>좋아요</th>
+						<th>싫어요</th>
+						<th>댓글 수</th>
+					</tr> 
 					
-			<table>
-				<tr>
-					<th>글번호&ensp;<input type="checkbox" name="${l.getLogNo() }" value="${l.getLogNo() } "></th>
-					<th>카테고리</th>
-					<th>서브카테고리</th>
-					<th>제목</th>
-					<th>내용</th>
-					<th>날짜</th>
-					<th>조회수</th>
-					<th>회원번호</th>
-					<th>사진파일</th>
-					<th>좋아요</th>
-					<th>싫어요</th>
-					<th>댓글 수</th>
-				</tr> 
-				
-				<c:forEach items='${list }' var="l">
-				<tr>
-					<td>${l.getBno() } <input type="checkbox" name="${l.getBno() }" value="${l.getBno() } "> </td>
-					<td>${l.getBcategory() }</td>
-					<td>${l.getSubCategory() }</td>
-					<td>${l.getBtitle() }</td>
-					<td>${fn:substring(l.getBcontent(), 0, 15 )}</td>
-					<td>${l.getBdate() }</td>
-					<td>${l.getBcount() }</td>
-					<td>${l.getNo() }</td>
-					<td>${l.getBthumbnail() }</td>
-					<td>${l.getBlike() }</td>
-					<td>${l.getBdislike() }</td>
-					<td>${l.getCommentCount() }</td>
-				</tr>				
-				</c:forEach>
-				
-			</table>
-			<div id="dbutton">
-				 <button type="submit">선택 삭제</button>			
-				 <button type="submit">전체 삭제</button>	
-			</div>		 
+					<c:forEach items='${list }' var="l">
+					<tr onclick="test()">
+						<td>${l.getBno() } <input type="checkbox" name="${l.getBno() }" value="${l.getBno() } "> </td>
+						<td>${l.getBcategory() }</td>
+						<td>${l.getSubCategory() }</td>
+						<td>${l.getBtitle() }</td>
+						<td>${fn:substring(l.getBcontent(), 0, 15 )}</td>
+						<td>${fn:substring(l.getBdate(), 0, 19 )}</td>
+						<td>${l.getBcount() }</td>
+						<td>${l.getNo() }</td>
+						<td>${l.getBthumbnail() }</td>
+						<td>${l.getBlike() }</td>
+						<td>${l.getBdislike() }</td>
+						<td>${l.getCommentCount() }</td>
+					</tr>				
+					</c:forEach>
+					
+				</table>
+				<div id="dbutton">
+					 <button type="submit">선택 삭제</button>			
+					 <button type="submit">전체 삭제</button>	
+				</div>		 
+				</c:when>
+				<c:otherwise>
+				  <h2>출력할 로그가 없습니다.</h2>
+				</c:otherwise>
+			</c:choose>		
 		</div>
 		&emsp;&emsp;전체 글 수 : ${totalCount } 개 / 현재 페이지 : ${page }	
 		
@@ -193,13 +260,24 @@ tr:hover{
 			<button type="submit">검색</button>
 		</form>	 
 
+		<div id="Paging">
+			<c:set var="pageName" value="admin" scope="request"/>
+			<!-- 한 쪽당 데이터 20개씩 나열 -->
+			<c:set var="PAGENUMBER" value="20" scope="request"/> 
+			<!-- 한 쪽당 페이지 10개씩 나열  -->
+			<c:set var="LIMIT" value="5" scope="request"/>
+			<c:import url="paging.jsp"/>
+		</div>
 
 	</div>
 	
 	<c:import url="plusBar.jsp"/>
 	<c:import url="footer.jsp"/>
 </div>
-
+<div id="searchBack">
+</div>
+<div id="searchBox">
+</div>
 </body>
 </html>
 

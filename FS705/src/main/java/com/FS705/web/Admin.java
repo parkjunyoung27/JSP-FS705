@@ -30,12 +30,11 @@ public class Admin extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		//grade가 있어야 됨 grade=9 는 관리자 등급 
-		//if((int) session.getAttribute("grade") != 9) {
-		//	response.sendRedirect("./error");
-		//}
+		if((int) session.getAttribute("grade") != 9) {
+			response.sendRedirect("./error");
+		}
 		
 		//-----------------log남기기----------------------------------------
-		//Session 불러오기
 		String id = "";
 		if(session.getAttribute(id) != null) {
 			id = (String)session.getAttribute("id");
@@ -49,8 +48,6 @@ public class Admin extends HttpServlet {
 		logDto.setLogEtc(request.getHeader("User-Agent"));
 		logDto.setLogMethod("get");
 		LogDAO.insertLog(logDto);
-		
-		ArrayList<LogDTO> logList = null;
 
 		//Paging
 		int page = 1; //페이지 기본값 설정
@@ -59,35 +56,78 @@ public class Admin extends HttpServlet {
 		} // 페이지 있으면 파라미터값에 저장
 		request.setAttribute("page", page); //페이지 보내기
 
+		String order = request.getParameter("order");
+		String ip = (String)request.getParameter("ip");
+		String target = (String)request.getParameter("target");
+		String searchName =(String) request.getParameter("searchname");
+		String search = (String)request.getParameter("adminsearch");
 		
-		//첫화면 일때  ip, target 아직 설정 안할 때 
-		if(request.getParameter("ip") == null 
-				&& request.getParameter("target") == null) {
-		logList = logDao.loglist((page-1) * 20);
+		request.setAttribute("order",request.getParameter("order"));
+		
+		String orderSql = "";
+		if(order != null) {
+			if(order.equals("DESC")) {
+				orderSql = "ORDER BY logNo DESC";							
+			}
 		}
-		//ip와 target이 전체가 선택될때 
-		else if(request.getParameter("ip") == "" 
-				&& request.getParameter("target") == "") {
-		logList = logDao.loglist((page-1) * 20);
 		
-		//ip와 target 둘 다 null값이 아닐때 
-		}else if(request.getParameter("ip") != "" 
-				&& request.getParameter("target") != "") {
-			String ip = request.getParameter("ip");
-			String target = request.getParameter("target");
-			logList = logDao.selectIpTarget(ip, target,(page-1) * 20);
+		System.out.println(order);
+		ArrayList<LogDTO> logList = null;
+	//초기화면 모든 검색,옵션 선택 안할때  	
+		if(searchName == null) {	
+			if(ip == null && target == null && searchName == null && search == null) {
+				logList = logDao.loglist((page-1) * 20,  orderSql);
+			}
+		}else {//검색,옵션 셀렉트 할 때
+			if(searchName.equals("all")) { //전체검색 할 때
+				System.out.println("전체검색");
+					//검색 폼만 누를 때 
+				if(ip.equals("")&& target.equals("")&& search.equals("")){
+					logList = logDao.loglist((page-1) * 20, orderSql);
+				//ip 선택시
+				}else if(!ip.equals("")&& target.equals("") && search.equals("")){				
+					logList = logDao.selectIP(ip, (page-1) * 20, orderSql);
+				}else if(ip.equals("")&& !target.equals("") && search.equals("")){				
+					logList = logDao.selectTarget(target, (page-1) * 20,orderSql);
+				}else if(!ip.equals("")&& !target.equals("") && search.equals("")){				
+					logList = logDao.selectIpTarget(ip, target, (page-1) * 20,orderSql);
+				}else if(ip.equals("")&& target.equals("") && !search.equals("")){				
+					logList = logDao.searchAll(searchName, search, (page-1) * 20,orderSql);
+				}else if(!ip.equals("")&& target.equals("") && !search.equals("")){				
+					logList = logDao.searchAllIp(searchName, search, ip,(page-1) * 20,orderSql);
+				}else if(ip.equals("")&& !target.equals("") && !search.equals("")){				
+					logList = logDao.searchAllTarget(searchName, search, target, (page-1) * 20,orderSql);
+				}else if(!ip.equals("")&& !target.equals("") && !search.equals("")){				
+					logList = logDao.searchAllIpTarget(searchName, search, ip, target, (page-1) * 20,orderSql);
+				}
 			
-		//ip값만 null이 아닐때 
-		}else if(request.getParameter("ip") != ""
-				&& request.getParameter("target") == "") {
-			String ip = request.getParameter("ip");
-			logList = logDao.selectIP(ip, (page-1) * 20);
-		//target값만 null이 아닐때 
-		}else if(request.getParameter("target") != ""
-				&& request.getParameter("ip") == "") {
-			String target = request.getParameter("target");
-			logList = logDao.selectTarget(target, (page-1) * 20);
+			}else {//전체검색 아닐 때
+				//검색값 입력 안할 때
+				if(search.equals("")) {
+					if(ip.equals("")&& target.equals("")){
+						logList = logDao.loglist(page,orderSql);
+					}else if(!ip.equals("")&& target.equals("")){
+						logList = logDao.selectIP(ip, (page-1) * 20,orderSql);
+					}else if(ip.equals("")&& !target.equals("")){
+						logList = logDao.selectTarget(target, (page-1) * 20,orderSql);
+					}else if(!ip.equals("")&& !target.equals("")){
+						logList = logDao.selectIpTarget(ip, target, (page-1) * 20,orderSql);
+					}
+					
+				}else {//검색값이 들어갈 때 
+					if(ip.equals("")&& target.equals("")){
+						logList = logDao.search(searchName, search, page,orderSql);
+					}else if(!ip.equals("")&& target.equals("")){
+						logList = logDao.searchIp(searchName, search, ip, (page-1) * 20,orderSql);
+					}else if(ip.equals("")&& !target.equals("")){
+						logList = logDao.searchTarget(searchName, search, target, (page-1) * 20,orderSql);
+					}else if(!ip.equals("")&& !target.equals("")){
+						logList = logDao.searchBoth(searchName, search, ip, target,  (page-1) * 20,orderSql);
+								}
+					}		
+			}
 		}
+		
 		request.setAttribute("list", logList); // log리스트		
 		
 		//옵션에 붙을 ip 목록
@@ -100,18 +140,18 @@ public class Admin extends HttpServlet {
 		//ip, target 보내기
 		request.setAttribute("ip", request.getParameter("ip")); // ip 
 		request.setAttribute("target", request.getParameter("target")); //target
+		request.setAttribute("searchname", request.getParameter("searchname")); //target
+		request.setAttribute("adminsearch", request.getParameter("adminsearch")); //target
 		
 		//totalcount 계산
 		if(logList != null && logList.size() > 0) {
 			request.setAttribute("totalCount", logList.get(0).getTotalCount());
 		}
-		
+	
 		//RD에 붙이기 
 		RequestDispatcher rd = request.getRequestDispatcher("./admin.jsp"); // index.jsp가 열리면서 해당 내용이 뜸 	
 		rd.forward(request, response);
-		}
-		
-	
+	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
@@ -134,28 +174,22 @@ public class Admin extends HttpServlet {
 			page = Util.str2Int(request.getParameter("page"));
 		}
 		request.setAttribute("page", page);
+				
+		int sum = 0;
+		String[] numbers = null;
 
-		//---------------------- 값 받아오기 --------------------------
-		String searchName = request.getParameter("searchname");//검색 종류
-		String search = request.getParameter("adminsearch");//설치입력값
-
-		ArrayList<LogDTO> logList = null;
-		if(searchName.equals("all")) {
-			logList = logDao.searchAll(searchName, search, (page-1)*20);
+		if(request.getParameter("check") == null) {
+			System.out.println("삭제할것이 없습니다.");
+		}else {
+		numbers = request.getParameterValues("check");
+			for (String string : numbers) {
+				int number = Util.str2Int(string);
+				int result = LogDAO.deleteLog(number);
+				sum += result;
+			}
+			System.out.println(sum+"개 로그 삭제!!!");
+			response.sendRedirect("./admin");
 		}
-		else {
-		logList = logDao.search(searchName, search, (page-1)*20);
-		}
-		RequestDispatcher rd = request.getRequestDispatcher("admin.jsp");
-		request.setAttribute("list", logList);
-		
-		//totalount
-		if(logList != null && logList.size()>0) {
-			request.setAttribute("totalCount", logList.get(0).getTotalCount());
-		}
-		
-		rd.forward(request, response);
-
 	}
 
 }
