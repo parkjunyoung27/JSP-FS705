@@ -52,7 +52,6 @@ public class Boardm extends HttpServlet {
 		logDto.setLogMethod("get");
 		LogDAO.insertLog(logDto);
 		
-		ArrayList<BoardDTO> boardList = null;
 
 		//Paging
 		int page = 1; //페이지 기본값 설정
@@ -60,11 +59,16 @@ public class Boardm extends HttpServlet {
 			page = Util.str2Int(request.getParameter("page"));
 		} // 페이지 있으면 파라미터값에 저장
 		request.setAttribute("page", page); //페이지 보내기
-		
+
 		//첫화면 일때  grade 아직 설정 안할 때 
-		boardList = BoardDAO.boardList((page-1) * 20);
+		String order = request.getParameter("order");
 		String category = request.getParameter("category");
 		String subCategory = request.getParameter("subCategory");  
+		String searchType =(String) request.getParameter("searchType");
+		String searchText = (String)request.getParameter("searchText");
+		
+		ArrayList<BoardDTO> boardList = null;
+		boardList = BoardDAO.boardList((page-1) * 20);
 		
 		//첫화면 일때  category, subCategory 아직 설정 안할 때 
 		if(request.getParameter("category") == null 
@@ -98,9 +102,12 @@ public class Boardm extends HttpServlet {
 		request.setAttribute("categoryList", categoryList);
 		ArrayList<String> subCategoryList = BoardDAO.optionList("subCategory");
 		request.setAttribute("subCategoryList", subCategoryList);
+		
 		//category, target 값 
 		request.setAttribute("category", request.getParameter("category")); // ip 
 		request.setAttribute("subCategory", request.getParameter("subCategory")); // ip 
+		request.setAttribute("searchType", request.getParameter("searchType")); // ip 
+		request.setAttribute("searchText", request.getParameter("searchText")); // ip 
 
 		//total
 		if(boardList != null && boardList.size() > 0) {
@@ -134,6 +141,22 @@ public class Boardm extends HttpServlet {
 			page = Util.str2Int(request.getParameter("page"));
 		}
 		request.setAttribute("page", page);
+		
+		int sum = 0;
+		String[] numbers = null;
+		if(request.getParameter("check") == null) {
+			System.out.println("삭제할 것이 없습니다.");
+		}else {
+			numbers=request.getParameterValues("check");
+			for(String string : numbers) {
+				int number = Util.str2Int(string);
+				int result = BoardDAO.delete(number);
+				sum += result;
+			}
+			System.out.println(sum+"개 글 삭제!!");
+			response.sendRedirect("./boardm");
+			
+		}
 	}
-
+	
 }

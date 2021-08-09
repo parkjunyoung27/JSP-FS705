@@ -124,12 +124,13 @@ tr:hover{
 		var order = document.getElementById("order").value;
 		var ip = document.getElementById("ip").value;
 		var target = document.getElementById("target").value;
-		var searchname = document.getElementById("searchname").value;
-		var adminsearch = document.getElementById("adminsearch").value;
+		var searchType = document.getElementById("searchType").value;
+		var searchText = document.getElementById("searchText").value;
 		//값 오는 것이 확인된다면 서블릿을 보내서 해당 ip것만 받도록 합니다.
 		//location.href='admin?ip=' + ip + '&page=' + ${page };
 		//location.href='admin?ip='+ip+'&target='+ target+'&'+searchname+'='+adminsearch+'&page=' + 1;
-		location.href='admin?order='+order+'&ip='+ip+'&target='+ target+'&searchname='+searchname+'&adminsearch='+adminsearch+'&page=' + 1;
+		location.href='admin?order='+order+'&ip='+ip+'&target='+ target+'&searchType='+searchType
+				+'&searchText='+searchText+'&page=' + 1;
 		}
 		
 	function checkSelectAll()  {
@@ -291,13 +292,13 @@ tr:hover{
 			<input type="hidden" name="order" value="${order }" >
 			<input type="hidden" name="ip" value="${ip }" >
 			<input type="hidden" name="target" value="${target }" >
-			<select name="searchname" id="searchname">
+			<select name="searchType" id="searchType">
 				<option value='all' selected>전체</option>
 				<option value='logIp'>ip</option>
 				<option value='logTarget'>target</option>
 				<option value='logEtc'>etc</option>
 			</select>
-			<input type="text" name="adminsearch" id="adminsearch" value="${adminsearch}">
+			<input type="text" name="searchText" id="searchText" value="${searchText}">
 			<button type="submit">검색</button>
 			<input type="hidden" name="page" value="${page }" >
 		</form>	 

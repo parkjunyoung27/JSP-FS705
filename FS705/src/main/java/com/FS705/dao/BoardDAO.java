@@ -214,6 +214,25 @@ public class BoardDAO {
 		return list;
 	}
 
+
+	public static int delete(int number) {
+		int result = 0;
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		String sql = "DELETE FROM board WHERE bno = ? ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, number);
+			result = pstmt.executeUpdate();
+			System.out.println("게시글이 삭제 됐습니다.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(null, pstmt, conn);
+		}
+		return result;
+	}
 	
 	
 }

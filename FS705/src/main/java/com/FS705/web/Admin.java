@@ -30,9 +30,9 @@ public class Admin extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		//grade가 있어야 됨 grade=9 는 관리자 등급 
-		if((int) session.getAttribute("grade") != 9) {
-			response.sendRedirect("./error");
-		}
+//		if((int) session.getAttribute("grade") != 9) {
+//			response.sendRedirect("./error");
+//		}
 		
 		//-----------------log남기기----------------------------------------
 		String id = "";
@@ -49,6 +49,12 @@ public class Admin extends HttpServlet {
 		logDto.setLogMethod("get");
 		LogDAO.insertLog(logDto);
 
+		String order = request.getParameter("order");
+		String ip = (String)request.getParameter("ip");
+		String target = (String)request.getParameter("target");
+		String searchType =(String) request.getParameter("searchType");
+		String searchText = (String)request.getParameter("searchText");
+
 		//Paging
 		int page = 1; //페이지 기본값 설정
 		if(request.getParameter("page") != null) {
@@ -56,11 +62,6 @@ public class Admin extends HttpServlet {
 		} // 페이지 있으면 파라미터값에 저장
 		request.setAttribute("page", page); //페이지 보내기
 
-		String order = request.getParameter("order");
-		String ip = (String)request.getParameter("ip");
-		String target = (String)request.getParameter("target");
-		String searchName =(String) request.getParameter("searchname");
-		String search = (String)request.getParameter("adminsearch");
 		
 		request.setAttribute("order",request.getParameter("order"));
 		
@@ -71,39 +72,41 @@ public class Admin extends HttpServlet {
 			}
 		}
 		
+		
 		System.out.println(order);
 		ArrayList<LogDTO> logList = null;
+		
 	//초기화면 모든 검색,옵션 선택 안할때  	
-		if(searchName == null) {	
-			if(ip == null && target == null && searchName == null && search == null) {
+		if(searchType == null) {	
+			if(ip == null && target == null && searchType == null && searchText == null) {
 				logList = logDao.loglist((page-1) * 20,  orderSql);
 			}
 		}else {//검색,옵션 셀렉트 할 때
-			if(searchName.equals("all")) { //전체검색 할 때
+			if(searchType.equals("all")) { //전체검색 할 때
 				System.out.println("전체검색");
 					//검색 폼만 누를 때 
-				if(ip.equals("")&& target.equals("")&& search.equals("")){
+				if(ip.equals("")&& target.equals("")&& searchText.equals("")){
 					logList = logDao.loglist((page-1) * 20, orderSql);
 				//ip 선택시
-				}else if(!ip.equals("")&& target.equals("") && search.equals("")){				
+				}else if(!ip.equals("")&& target.equals("") && searchText.equals("")){				
 					logList = logDao.selectIP(ip, (page-1) * 20, orderSql);
-				}else if(ip.equals("")&& !target.equals("") && search.equals("")){				
+				}else if(ip.equals("")&& !target.equals("") && searchText.equals("")){				
 					logList = logDao.selectTarget(target, (page-1) * 20,orderSql);
-				}else if(!ip.equals("")&& !target.equals("") && search.equals("")){				
+				}else if(!ip.equals("")&& !target.equals("") && searchText.equals("")){				
 					logList = logDao.selectIpTarget(ip, target, (page-1) * 20,orderSql);
-				}else if(ip.equals("")&& target.equals("") && !search.equals("")){				
-					logList = logDao.searchAll(searchName, search, (page-1) * 20,orderSql);
-				}else if(!ip.equals("")&& target.equals("") && !search.equals("")){				
-					logList = logDao.searchAllIp(searchName, search, ip,(page-1) * 20,orderSql);
-				}else if(ip.equals("")&& !target.equals("") && !search.equals("")){				
-					logList = logDao.searchAllTarget(searchName, search, target, (page-1) * 20,orderSql);
-				}else if(!ip.equals("")&& !target.equals("") && !search.equals("")){				
-					logList = logDao.searchAllIpTarget(searchName, search, ip, target, (page-1) * 20,orderSql);
+				}else if(ip.equals("")&& target.equals("") && !searchText.equals("")){				
+					logList = logDao.searchAll(searchType, searchText, (page-1) * 20,orderSql);
+				}else if(!ip.equals("")&& target.equals("") && !searchText.equals("")){				
+					logList = logDao.searchAllIp(searchType, searchText, ip,(page-1) * 20,orderSql);
+				}else if(ip.equals("")&& !target.equals("") && !searchText.equals("")){				
+					logList = logDao.searchAllTarget(searchType, searchText, target, (page-1) * 20,orderSql);
+				}else if(!ip.equals("")&& !target.equals("") && !searchText.equals("")){				
+					logList = logDao.searchAllIpTarget(searchType, searchText, ip, target, (page-1) * 20,orderSql);
 				}
 			
 			}else {//전체검색 아닐 때
 				//검색값 입력 안할 때
-				if(search.equals("")) {
+				if(searchText.equals("")) {
 					if(ip.equals("")&& target.equals("")){
 						logList = logDao.loglist(page,orderSql);
 					}else if(!ip.equals("")&& target.equals("")){
@@ -116,13 +119,13 @@ public class Admin extends HttpServlet {
 					
 				}else {//검색값이 들어갈 때 
 					if(ip.equals("")&& target.equals("")){
-						logList = logDao.search(searchName, search, page,orderSql);
+						logList = logDao.search(searchType, searchText, page,orderSql);
 					}else if(!ip.equals("")&& target.equals("")){
-						logList = logDao.searchIp(searchName, search, ip, (page-1) * 20,orderSql);
+						logList = logDao.searchIp(searchType, searchText, ip, (page-1) * 20,orderSql);
 					}else if(ip.equals("")&& !target.equals("")){
-						logList = logDao.searchTarget(searchName, search, target, (page-1) * 20,orderSql);
+						logList = logDao.searchTarget(searchType, searchText, target, (page-1) * 20,orderSql);
 					}else if(!ip.equals("")&& !target.equals("")){
-						logList = logDao.searchBoth(searchName, search, ip, target,  (page-1) * 20,orderSql);
+						logList = logDao.searchBoth(searchType, searchText, ip, target,  (page-1) * 20,orderSql);
 								}
 					}		
 			}
@@ -140,8 +143,8 @@ public class Admin extends HttpServlet {
 		//ip, target 보내기
 		request.setAttribute("ip", request.getParameter("ip")); // ip 
 		request.setAttribute("target", request.getParameter("target")); //target
-		request.setAttribute("searchname", request.getParameter("searchname")); //target
-		request.setAttribute("adminsearch", request.getParameter("adminsearch")); //target
+		request.setAttribute("searchType", request.getParameter("searchType")); //target
+		request.setAttribute("searchText", request.getParameter("searchText")); //target
 		
 		//totalcount 계산
 		if(logList != null && logList.size() > 0) {

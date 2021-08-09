@@ -220,27 +220,26 @@ public class LogDAO {
 		return list;
 	}
 
-	public ArrayList<LogDTO> search(String searchName, String search, int page, String orderSql) {
+	public ArrayList<LogDTO> search(String searchType, String searchText, int page, String orderSql) {
 		ArrayList<LogDTO> list = new ArrayList<LogDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;	
-		System.out.println(searchName);
+		System.out.println(searchType);
 	//	System.out.println(search);
 		String sql = "SELECT (SELECT count(*) FROM log WHERE "
-				+ searchName
+				+ searchType
 				+" LIKE CONCAT('%',?,'%')) as totalcount, "
 				+"logNo, logIp, logDate, logId, logEtc, logTarget ,logMethod"
-				+" FROM log WHERE " + searchName
+				+" FROM log WHERE " + searchType
 				+" LIKE CONCAT('%',?,'%') "
 				+ orderSql
 				+ " limit ?, 20";
-		 
 		//where 0 은 전체가 나온다 
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, search);
-			pstmt.setString(2, search);
+			pstmt.setString(1, searchText);
+			pstmt.setString(2, searchText);
 			pstmt.setInt(3, page);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
@@ -262,11 +261,9 @@ public class LogDAO {
 		}
 		return list;
 	}
-
 	
 
-
-	public ArrayList<LogDTO> searchAll(String searchName, String search, int page, String orderSql) {
+	public ArrayList<LogDTO> searchAll(String searchType, String searchText, int page, String orderSql) {
 		ArrayList<LogDTO> list = new ArrayList<LogDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -292,7 +289,7 @@ public class LogDAO {
 		try {
 			pstmt = con.prepareStatement(sql);
 			for(int i = 1; i < 15; i++) {				
-				pstmt.setString(i, search);
+				pstmt.setString(i, searchText);
 			}
 			pstmt.setInt(15, page);
 			rs = pstmt.executeQuery();
@@ -316,12 +313,12 @@ public class LogDAO {
 		return list;
 	}
 
-	public ArrayList<LogDTO> searchTarget(String searchName, String search, String target, int page, String orderSql) {
+	public ArrayList<LogDTO> searchTarget(String searchType, String searchText, String target, int page, String orderSql) {
 		ArrayList<LogDTO> list = new ArrayList<LogDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;	
-		System.out.println(searchName);
+		System.out.println(searchType);
 	//	System.out.println(search);
 		String sql = "SELECT *, (SELECT count(*) FROM log WHERE ?"
 				+" LIKE CONCAT('%',?,'%') AND logTarget= ?) as totalcount "		
@@ -331,11 +328,11 @@ public class LogDAO {
 				+ " limit ?, 20";
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, searchName);
-			pstmt.setString(2, search);
+			pstmt.setString(1, searchType);
+			pstmt.setString(2, searchText);
 			pstmt.setString(3, target);
-			pstmt.setString(4, searchName);
-			pstmt.setString(5, search);
+			pstmt.setString(4, searchType);
+			pstmt.setString(5, searchText);
 			pstmt.setString(6, target);
 			pstmt.setInt(7, page);
 			rs = pstmt.executeQuery();
@@ -359,7 +356,7 @@ public class LogDAO {
 		return list;
 	}
 
-	public ArrayList<LogDTO> searchIp(String searchName, String search, String ip, int page, String orderSql) {
+	public ArrayList<LogDTO> searchIp(String searchType, String searchText, String ip, int page, String orderSql) {
 	
 		ArrayList<LogDTO> list = new ArrayList<LogDTO>();
 		Connection con = DBConnection.dbconn();
@@ -373,11 +370,11 @@ public class LogDAO {
 				+ " limit ?, 20";
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, searchName);
-			pstmt.setString(2, search);
+			pstmt.setString(1, searchType);
+			pstmt.setString(2, searchText);
 			pstmt.setString(3, ip);
-			pstmt.setString(4, searchName);
-			pstmt.setString(5, search);
+			pstmt.setString(4, searchType);
+			pstmt.setString(5, searchText);
 			pstmt.setString(6, ip);
 			pstmt.setInt(7, page);
 			rs = pstmt.executeQuery();
@@ -401,7 +398,7 @@ public class LogDAO {
 		return list;
 	}
 
-	public ArrayList<LogDTO> searchBoth(String searchName, String search, String ip, String target, int page, String orderSql) {
+	public ArrayList<LogDTO> searchBoth(String searchType, String searchText, String ip, String target, int page, String orderSql) {
 		ArrayList<LogDTO> list = new ArrayList<LogDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -414,12 +411,12 @@ public class LogDAO {
 				+ " limit ?, 20";
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, searchName);
-			pstmt.setString(2, search);
+			pstmt.setString(1, searchType);
+			pstmt.setString(2, searchText);
 			pstmt.setString(3, ip);
 			pstmt.setString(4, target);
-			pstmt.setString(5, searchName);
-			pstmt.setString(6, search);
+			pstmt.setString(5, searchType);
+			pstmt.setString(6, searchText);
 			pstmt.setString(7, ip);
 			pstmt.setString(8, target);
 			pstmt.setInt(9, page);
@@ -444,13 +441,12 @@ public class LogDAO {
 		return list;
 	}
 
-	public ArrayList<LogDTO> searchAllIp(String searchName, String search, String ip, int page, String orderSql) {
+	public ArrayList<LogDTO> searchAllIp(String searchType, String searchText, String ip, int page, String orderSql) {
 		ArrayList<LogDTO> list = new ArrayList<LogDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;	
 		String sql = "SELECT *, (SELECT COUNT(*) FROM log WHERE logNo LIKE CONCAT('%',?,'%')"
-				+ " OR logIp LIKE CONCAT('%',?,'%')"
 				+ "	OR logDate LIKE CONCAT('%',?,'%')"
 				+ "	OR logId LIKE CONCAT('%',?,'%')"
 				+ "	OR logEtc LIKE CONCAT('%',?,'%')"
@@ -459,7 +455,6 @@ public class LogDAO {
 				+ " AND logIp= ? )as totalcount"
 				+ "	FROM log" 
 				+ "	WHERE logNo LIKE CONCAT('%',?,'%') "
-				+ "	OR logIp LIKE CONCAT('%',?,'%')"
 				+ "	OR logDate LIKE CONCAT('%',?,'%')"
 				+ "	OR logId LIKE CONCAT('%',?,'%')"
 				+ "	OR logEtc LIKE CONCAT('%',?,'%')"
@@ -472,10 +467,10 @@ public class LogDAO {
 		try {
 			pstmt = con.prepareStatement(sql);
 			for(int i = 1; i < 8; i++) {				
-				pstmt.setString(i, search);}
+				pstmt.setString(i, searchText);}
 			pstmt.setString(8, ip);
 			for(int j = 9; j < 16; j++) {				
-				pstmt.setString(j, search);
+				pstmt.setString(j, searchText);
 			}
 			pstmt.setString(16, ip);
 			pstmt.setInt(17, page);
@@ -500,7 +495,7 @@ public class LogDAO {
 		return list;
 	}
 
-	public ArrayList<LogDTO> searchAllTarget(String searchName, String search, String target, int page, String orderSql) {
+	public ArrayList<LogDTO> searchAllTarget(String searchType, String searchText, String target, int page, String orderSql) {
 		ArrayList<LogDTO> list = new ArrayList<LogDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -528,10 +523,10 @@ public class LogDAO {
 		try {
 			pstmt = con.prepareStatement(sql);
 			for(int i = 1; i < 8; i++) {				
-				pstmt.setString(i, search);}
+				pstmt.setString(i, searchText);}
 			pstmt.setString(8, target);
 			for(int j = 9; j < 16; j++) {				
-				pstmt.setString(j, search);
+				pstmt.setString(j, searchText);
 			}
 			pstmt.setString(16, target);
 			pstmt.setInt(17, page);
@@ -557,7 +552,7 @@ public class LogDAO {
 	}
 	
 
-	public ArrayList<LogDTO> searchAllIpTarget(String searchName, String search, String ip, String target, int page, String orderSql) {
+	public ArrayList<LogDTO> searchAllIpTarget(String searchType, String searchText, String ip, String target, int page, String orderSql) {
 		ArrayList<LogDTO> list = new ArrayList<LogDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -585,11 +580,11 @@ public class LogDAO {
 		try {
 			pstmt = con.prepareStatement(sql);
 			for(int i = 1; i < 8; i++) {				
-				pstmt.setString(i, search);}
+				pstmt.setString(i, searchText);}
 			pstmt.setString(8, target);
 			pstmt.setString(9, ip);
 			for(int j = 10; j < 17; j++) {				
-				pstmt.setString(j, search);
+				pstmt.setString(j, searchText);
 			}
 			pstmt.setString(17, target);
 			pstmt.setString(18, ip);
