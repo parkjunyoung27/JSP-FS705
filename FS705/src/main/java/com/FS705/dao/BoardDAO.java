@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import com.FS705.db.DBConnection;
 import com.FS705.dto.BoardDTO;
-import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 
 public class BoardDAO {
@@ -21,14 +20,16 @@ public class BoardDAO {
 	}
 	
 
-	public static ArrayList<BoardDTO> boardList(int page) {
+	public static ArrayList<BoardDTO> boardList(int page, String orderSql) {
 		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
 		
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql ="SELECT *, (SELECT count(*) FROM board) as totalcount "
-				+ "FROM board LIMIT ?, 20"; //20개씩 가져오기
+				+ "FROM board "
+				+ orderSql
+				+ " LIMIT ?, 20"; //20개씩 가져오기
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, page);
@@ -84,7 +85,7 @@ public class BoardDAO {
 	}
 
 
-	public static ArrayList<BoardDTO> selectCategorySub(String category, String subCategory, int page) {
+	public static ArrayList<BoardDTO> selectCategorySubcategory(String category, String subCategory, int page, String orderSql) {
 		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -92,7 +93,9 @@ public class BoardDAO {
 		String sql ="SELECT *,"
 				+ "(SELECT count(*) FROM board WHERE bcategory=? AND subCategory=?) "
 				+ "as totalcount "
-				+ "FROM board WHERE bcategory=? AND subCategory=? limit ?, 20;" ;	
+				+ "FROM board WHERE bcategory=? AND subCategory=? "
+				+ orderSql
+				+ " limit ?, 20;" ;	
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, category);
@@ -129,7 +132,7 @@ public class BoardDAO {
 	}
 
 
-	public static ArrayList<BoardDTO> selectCategory(String category, int page) {
+	public static ArrayList<BoardDTO> selectCategory(String category, int page, String orderSql) {
 		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -137,7 +140,9 @@ public class BoardDAO {
 		String sql ="SELECT *,"
 				+ "(SELECT count(*) FROM board WHERE bcategory=? ) "
 				+ "as totalcount "
-				+ "FROM board WHERE bcategory=? limit ?, 20;" ;	
+				+ "FROM board WHERE bcategory=? " 
+				+ orderSql
+				+ " limit ?, 20;" ;	
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, category);
@@ -172,7 +177,7 @@ public class BoardDAO {
 	}
 
 
-	public static ArrayList<BoardDTO> selectSubCategory(String subCategory, int page) {
+	public static ArrayList<BoardDTO> selectSubcategory(String subCategory, int page, String orderSql) {
 		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -180,7 +185,9 @@ public class BoardDAO {
 		String sql ="SELECT *,"
 				+ "(SELECT count(*) FROM board WHERE subCategory=? ) "
 				+ "as totalcount "
-				+ "FROM board WHERE subCategory=? limit ?, 20;" ;	
+				+ "FROM board WHERE subCategory=? "
+				+ orderSql
+				+ " limit ?, 20;" ;	
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, subCategory);
@@ -233,8 +240,525 @@ public class BoardDAO {
 		}
 		return result;
 	}
+
+
+	public static ArrayList<String> subCatgoryList(String view) {
+		ArrayList<String> list = null;
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT DISTINCT subCategory FROM " + view;
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if( rs != null) {
+				list = new ArrayList<String>();
+			}while(rs.next()) {
+				list.add(rs.getString("subCategory"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+
+	public static ArrayList<BoardDTO> searchAll(String searchType, String searchText, int page, String orderSql) {
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		String sql = "SELECT *, (SELECT COUNT(*) FROM board "
+				+ "WHERE bno LIKE CONCAT('%',?,'%')"
+				+ " OR btitle LIKE CONCAT('%',?,'%')"
+				+ "	OR bcontent LIKE CONCAT('%',?,'%')"
+				+ "	OR bdate LIKE CONCAT('%',?,'%')"
+				+ "	OR bcount LIKE CONCAT('%',?,'%')"
+				+ "	OR no LIKE CONCAT('%',?,'%')"
+				+ "	OR bcategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bthumbnail LIKE CONCAT('%',?,'%')"
+				+ "	OR subCategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bfile LIKE CONCAT('%',?,'%')"
+				+ "	OR blike LIKE CONCAT('%',?,'%')"
+				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
+				+ "	OR commentCount LIKE CONCAT('%',?,'%'))as totalcount"
+				+ "	FROM board" 
+				+ "	WHERE bno LIKE CONCAT('%',?,'%') "
+				+ " OR btitle LIKE CONCAT('%',?,'%')"
+				+ "	OR bcontent LIKE CONCAT('%',?,'%')"
+				+ "	OR bdate LIKE CONCAT('%',?,'%')"
+				+ "	OR bcount LIKE CONCAT('%',?,'%')"
+				+ "	OR no LIKE CONCAT('%',?,'%')"
+				+ "	OR bcategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bthumbnail LIKE CONCAT('%',?,'%')"
+				+ "	OR subCategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bfile LIKE CONCAT('%',?,'%')"
+				+ "	OR blike LIKE CONCAT('%',?,'%')"
+				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
+				+ "	OR commentCount LIKE CONCAT('%',?,'%')"
+				+ orderSql
+				+ " limit ?, 20";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			for(int i = 1; i < 27; i++) {				
+				pstmt.setString(i, searchText);
+			}
+			pstmt.setInt(27, page);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBno(rs.getInt("bno"));
+				dto.setBtitle(rs.getString("btitle"));
+				dto.setBcontent(rs.getString("bcontent"));
+				dto.setBdate(rs.getString("bdate"));
+				dto.setBcount(rs.getInt("bcount"));
+				dto.setNo(rs.getInt("no"));
+				dto.setBcategory(rs.getString("bcategory"));
+				dto.setBthumbnail(rs.getString("bthumbnail"));
+				dto.setSubCategory(rs.getString("subCategory"));
+				dto.setBfile(rs.getString("bfile"));
+				dto.setBlike(rs.getInt("blike"));
+				dto.setBdislike(rs.getInt("bdislike"));
+				dto.setCommentCount(rs.getInt("commentCount"));
+				dto.setTotalCount(rs.getInt("totalcount"));
+				list.add(dto);
+				}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
+		}
+		return list;
+		}
+
+	public static ArrayList<BoardDTO> searchAllCategory(String searchType, String searchText, String category, int page,
+			String orderSql) {
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		String sql = "SELECT *, (SELECT COUNT(*) FROM board "
+				+ "WHERE bno LIKE CONCAT('%',?,'%')"
+				+ " OR btitle LIKE CONCAT('%',?,'%')"
+				+ "	OR bcontent LIKE CONCAT('%',?,'%')"
+				+ "	OR bdate LIKE CONCAT('%',?,'%')"
+				+ "	OR bcount LIKE CONCAT('%',?,'%')"
+				+ "	OR no LIKE CONCAT('%',?,'%')"
+				+ "	OR bcategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bthumbnail LIKE CONCAT('%',?,'%')"
+				+ "	OR subCategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bfile LIKE CONCAT('%',?,'%')"
+				+ "	OR blike LIKE CONCAT('%',?,'%')"
+				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
+				+ "	OR commentCount LIKE CONCAT('%',?,'%') AND bcategory = ? )as totalcount"
+				+ "	FROM board" 
+				+ "	WHERE bno LIKE CONCAT('%',?,'%') "
+				+ " OR btitle LIKE CONCAT('%',?,'%')"
+				+ "	OR bcontent LIKE CONCAT('%',?,'%')"
+				+ "	OR bdate LIKE CONCAT('%',?,'%')"
+				+ "	OR bcount LIKE CONCAT('%',?,'%')"
+				+ "	OR no LIKE CONCAT('%',?,'%')"
+				+ "	OR bcategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bthumbnail LIKE CONCAT('%',?,'%')"
+				+ "	OR subCategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bfile LIKE CONCAT('%',?,'%')"
+				+ "	OR blike LIKE CONCAT('%',?,'%')"
+				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
+				+ "	OR commentCount LIKE CONCAT('%',?,'%') AND bcategory = ? "
+				+ orderSql
+				+ " limit ?, 20";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			for(int i = 1; i < 14; i++) {				
+				pstmt.setString(i, searchText);
+			}
+			pstmt.setString(14, category);
+			for(int i = 15; i < 28; i++) {				
+				pstmt.setString(i, searchText);
+			}
+			pstmt.setString(28, category);
+			pstmt.setInt(29, page);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBno(rs.getInt("bno"));
+				dto.setBtitle(rs.getString("btitle"));
+				dto.setBcontent(rs.getString("bcontent"));
+				dto.setBdate(rs.getString("bdate"));
+				dto.setBcount(rs.getInt("bcount"));
+				dto.setNo(rs.getInt("no"));
+				dto.setBcategory(rs.getString("bcategory"));
+				dto.setBthumbnail(rs.getString("bthumbnail"));
+				dto.setSubCategory(rs.getString("subCategory"));
+				dto.setBfile(rs.getString("bfile"));
+				dto.setBlike(rs.getInt("blike"));
+				dto.setBdislike(rs.getInt("bdislike"));
+				dto.setCommentCount(rs.getInt("commentCount"));
+				dto.setTotalCount(rs.getInt("totalcount"));
+				list.add(dto);
+				}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
+		}
+		return list;
+		}
+
+
+	public static ArrayList<BoardDTO> searchAllSubcategory(String searchType, String searchText, String subCategory,
+			int page, String orderSql) {
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		String sql = "SELECT *, (SELECT COUNT(*) FROM board "
+				+ "WHERE bno LIKE CONCAT('%',?,'%')"
+				+ " OR btitle LIKE CONCAT('%',?,'%')"
+				+ "	OR bcontent LIKE CONCAT('%',?,'%')"
+				+ "	OR bdate LIKE CONCAT('%',?,'%')"
+				+ "	OR bcount LIKE CONCAT('%',?,'%')"
+				+ "	OR no LIKE CONCAT('%',?,'%')"
+				+ "	OR bcategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bthumbnail LIKE CONCAT('%',?,'%')"
+				+ "	OR subCategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bfile LIKE CONCAT('%',?,'%')"
+				+ "	OR blike LIKE CONCAT('%',?,'%')"
+				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
+				+ "	OR commentCount LIKE CONCAT('%',?,'%') AND subCategory = ? )as totalcount"
+				+ "	FROM board" 
+				+ "	WHERE bno LIKE CONCAT('%',?,'%') "
+				+ " OR btitle LIKE CONCAT('%',?,'%')"
+				+ "	OR bcontent LIKE CONCAT('%',?,'%')"
+				+ "	OR bdate LIKE CONCAT('%',?,'%')"
+				+ "	OR bcount LIKE CONCAT('%',?,'%')"
+				+ "	OR no LIKE CONCAT('%',?,'%')"
+				+ "	OR bcategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bthumbnail LIKE CONCAT('%',?,'%')"
+				+ "	OR subCategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bfile LIKE CONCAT('%',?,'%')"
+				+ "	OR blike LIKE CONCAT('%',?,'%')"
+				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
+				+ "	OR commentCount LIKE CONCAT('%',?,'%') AND subCategory = ? "
+				+ orderSql
+				+ " limit ?, 20";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			for(int i = 1; i < 14; i++) {				
+				pstmt.setString(i, searchText);
+			}
+			pstmt.setString(14, subCategory);
+			for(int i = 15; i < 28; i++) {				
+				pstmt.setString(i, searchText);
+			}
+			pstmt.setString(28, subCategory);
+			pstmt.setInt(29, page);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBno(rs.getInt("bno"));
+				dto.setBtitle(rs.getString("btitle"));
+				dto.setBcontent(rs.getString("bcontent"));
+				dto.setBdate(rs.getString("bdate"));
+				dto.setBcount(rs.getInt("bcount"));
+				dto.setNo(rs.getInt("no"));
+				dto.setBcategory(rs.getString("bcategory"));
+				dto.setBthumbnail(rs.getString("bthumbnail"));
+				dto.setSubCategory(rs.getString("subCategory"));
+				dto.setBfile(rs.getString("bfile"));
+				dto.setBlike(rs.getInt("blike"));
+				dto.setBdislike(rs.getInt("bdislike"));
+				dto.setCommentCount(rs.getInt("commentCount"));
+				dto.setTotalCount(rs.getInt("totalcount"));
+				list.add(dto);
+				}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
+		}
+		return list;
+		}
+
+	public static ArrayList<BoardDTO> searchAllCategorySubcategory(String searchType, String searchText,
+			String category, String subCategory, int page, String orderSql) {
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		String sql = "SELECT *, (SELECT COUNT(*) FROM board "
+				+ "WHERE bno LIKE CONCAT('%',?,'%')"
+				+ " OR btitle LIKE CONCAT('%',?,'%')"
+				+ "	OR bcontent LIKE CONCAT('%',?,'%')"
+				+ "	OR bdate LIKE CONCAT('%',?,'%')"
+				+ "	OR bcount LIKE CONCAT('%',?,'%')"
+				+ "	OR no LIKE CONCAT('%',?,'%')"
+				+ "	OR bcategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bthumbnail LIKE CONCAT('%',?,'%')"
+				+ "	OR subCategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bfile LIKE CONCAT('%',?,'%')"
+				+ "	OR blike LIKE CONCAT('%',?,'%')"
+				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
+				+ "	OR commentCount LIKE CONCAT('%',?,'%') AND bcategory = ? AND subCategory = ?  )as totalcount"
+				+ "	FROM board" 
+				+ "	WHERE bno LIKE CONCAT('%',?,'%') "
+				+ " OR btitle LIKE CONCAT('%',?,'%')"
+				+ "	OR bcontent LIKE CONCAT('%',?,'%')"
+				+ "	OR bdate LIKE CONCAT('%',?,'%')"
+				+ "	OR bcount LIKE CONCAT('%',?,'%')"
+				+ "	OR no LIKE CONCAT('%',?,'%')"
+				+ "	OR bcategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bthumbnail LIKE CONCAT('%',?,'%')"
+				+ "	OR subCategory LIKE CONCAT('%',?,'%')"
+				+ "	OR bfile LIKE CONCAT('%',?,'%')"
+				+ "	OR blike LIKE CONCAT('%',?,'%')"
+				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
+				+ "	OR commentCount LIKE CONCAT('%',?,'%') AND bcategory = ?  AND subCategory = ? "
+				+ orderSql
+				+ " limit ?, 20";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			for(int i = 1; i < 14; i++) {				
+				pstmt.setString(i, searchText);
+			}
+			pstmt.setString(14, category);
+			pstmt.setString(15, subCategory);
+			
+			for(int i = 16; i < 29; i++) {				
+				pstmt.setString(i, searchText);
+			}
+			pstmt.setString(29, category);
+			pstmt.setString(30, subCategory);
+			pstmt.setInt(31, page);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBno(rs.getInt("bno"));
+				dto.setBtitle(rs.getString("btitle"));
+				dto.setBcontent(rs.getString("bcontent"));
+				dto.setBdate(rs.getString("bdate"));
+				dto.setBcount(rs.getInt("bcount"));
+				dto.setNo(rs.getInt("no"));
+				dto.setBcategory(rs.getString("bcategory"));
+				dto.setBthumbnail(rs.getString("bthumbnail"));
+				dto.setSubCategory(rs.getString("subCategory"));
+				dto.setBfile(rs.getString("bfile"));
+				dto.setBlike(rs.getInt("blike"));
+				dto.setBdislike(rs.getInt("bdislike"));
+				dto.setCommentCount(rs.getInt("commentCount"));
+				dto.setTotalCount(rs.getInt("totalcount"));
+				list.add(dto);
+				}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
+		}
+		return list;
+		}
+
+
+	public static ArrayList<BoardDTO> search(String searchType, String searchText, int page, String orderSql) {
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		String sql = "SELECT (SELECT count(*) FROM board WHERE "
+				+ searchType
+				+" LIKE CONCAT('%',?,'%')) as totalcount, * "
+				+" FROM board WHERE " + searchType
+				+" LIKE CONCAT('%',?,'%') "
+				+ orderSql
+				+ " limit ?, 20";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, searchText);
+			pstmt.setString(2, searchText);
+			pstmt.setInt(3, page);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBno(rs.getInt("bno"));
+				dto.setBtitle(rs.getString("btitle"));
+				dto.setBcontent(rs.getString("bcontent"));
+				dto.setBdate(rs.getString("bdate"));
+				dto.setBcount(rs.getInt("bcount"));
+				dto.setNo(rs.getInt("no"));
+				dto.setBcategory(rs.getString("bcategory"));
+				dto.setBthumbnail(rs.getString("bthumbnail"));
+				dto.setSubCategory(rs.getString("subCategory"));
+				dto.setBfile(rs.getString("bfile"));
+				dto.setBlike(rs.getInt("blike"));
+				dto.setBdislike(rs.getInt("bdislike"));
+				dto.setCommentCount(rs.getInt("commentCount"));
+				dto.setTotalCount(rs.getInt("totalcount"));
+				list.add(dto);
+				}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
+		}
+		return list;
+		}
 	
-	
+	public static ArrayList<BoardDTO> searchCategory(String searchType, String searchText, String category, int page,
+			String orderSql) {
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		String sql = "SELECT (SELECT count(*) FROM board WHERE "
+				+ searchType
+				+" LIKE CONCAT('%',?,'%') AND bcategory = ?) as totalcount, * "
+				+" FROM board WHERE " + searchType
+				+" LIKE CONCAT('%',?,'%') AND bcategory = ? "
+				+ orderSql
+				+ " limit ?, 20";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, searchText);
+			pstmt.setString(2, category);
+			pstmt.setString(3, searchText);
+			pstmt.setString(4, category);
+			pstmt.setInt(5, page);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBno(rs.getInt("bno"));
+				dto.setBtitle(rs.getString("btitle"));
+				dto.setBcontent(rs.getString("bcontent"));
+				dto.setBdate(rs.getString("bdate"));
+				dto.setBcount(rs.getInt("bcount"));
+				dto.setNo(rs.getInt("no"));
+				dto.setBcategory(rs.getString("bcategory"));
+				dto.setBthumbnail(rs.getString("bthumbnail"));
+				dto.setSubCategory(rs.getString("subCategory"));
+				dto.setBfile(rs.getString("bfile"));
+				dto.setBlike(rs.getInt("blike"));
+				dto.setBdislike(rs.getInt("bdislike"));
+				dto.setCommentCount(rs.getInt("commentCount"));
+				dto.setTotalCount(rs.getInt("totalcount"));
+				list.add(dto);
+				}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
+		}
+		return list;
+		}
+
+	public static ArrayList<BoardDTO> searchSubcategory(String searchType, String searchText, String subCategory, int page,
+			String orderSql) {
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		String sql = "SELECT (SELECT count(*) FROM board WHERE "
+				+ searchType
+				+" LIKE CONCAT('%',?,'%') AND subCategory = ?) as totalcount, * "
+				+" FROM board WHERE " + searchType
+				+" LIKE CONCAT('%',?,'%') AND subCategory = ? "
+				+ orderSql
+				+ " limit ?, 20";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, searchText);
+			pstmt.setString(2, subCategory);
+			pstmt.setString(3, searchText);
+			pstmt.setString(4, subCategory);
+			pstmt.setInt(5, page);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBno(rs.getInt("bno"));
+				dto.setBtitle(rs.getString("btitle"));
+				dto.setBcontent(rs.getString("bcontent"));
+				dto.setBdate(rs.getString("bdate"));
+				dto.setBcount(rs.getInt("bcount"));
+				dto.setNo(rs.getInt("no"));
+				dto.setBcategory(rs.getString("bcategory"));
+				dto.setBthumbnail(rs.getString("bthumbnail"));
+				dto.setSubCategory(rs.getString("subCategory"));
+				dto.setBfile(rs.getString("bfile"));
+				dto.setBlike(rs.getInt("blike"));
+				dto.setBdislike(rs.getInt("bdislike"));
+				dto.setCommentCount(rs.getInt("commentCount"));
+				dto.setTotalCount(rs.getInt("totalcount"));
+				list.add(dto);
+				}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
+		}
+		return list;
+		}
+
+	public static ArrayList<BoardDTO> searchBoth(String searchType, String searchText, String category,
+			String subCategory, int page, String orderSql) {
+		ArrayList<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
+		String sql = "SELECT (SELECT count(*) FROM board WHERE "
+				+ searchType
+				+" LIKE CONCAT('%',?,'%') AND bcategory = ? AND subCategory = ?) as totalcount, * "
+				+" FROM board WHERE " + searchType
+				+" LIKE CONCAT('%',?,'%') AND bcategory = ? AND subCategory = ? "
+				+ orderSql
+				+ " limit ?, 20";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, searchText);
+			pstmt.setString(2, category);
+			pstmt.setString(3, subCategory);
+			pstmt.setString(4, searchText);
+			pstmt.setString(5, category);
+			pstmt.setString(6, subCategory);
+			pstmt.setInt(7, page);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setBno(rs.getInt("bno"));
+				dto.setBtitle(rs.getString("btitle"));
+				dto.setBcontent(rs.getString("bcontent"));
+				dto.setBdate(rs.getString("bdate"));
+				dto.setBcount(rs.getInt("bcount"));
+				dto.setNo(rs.getInt("no"));
+				dto.setBcategory(rs.getString("bcategory"));
+				dto.setBthumbnail(rs.getString("bthumbnail"));
+				dto.setSubCategory(rs.getString("subCategory"));
+				dto.setBfile(rs.getString("bfile"));
+				dto.setBlike(rs.getInt("blike"));
+				dto.setBdislike(rs.getInt("bdislike"));
+				dto.setCommentCount(rs.getInt("commentCount"));
+				dto.setTotalCount(rs.getInt("totalcount"));
+				list.add(dto);
+				}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			Util.closeAll(rs, pstmt, con);
+		}
+		return list;
+		}
 }
 
 

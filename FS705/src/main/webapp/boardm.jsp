@@ -143,11 +143,11 @@ function select(){
 	var subCategory = document.getElementById("subCategory").value;
 	var searchType = document.getElementById("searchType").value;
 	var searchText = document.getElementById("searchText").value;
-	
-	location.href = 'boardm?order=' + order + '&category=' + category
-			+'&subCategory=' + subCategory 
-			+'&searchType=' + searchType + '&searchText=' + searchText
-			+'&page=' + 1;
+		
+	location.href= 'boardm?order='+order+'&category='+category
+			+'&subCategory='+subCategory 
+			+'&searchType='+searchType +'&searchText='+searchText
+			+'&page='+1;
 	}
 	
 	function checkSelectAll()  {
@@ -204,7 +204,6 @@ function select(){
 	}
 
 </script>
-
 </head>
 <body>
 <div id="wrapper">
@@ -215,19 +214,19 @@ function select(){
 			<a href='./memberm'> 회원 관리</a>  |  
 			<a href='./boardm'><b>게시글관리</b></a>
 		</div>
-		
+
 		<div id = "adminMain">
 			<h1>게시글관리 </h1>
+			${order }
 			<form action="boardm" method="get" id ="orderform">
 			<select onchange="select()" id ="order" name="order">
-				<option value= ""
-				<c:if test="${'' eq order }">selected</c:if>>
+				<option value= "" <c:if test="${'' eq order }">selected</c:if>>
 				오래된순</option>
-				<option value='bno' <c:if test="${'bno' eq order }">selected</c:if>>
+				<option value="bno" <c:if test="${'bno' eq order }">selected</c:if>>
 				최신순</option>
-				<option value='bcount' <c:if test="${'bcount' eq order }">selected</c:if>>
+				<option value="bcount" <c:if test="${'bcount' eq order }">selected</c:if>>
 				조회수 높은순</option>
-				<option value='blike' <c:if test="${'blike' eq order }">selected</c:if>>
+				<option value="blike" <c:if test="${'blike' eq order }">selected</c:if>>
 				좋아요 많은순</option>
 			</select>
 			</form>	 
@@ -236,6 +235,7 @@ function select(){
 				<c:when test="${fn:length(list) > 0 }">
 				
 				<form action="./boardm" method="post" class="deleteform">
+		
 				<table>
 					<tr>
 						<th>
@@ -262,7 +262,7 @@ function select(){
 								<option value="" selected>선택</option>
 								<c:forEach items="${subCategoryList }" var="s">
 									<c:if test="${subCategory eq s }">
-										<option value="${t }" selected>${s }</option>
+										<option value="${s }" selected>${s }</option>
 									</c:if>
 									<c:if test="${subCategory ne s }">
 										<option value="${s }">${s }</option>
@@ -270,17 +270,9 @@ function select(){
 								</c:forEach>
 							</select>
 						</c:when>	
-						<c:otherwise>
-							<select onchange="select()" id="subCategory" disabled>
-								<option value="" selected>선택</option>
-								<c:forEach items="${subCategoryList }" var="s">
-									<c:if test="${subCategory eq s }">
-										<option value="${t }" selected>${s }</option>
-									</c:if>
-									<c:if test="${subCategory ne s }">
-										<option value="${s }">${s }</option>
-									</c:if>
-								</c:forEach>
+						<c:otherwise> <!-- category가 null일 때 -->
+							<select disabled>
+								<option>전체</option>
 							</select>
 						</c:otherwise>
 						</c:choose>
@@ -308,7 +300,16 @@ function select(){
 						<td>${fn:substring(l.getBdate(), 0, 19 )}</td>
 						<td>${l.getBcount() }</td>
 						<td>${l.getNo() }</td>
-						<td>${l.getBthumbnail() }</td>
+						<td>
+							<c:choose>
+								<c:when test="${l.getBthumbnail() != null}">
+								${l.getBthumbnail() }
+								</c:when>
+								<c:otherwise>
+								null
+								</c:otherwise>
+							</c:choose>
+						</td>
 						<td>${l.getBlike() }</td>
 						<td>${l.getBdislike() }</td>
 						<td>${l.getCommentCount() }</td>
@@ -332,9 +333,8 @@ function select(){
 			<input type="hidden" name="subCategory" value="${subCategory }" >	
 			<select name="searchType" id="searchType">
 				<option value='all' selected>전체</option>
-				<option value='logIp'>ip</option>
-				<option value='logTarget'>target</option>
-				<option value='logEtc'>etc</option>
+				<option value='btitle'>제목</option>
+				<option value='bcontent'>내용</option>
 			</select>
 			<input type="text" id="searchText" name="searchText">
 			<button type="submit">검색</button>
@@ -343,10 +343,10 @@ function select(){
 
 		<div id="Paging">
 			<c:set var="pageName" value="admin" scope="request"/>
-			<!-- 한 쪽당 데이터 20개씩 나열 -->
+			<!-- 한 쪽당 데이터 20개씩 나열 -->	 
 			<c:set var="PAGENUMBER" value="20" scope="request"/> 
 			<!-- 한 쪽당 페이지 10개씩 나열  -->
-			<c:set var="LIMIT" value="5" scope="request"/>
+	 		<c:set var="LIMIT" value="5" scope="request"/>
 			<c:import url="paging.jsp"/>
 		</div>
 
