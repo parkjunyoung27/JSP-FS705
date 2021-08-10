@@ -80,28 +80,28 @@ public class Memberm extends HttpServlet {
 		//초기화면 모든 검색, 옵션, 선택 안할때 
 
 		if(searchType == null) {
-			memberList = MemberDAO.memberList((page-1)*20, orderSql);
+			memberList = MemberDAO.memberList((page-1)*3, orderSql);
 		}else {//검색,옵션 셀렉트 할 때
 			if(searchType.equals("all")) { //전체검색 할 때
 				System.out.println("전체검색");
 					//검색 폼만 누를 때 
 				if(grade.equals("")&& gender.equals("")&& searchText.equals("")){
-					memberList = MemberDAO.memberList((page-1) * 20, orderSql);
+					memberList = MemberDAO.memberList((page-1) * 3, orderSql);
 				//ip 선택시
 				}else if(!grade.equals("")&& gender.equals("") && searchText.equals("")){				
-					memberList = MemberDAO.selectGrade(grade, (page-1) * 20, orderSql);
+					memberList = MemberDAO.selectGrade(grade, (page-1) * 3, orderSql);
 				}else if(grade.equals("")&& !gender.equals("") && searchText.equals("")){				
-					memberList = MemberDAO.selectGender(gender, (page-1) * 20,orderSql);
+					memberList = MemberDAO.selectGender(gender, (page-1) * 3,orderSql);
 				}else if(!grade.equals("")&& !gender.equals("") && searchText.equals("")){				
-					memberList = MemberDAO.selectGradeGender(grade, gender, (page-1) * 20,orderSql);
+					memberList = MemberDAO.selectGradeGender(grade, gender, (page-1) * 3,orderSql);
 				}else if(grade.equals("")&& gender.equals("") && !searchText.equals("")){				
-					memberList = MemberDAO.searchAll(searchType, searchText, (page-1) * 20,orderSql);
+					memberList = MemberDAO.searchAll(searchType, searchText, (page-1) * 3,orderSql);
 				}else if(!grade.equals("")&& gender.equals("") && !searchText.equals("")){				
-					memberList = MemberDAO.searchAllGrade(searchType, searchText, grade,(page-1) * 20, orderSql);
+					memberList = MemberDAO.searchAllGrade(searchType, searchText, grade,(page-1) * 3, orderSql);
 				}else if(grade.equals("")&& !gender.equals("") && !searchText.equals("")){				
-					memberList = MemberDAO.searchAllGender(searchType, searchText, gender, (page-1) * 20,orderSql);
+					memberList = MemberDAO.searchAllGender(searchType, searchText, gender, (page-1) * 3,orderSql);
 				}else if(!grade.equals("")&& !gender.equals("") && !searchText.equals("")){				
-					memberList = MemberDAO.searchAllGradeGender(searchType, searchText, grade, gender, (page-1) * 20,orderSql);
+					memberList = MemberDAO.searchAllGradeGender(searchType, searchText, grade, gender, (page-1) * 3,orderSql);
 				}
 			
 			}else {//전체검색 아닐 때
@@ -110,22 +110,22 @@ public class Memberm extends HttpServlet {
 					if(grade.equals("")&& gender.equals("")){
 						memberList = MemberDAO.memberList(page,orderSql);
 					}else if(!grade.equals("")&& gender.equals("")){
-						memberList = MemberDAO.selectGrade(grade, (page-1) * 20,orderSql);
+						memberList = MemberDAO.selectGrade(grade, (page-1) * 3,orderSql);
 					}else if(grade.equals("")&& !gender.equals("")){
-						memberList = MemberDAO.selectGender(gender, (page-1) * 20,orderSql);
+						memberList = MemberDAO.selectGender(gender, (page-1) * 3,orderSql);
 					}else if(!grade.equals("")&& !gender.equals("")){
-						memberList = MemberDAO.selectGradeGender(grade, gender, (page-1) * 20,orderSql);
+						memberList = MemberDAO.selectGradeGender(grade, gender, (page-1) * 3,orderSql);
 					}
 					
 				}else {//검색값이 들어갈 때 
 					if(grade.equals("")&& gender.equals("")){
 						memberList = MemberDAO.search(searchType, searchText, page,orderSql);
 					}else if(!grade.equals("")&& gender.equals("")){
-						memberList = MemberDAO.searchGrade(searchType, searchText, grade, (page-1) * 20,orderSql);
+						memberList = MemberDAO.searchGrade(searchType, searchText, grade, (page-1) * 3,orderSql);
 					}else if(grade.equals("")&& !gender.equals("")){
-						memberList = MemberDAO.searchGender(searchType, searchText, gender, (page-1) * 20,orderSql);
+						memberList = MemberDAO.searchGender(searchType, searchText, gender, (page-1) * 3,orderSql);
 					}else if(!grade.equals("")&& !gender.equals("")){
-						memberList = MemberDAO.searchBoth(searchType, searchText, grade, gender,  (page-1) * 20,orderSql);
+						memberList = MemberDAO.searchBoth(searchType, searchText, grade, gender,  (page-1) * 3,orderSql);
 								}
 					}		
 			}

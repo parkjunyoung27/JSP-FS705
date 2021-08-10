@@ -200,7 +200,7 @@ tr:hover{
 			<a href='./boardm'>게시글관리</a>
 		</div>
 		<div id = "adminMain">
-			<h1>로그관리 </h1>
+			<h1>로그 관리 </h1>
 			<form action="admin" method="get" id ="orderform">
 			<select onchange="select()" id="order" name="order">
 				<option value= "" 

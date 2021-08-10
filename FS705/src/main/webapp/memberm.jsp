@@ -161,7 +161,6 @@ tr:hover{
 	
 	
 	function checkDelete(form){
-		
 		var sum = 0;
 		var count = form.check.length; //form.name값.길이
 		for(var i =0; i<count; i++){
@@ -190,13 +189,15 @@ tr:hover{
 <div id="wrapper">
 	<c:import url="header.jsp"/>
 	<div id="container">
+	
 		<div id="adminMenu">
 			&ensp; <a href='./admin'>로그 관리</a>  | 
 			<a href='./memberm'><b>회원 관리</b></a>  |  
 			<a href='./boardm'>게시글 관리</a>
 		</div>
+		
 		<div id = "adminMain">
-			<h1>회원관리 </h1>
+			<h1>회원 관리 </h1>
 			<form action="memberm" method="get" id ="orderform">
 			<select onchange="select()" id="order" name="order">
 				<option value=""
@@ -266,7 +267,10 @@ tr:hover{
 						<td>${l.getEmail() }</td>
 						<td>${fn:substring(l.getJoindate(), 0, 19 )}</td>
 						<td>${l.getBirthdate() }</td>
-						<td>${l.getGrade() }</td>
+						<td>${l.getGrade() }
+						<button type="submit">▲</button>
+						 <button type="submit">▼</button>
+						</td>
 						<td>${l.getHint() }</td>
 						<td>${l.getHintAnswer() }</td>
 						<td>${l.getProfile() }</td>
@@ -298,20 +302,18 @@ tr:hover{
 			<input type="hidden" name="page" value="${page }" >
 		</form>	 
 
-	<div id="Paging">
-		<c:set var="pageName" value="admin" scope="request"/>
-		<!-- 한 쪽당 데이터 20개씩 나열 -->
-		<c:set var="PAGENUMBER" value="20" scope="request"/> 
-		<!-- 한 쪽당 페이지 10개씩 나열  -->
-		<c:set var="LIMIT" value="5" scope="request"/>
-		<c:import url="paging.jsp"/>
+		<div id="Paging">
+			<c:set var="pageName" value="memberm" scope="request"/>
+			<!-- 한 쪽당 데이터 20개씩 나열 -->
+			<c:set var="PAGENUMBER" value="3" scope="request"/> 
+			<!-- 한 쪽당 페이지 10개씩 나열  -->
+			<c:set var="LIMIT" value="5" scope="request"/>
+			<c:import url="paging.jsp"/>
+		</div>
 	</div>
-
-
-	</div>
-	
 	<c:import url="plusBar.jsp"/>
 	<c:import url="footer.jsp"/>
+
 </div>
 
 </body>

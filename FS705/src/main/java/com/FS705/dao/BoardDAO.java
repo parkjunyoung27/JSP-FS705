@@ -29,7 +29,7 @@ public class BoardDAO {
 		String sql ="SELECT *, (SELECT count(*) FROM board) as totalcount "
 				+ "FROM board "
 				+ orderSql
-				+ " LIMIT ?, 20"; //20개씩 가져오기
+				+ " LIMIT ?, 10"; //10개씩 가져오기
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, page);
@@ -93,9 +93,9 @@ public class BoardDAO {
 		String sql ="SELECT *,"
 				+ "(SELECT count(*) FROM board WHERE bcategory=? AND subCategory=?) "
 				+ "as totalcount "
-				+ "FROM board WHERE bcategory=? AND subCategory=? "
+				+ "FROM board WHERE bcategory = ? AND subCategory = ? "
 				+ orderSql
-				+ " limit ?, 20;" ;	
+				+ " limit ?, 10;" ;	
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, category);
@@ -142,14 +142,13 @@ public class BoardDAO {
 				+ "as totalcount "
 				+ "FROM board WHERE bcategory=? " 
 				+ orderSql
-				+ " limit ?, 20;" ;	
+				+ " limit ?, 10;" ;	
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, category);
 			pstmt.setString(2, category);
 			pstmt.setInt(3, page);
-			rs = pstmt.executeQuery();
-			
+			rs = pstmt.executeQuery();			
 			while(rs.next()) {
 				BoardDTO dto = new BoardDTO();
 				dto.setBno(rs.getInt("bno"));
@@ -187,7 +186,7 @@ public class BoardDAO {
 				+ "as totalcount "
 				+ "FROM board WHERE subCategory=? "
 				+ orderSql
-				+ " limit ?, 20;" ;	
+				+ " limit ?, 10;" ;	
 		try {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, subCategory);
@@ -297,9 +296,9 @@ public class BoardDAO {
 				+ "	OR bfile LIKE CONCAT('%',?,'%')"
 				+ "	OR blike LIKE CONCAT('%',?,'%')"
 				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
-				+ "	OR commentCount LIKE CONCAT('%',?,'%')"
+				+ "	OR commentCount LIKE CONCAT('%',?,'%') "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 10";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -369,7 +368,7 @@ public class BoardDAO {
 				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
 				+ "	OR commentCount LIKE CONCAT('%',?,'%') AND bcategory = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 10";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -383,6 +382,7 @@ public class BoardDAO {
 			pstmt.setString(28, category);
 			pstmt.setInt(29, page);
 			rs = pstmt.executeQuery();
+			
 			while(rs.next()) {
 				BoardDTO dto = new BoardDTO();
 				dto.setBno(rs.getInt("bno"));
@@ -401,6 +401,7 @@ public class BoardDAO {
 				dto.setTotalCount(rs.getInt("totalcount"));
 				list.add(dto);
 				}
+			
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -445,7 +446,7 @@ public class BoardDAO {
 				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
 				+ "	OR commentCount LIKE CONCAT('%',?,'%') AND subCategory = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 10";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -520,7 +521,7 @@ public class BoardDAO {
 				+ "	OR bdislike LIKE CONCAT('%',?,'%')"
 				+ "	OR commentCount LIKE CONCAT('%',?,'%') AND bcategory = ?  AND subCategory = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 10";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -576,7 +577,7 @@ public class BoardDAO {
 				+" FROM board WHERE " + searchType
 				+" LIKE CONCAT('%',?,'%') "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 10";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -623,7 +624,7 @@ public class BoardDAO {
 				+" FROM board WHERE " + searchType
 				+" LIKE CONCAT('%',?,'%') AND bcategory = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 10";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -672,7 +673,7 @@ public class BoardDAO {
 				+" FROM board WHERE " + searchType
 				+" LIKE CONCAT('%',?,'%') AND subCategory = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 10";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -721,7 +722,7 @@ public class BoardDAO {
 				+" FROM board WHERE " + searchType
 				+" LIKE CONCAT('%',?,'%') AND bcategory = ? AND subCategory = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 10";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -760,17 +761,6 @@ public class BoardDAO {
 		return list;
 		}
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

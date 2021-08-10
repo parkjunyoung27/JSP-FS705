@@ -137,20 +137,27 @@ tr:hover{
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 
-function select(){
-	var order = document.getElementById("order").value;
-	var category = document.getElementById("category").value;
-	var subCategory = document.getElementById("subCategory").value;
-	var searchType = document.getElementById("searchType").value;
-	var searchText = document.getElementById("searchText").value;
-		
-	location.href= 'boardm?order='+order+'&category='+category
-			+'&subCategory='+subCategory 
-			+'&searchType='+searchType +'&searchText='+searchText
-			+'&page='+1;
-	}
+	//1차적으로
+	//정렬만
+	function select(){
+		var order = document.getElementById("order").value;
+		location.href= 'boardm?order='+order +'&page='+1;
+		}
+
+	//2차
+	function secondSelect(){
+		var order = document.getElementById("orderSecond").value;
+		var category = document.getElementById("category").value;
+		var subCategory = document.getElementById("subCategory").value;
+		var searchType = document.getElementById("searchType").value;
+		var searchText = document.getElementById("searchText").value;
+		location.href= './boardm?order=' + order + '&category='
+				+ category + '&subCategory=' + subCategory
+				+ '&searchType=' + searchType
+				+ '&searchText=' + searchText + '&page='+1;
+	}	
 	
-	function checkSelectAll()  {
+	function checkSelectAll() {
 		  // 전체 체크박스
 		  const checkboxes //전체 갯수 선택했을때 갯수 세기 
 		    = document.querySelectorAll('input[name="check"]');
@@ -166,7 +173,6 @@ function select(){
 		  }else {
 		    selectAll.checked = false;
 		  }
-	
 		}
 
 	function selectAll(selectAll)  { // 전체체크 선택시
@@ -179,9 +185,7 @@ function select(){
 		})
 	}
 	
-	
 	function checkDelete(form){
-		
 		var sum = 0;
 		var count = form.check.length; //form.name값.길이
 		for(var i =0; i<count; i++){
@@ -206,6 +210,7 @@ function select(){
 </script>
 </head>
 <body>
+<input type="hidden" name="order" value="${order }" id="orderSecond" >
 <div id="wrapper">
 	<c:import url="header.jsp"/>
 	<div id="container">
@@ -215,25 +220,21 @@ function select(){
 			<a href='./boardm'><b>게시글관리</b></a>
 		</div>
 
-		<div id = "adminMain">
-			<h1>게시글관리 </h1>
-			${order }
-			<form action="boardm" method="get" id ="orderform">
-			<select onchange="select()" id ="order" name="order">
-				<option value= "" <c:if test="${'' eq order }">selected</c:if>>
-				오래된순</option>
-				<option value="bno" <c:if test="${'bno' eq order }">selected</c:if>>
-				최신순</option>
-				<option value="bcount" <c:if test="${'bcount' eq order }">selected</c:if>>
-				조회수 높은순</option>
-				<option value="blike" <c:if test="${'blike' eq order }">selected</c:if>>
-				좋아요 많은순</option>
-			</select>
-			</form>	 
-			
+		<div id= "adminMain">
+			<h1>게시글 관리 </h1>
 			<c:choose>
 				<c:when test="${fn:length(list) > 0 }">
-				
+				<select onchange="select()" id ="order" name="order">
+					<option value='' <c:if test="${'' eq order }">selected</c:if>>
+					등록순</option>
+					<option value='bno' <c:if test="${'bno' eq order }">selected</c:if>>
+					최신순</option>
+					<option value='bcount' <c:if test="${'bcount' eq order }">selected</c:if>>
+					조회순</option>
+					<option value='blike' <c:if test="${'blike' eq order }">selected</c:if>>
+					좋아요순</option>
+				</select>
+			
 				<form action="./boardm" method="post" class="deleteform">
 		
 				<table>
@@ -243,7 +244,7 @@ function select(){
 						</th>
 						<th>글번호</th>
 						<th>카테고리
-							<select onchange="select()" id="category">
+							<select onchange="secondSelect()" id="category">
 								<option value="" selected>카테고리</option>
 								<c:forEach items="${categoryList }" var="c">
 									<c:if test="${category eq c }">
@@ -258,7 +259,7 @@ function select(){
 						<th>서브카테고리
 						<c:choose>
 						<c:when test="${category ne '' }">
-							<select onchange="select()" id="subCategory">
+							<select onchange="secondSelect()" id="subCategory">
 								<option value="" selected>선택</option>
 								<c:forEach items="${subCategoryList }" var="s">
 									<c:if test="${subCategory eq s }">
@@ -317,7 +318,7 @@ function select(){
 					</c:forEach>
 				</table>
 					<button type="button" onclick="checkDelete(this.form)"> 삭제</button>			
-				</form>
+				 </form>
 				
 				</c:when>
 				<c:otherwise>
@@ -327,7 +328,7 @@ function select(){
 		</div>
 		&emsp;&emsp;전체 글 수 : ${totalCount } 개 / 현재 페이지 : ${page }	
 		
-		<form action="boardm" id ="searchform" method="get" onsubmit="select()">
+		<form action="boardm" id ="searchform" method="get" onsubmit="secondSelect()">
 			<input type="hidden" name="order" value="${order }" >
 			<input type="hidden" name="category" value="${category }" >	
 			<input type="hidden" name="subCategory" value="${subCategory }" >	
@@ -342,14 +343,14 @@ function select(){
 		</form>	 
 
 		<div id="Paging">
-			<c:set var="pageName" value="admin" scope="request"/>
+			<c:set var="pageName" value="boardm" scope="request"/>
 			<!-- 한 쪽당 데이터 20개씩 나열 -->	 
-			<c:set var="PAGENUMBER" value="20" scope="request"/> 
+			<c:set var="PAGENUMBER" value="10" scope="request"/> 
 			<!-- 한 쪽당 페이지 10개씩 나열  -->
 	 		<c:set var="LIMIT" value="5" scope="request"/>
 			<c:import url="paging.jsp"/>
 		</div>
-
+		
 	</div>
 	
 	<c:import url="plusBar.jsp"/>

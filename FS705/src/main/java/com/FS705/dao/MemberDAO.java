@@ -27,7 +27,7 @@ public class MemberDAO {
 		String sql ="SELECT *,(SELECT count(*) FROM member) as totalcount "
 				+ "FROM member "
 				+ orderSql
-				+ " LIMIT ?, 20"; //20개씩 가져오기
+				+ " LIMIT ?, 3"; //3개씩 가져오기
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -67,7 +67,7 @@ public class MemberDAO {
 		String sql ="SELECT *,(SELECT count(*) FROM member) as totalcount "
 				+ "FROM member WHERE grade = ? AND sex = ? "
 				+ orderSql
-				+ " LIMIT ?, 20"; //20개씩 가져오기
+				+ " LIMIT ?, 3"; //3개씩 가져오기
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -110,7 +110,7 @@ public class MemberDAO {
 		String sql ="SELECT *,(SELECT count(*) FROM member) as totalcount "
 				+ "FROM member WHERE grade = ? "
 				+ orderSql
-				+ " LIMIT ?, 20"; //20개씩 가져오기
+				+ " LIMIT ?, 3"; //3개씩 가져오기
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -151,7 +151,7 @@ public class MemberDAO {
 		String sql ="SELECT *,(SELECT count(*) FROM member) as totalcount "
 				+ "FROM member WHERE sex = ? "
 				+ orderSql
-				+ " LIMIT ?, 20"; //20개씩 가져오기
+				+ " LIMIT ?, 3"; //3개씩 가져오기
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -216,7 +216,7 @@ public class MemberDAO {
 				+ "	OR hintAnswer LIKE CONCAT('%',?,'%')"
 				+ "	OR profile LIKE CONCAT('%',?,'%')"
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 3";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -284,7 +284,7 @@ public class MemberDAO {
 				+ "	OR hintAnswer LIKE CONCAT('%',?,'%')"
 				+ "	OR profile LIKE CONCAT('%',?,'%') AND grade = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 3";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -359,7 +359,7 @@ public class MemberDAO {
 				+ "	OR hintAnswer LIKE CONCAT('%',?,'%')"
 				+ "	OR profile LIKE CONCAT('%',?,'%') AND sex = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 3";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -433,7 +433,7 @@ public class MemberDAO {
 				+ "	OR hintAnswer LIKE CONCAT('%',?,'%')"
 				+ "	OR profile LIKE CONCAT('%',?,'%') AND grade = ? AND sex = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 3";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -487,7 +487,7 @@ public class MemberDAO {
 				+" FROM member WHERE " + searchType
 				+" LIKE CONCAT('%',?,'%') "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 3";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -532,7 +532,7 @@ public class MemberDAO {
 				+" FROM member WHERE ?"
 				+" LIKE CONCAT('%',?,'%') AND grade = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 3";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -582,7 +582,7 @@ public class MemberDAO {
 				+" FROM member WHERE ?"
 				+" LIKE CONCAT('%',?,'%') AND sex = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 3";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -631,7 +631,7 @@ public class MemberDAO {
 				+" FROM member WHERE ?"
 				+" LIKE CONCAT('%',?,'%') AND grade = ? AND sex = ? "
 				+ orderSql
-				+ " limit ?, 20";
+				+ " limit ?, 3";
 		
 		try {
 			pstmt = con.prepareStatement(sql);

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.BoardDAO;
 import com.FS705.dao.LogDAO;
-import com.FS705.dao.BoardDAO;
 import com.FS705.dto.BoardDTO;
 import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
@@ -23,11 +22,9 @@ import com.FS705.util.Util;
 public class Boardm extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-
     public Boardm() {
         super();
     }
-
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
@@ -63,14 +60,18 @@ public class Boardm extends HttpServlet {
 		request.setAttribute("page", page); //페이지 보내기		
 		
 		//첫화면 일때  category 아직 설정 안할 때 
-		String order = request.getParameter("order");
+		String order = "";
+		if(request.getParameter("order") != null) {
+			order = request.getParameter("order");
+		}
+		
 		String category = request.getParameter("category");
 		String subCategory = request.getParameter("subCategory");
 		String searchType = request.getParameter("searchType");
 		String searchText = request.getParameter("searchText");
 		System.out.println("order : " + order + " category : " + category +" subCategory : " + subCategory + " searchType : "+ searchType + " searchText : " + searchText);
 		
-		request.setAttribute("order", request.getParameter("order"));
+		request.setAttribute("order", order);
 		request.setAttribute("category", request.getParameter("category"));
 		request.setAttribute("subCategory", request.getParameter("subCategory"));
 		request.setAttribute("searchType", request.getParameter("searchType"));  
@@ -90,60 +91,57 @@ public class Boardm extends HttpServlet {
 		ArrayList<BoardDTO> boardList = null;
 		//초기화면 모든 검색, 옵션 선택 안할때 
 		if(searchType == null) {
-			boardList = BoardDAO.boardList((page-1)*20, orderSql);
+			boardList = BoardDAO.boardList((page-1)*10, orderSql);
 		}else {//검색,옵션 셀렉트 할 때
 			if(searchType.equals("all")) { //전체검색 할 때
 				System.out.println("전체검색");
-					//검색 폼만 누를 때 
 				if(category.equals("")&& subCategory.equals("")&& searchText.equals("")){
-					boardList = BoardDAO.boardList((page-1) * 20, orderSql);
+					boardList = BoardDAO.boardList((page-1) * 10, orderSql);
 				//ip 선택시
 				}else if(!category.equals("")&& subCategory.equals("") && searchText.equals("")){				
-					boardList = BoardDAO.selectCategory(category, (page-1) * 20, orderSql);
+					boardList = BoardDAO.selectCategory(category, (page-1) * 10, orderSql);
 				}else if(category.equals("")&& !subCategory.equals("") && searchText.equals("")){				
-					boardList = BoardDAO.selectSubcategory(subCategory, (page-1) * 20,orderSql);
+					boardList = BoardDAO.selectSubcategory(subCategory, (page-1) * 10, orderSql);
 				}else if(!category.equals("")&& !subCategory.equals("") && searchText.equals("")){				
-					boardList = BoardDAO.selectCategorySubcategory(category, subCategory, (page-1) * 20,orderSql);
+					boardList = BoardDAO.selectCategorySubcategory(category, subCategory, (page-1) * 10, orderSql);
 				}else if(category.equals("")&& subCategory.equals("") && !searchText.equals("")){				
-					boardList = BoardDAO.searchAll(searchType, searchText, (page-1) * 20,orderSql);
+					boardList = BoardDAO.searchAll(searchType, searchText, (page-1) * 10, orderSql);
 				}else if(!category.equals("")&& subCategory.equals("") && !searchText.equals("")){				
-					boardList = BoardDAO.searchAllCategory(searchType, searchText, category,(page-1) * 20, orderSql);
+					boardList = BoardDAO.searchAllCategory(searchType, searchText, category,(page-1) * 10, orderSql);
 				}else if(category.equals("")&& !subCategory.equals("") && !searchText.equals("")){				
-					boardList = BoardDAO.searchAllSubcategory(searchType, searchText, subCategory, (page-1) * 20,orderSql);
+					boardList = BoardDAO.searchAllSubcategory(searchType, searchText, subCategory, (page-1) * 10, orderSql);
 				}else if(!category.equals("")&& !subCategory.equals("") && !searchText.equals("")){				
-					boardList = BoardDAO.searchAllCategorySubcategory(searchType, searchText, category, subCategory, (page-1) * 20,orderSql);
+					boardList = BoardDAO.searchAllCategorySubcategory(searchType, searchText, category, subCategory, (page-1) * 10, orderSql);
 				}
 			
 			}else {//전체검색 아닐 때
 				//검색값 입력 안할 때
 				if(searchText.equals("")) {
 					if(category.equals("")&& subCategory.equals("")){
-						boardList = BoardDAO.boardList(page,orderSql);
+						boardList = BoardDAO.boardList(page, orderSql);
 					}else if(!category.equals("")&& subCategory.equals("")){
-						boardList = BoardDAO.selectCategory(category, (page-1) * 20,orderSql);
+						boardList = BoardDAO.selectCategory(category, (page-1) * 10, orderSql);
 					}else if(category.equals("")&& !subCategory.equals("")){
-						boardList = BoardDAO.selectSubcategory(subCategory, (page-1) * 20,orderSql);
+						boardList = BoardDAO.selectSubcategory(subCategory, (page-1) * 10, orderSql);
 					}else if(!category.equals("")&& !subCategory.equals("")){
-						boardList = BoardDAO.selectCategorySubcategory(category, subCategory, (page-1) * 20,orderSql);
+						boardList = BoardDAO.selectCategorySubcategory(category, subCategory, (page-1) * 10, orderSql);
 					}
 					
 				}else {//검색값이 들어갈 때 
 					if(category.equals("")&& subCategory.equals("")){
-						boardList = BoardDAO.search(searchType, searchText, page,orderSql);
+						boardList = BoardDAO.search(searchType, searchText, page, orderSql);
 					}else if(!category.equals("")&& subCategory.equals("")){
-						boardList = BoardDAO.searchCategory(searchType, searchText, category, (page-1) * 20,orderSql);
+						boardList = BoardDAO.searchCategory(searchType, searchText, category, (page-1) * 10, orderSql);
 					}else if(category.equals("")&& !subCategory.equals("")){
-						boardList = BoardDAO.searchSubcategory(searchType, searchText, subCategory, (page-1) * 20,orderSql);
+						boardList = BoardDAO.searchSubcategory(searchType, searchText, subCategory, (page-1) * 10, orderSql);
 					}else if(!category.equals("")&& !subCategory.equals("")){
-						boardList = BoardDAO.searchBoth(searchType, searchText, category, subCategory,  (page-1) * 20,orderSql);
-								}
-					}		
+						boardList = BoardDAO.searchBoth(searchType, searchText, category, subCategory,  (page-1) * 10, orderSql);
+					}
+				}		
 			}
 		}
 		
-		
 		request.setAttribute("list", boardList);
-		
 		
 		//옵션에 붙을 목록 설정
 		ArrayList<String> categoryList = BoardDAO.optionList("bcategory");
@@ -207,7 +205,7 @@ public class Boardm extends HttpServlet {
 				sum += result;
 			}
 			System.out.println(sum + "개 게시글 삭제!!");
-			response.sendRedirect("./boardm");
+			response.sendRedirect("./boardm2");
 			
 		}
 	}
