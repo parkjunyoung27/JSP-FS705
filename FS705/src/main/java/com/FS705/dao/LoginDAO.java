@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import com.FS705.db.DBConnection;
 import com.FS705.dto.LoginDTO;
+import com.FS705.util.Util;
 
 public class LoginDAO {
 	//싱글턴
@@ -19,15 +20,10 @@ public class LoginDAO {
 	}
 	//로그인 기능
 	public LoginDTO login(LoginDTO dto) {
-		//dto
 		LoginDTO login = new LoginDTO();
-		//dbconn접속
 		Connection conn = DBConnection.dbconn();
-		//pstmt
 		PreparedStatement pstmt = null;
-		//결괏값 저장
 		ResultSet rs = null;
-		//sql문
 		String sql = "SELECT * FROM member WHERE id=? AND pw=?";
 		
 		try {
@@ -54,23 +50,57 @@ public class LoginDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			Util.closeAll(rs, pstmt, conn);
 		}		
 		return login;
 	}
-	
-	
-	
+	//id 중복확인
+	public int idCheck(String id) {
+		int check = 0;
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql= "SELECT COUNT(*) FROM member WHERE id=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				if(rs.getInt("count(*)") == 1) {
+					check = 1;
+				} else {
+					check = 0;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return check;
+	}
+	//가입하기
+	public int join(LoginDTO dto) {
+		int count = 0;
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		String sql = "INSERT INTO member (name, id, pw, sex, email, birthdate, hint, hintAnswer) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getName());
+			pstmt.setString(2, dto.getId());
+			pstmt.setString(3, dto.getPw());
+			pstmt.setString(4, dto.getSex());
+			pstmt.setString(5, dto.getEmail());
+			pstmt.setString(6, dto.getBirthdate());
+			pstmt.setString(7, dto.getHint());
+			pstmt.setString(8, dto.getHintAnswer());
+			count = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Util.closeAll(null, pstmt, conn);
+		}
+		return count;
+	}
 }

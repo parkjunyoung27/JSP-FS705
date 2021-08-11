@@ -139,7 +139,7 @@ function foodVote(bno, code){
 	<div id="container">
 		<div id="content">
 			<div id="boardlist">
-				<div class="btop"><a href="foodView?bno=${dto.bno }">[${dto.subCategory }] ${dto.btitle }</a><small id="ccount">${dto.bno }</small></div>
+				<div class="btop"></div>
 				<div class="bmiddle">
 					<ul class="bmfloat">
 						<li>${dto.name }<small id="ccount">${dto.id }</small></li>
