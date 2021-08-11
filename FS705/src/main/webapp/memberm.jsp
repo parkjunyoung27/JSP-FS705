@@ -131,6 +131,8 @@ tr:hover{
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
 
+var grade1 = document.getElementById("grade").value;
+
 	function select(){
 		var order = document.getElementById("order").value;
 		var grade = document.getElementById("grade").value;
@@ -146,7 +148,6 @@ tr:hover{
 	function select2(){
 		var order = document.getElementById("order").value;
 		var grade = document.getElementById("grade").value;
-		var grade1 = parseInt(grade)+1;
 		var gender = document.getElementById("gender").value;
 		var searchType = document.getElementById("searchType").value;
 		var searchText = document.getElementById("searchText").value;
@@ -175,6 +176,7 @@ tr:hover{
 
 		}
 	
+	
 	function selectAll(selectAll)  { // 전체체크 선택시
 	  const checkboxes  //check의 element를 모두 찾아서 노드리스트형태로 리턴, 20개의 체크박스 엘리먼트가 리턴
 	     = document.getElementsByName('check');
@@ -184,7 +186,6 @@ tr:hover{
 	    checkbox.checked = selectAll.checked
 	  })
 	}
-	
 	
 	function checkDelete(form){
 		var sum = 0;
@@ -215,24 +216,22 @@ tr:hover{
 		const divide = url.split("?");
 		const front = divide[0];
 		const back = divide[1];
-		//alert(divide);
+		var grade = document.getElementById("grade").value;
+		grade1 = parseInt(grade)+1;
+		
 		if(confirm("등급을 올리시겠습니까?")){
 			if(!back){
 				location.href = front +'?uno=' + uno;
 				alert("등급을 올렸습니다.");		
-				return select2();				
+				select2();		
 			}else{
 				location.href = front +'?uno=' + uno+'&'+back;				
 				alert("등급을 올렸습니다.");
-				return select2();
+				select2();
 			}
-			
-			//location.href = "/memberm?order"+${order}+"&grade="+${grade1}+"&gender=" +
-			//		 ${gender} + "&searchType="+${searchType}+"&searchText" +
-			//		${searchText}+"&page="+${page};
+				return false;
 		}
 	}
-	
 	function downGrade(dno){
 		const url3 = window.location.href;
 		const url2 = url3.split("/");
@@ -240,16 +239,22 @@ tr:hover{
 		const divide = url.split("?");
 		const front = divide[0];
 		const back = divide[1];
-		//alert(divide);
-		alert(${grade});
-		alert(${grade+1});
+		var grade = document.getElementById("grade").value;
+		grade1 = parseInt(grade)-1;
+
 		if(confirm("등급을 내리시겠습니까?")){
-			location.href = front +'?dno=' + dno + back;
-			alert("등급을 내렸습니다.");
-			location.href = url;				
+			if(!back){
+				location.href = front +'?dno=' + dno;
+				alert("등급을 내렸습니다.");		
+				select2();		
+			}else{
+				location.href = front +'?dno=' + dno+'&'+back;				
+				alert("등급을 내렸습니다.");
+				select2();
+			}
+				return false;
 		}
 	}
-	
 	</script>
 </head>
 
@@ -336,9 +341,23 @@ tr:hover{
 						<td>${fn:substring(l.getJoindate(), 0, 19 )}</td>
 						<td>${l.getBirthdate() }</td>
 						<td>
-							<button type="button" onclick="upGrade(${l.getNo()})" class="gradeButton">▲</button>
+							<c:choose>
+								<c:when test="${l.getGrade() eq 9}">
+									<button type="button" class="gradeButton" disabled ="disabled">▲</button>
+								</c:when>
+								<c:otherwise>
+									<button type="button" onclick="upGrade(${l.getNo()})" class="gradeButton">▲</button>								
+								</c:otherwise>
+							</c:choose>
 								${l.getGrade() }
-							<button type="button" onclick="downGrade(${l.getNo()})" class="gradeButton">▼</button>
+							<c:choose>
+								<c:when test="${l.getGrade() eq 1}">
+									<button type="button" class="gradeButton" disabled="disabled">▼</button>
+								</c:when>
+								<c:otherwise>
+									<button type="button" onclick="downGrade(${l.getNo()})" class="gradeButton">▼</button>
+								</c:otherwise>
+							</c:choose>
 						</td>
 						<td>${l.getHint() }</td>
 						<td>${l.getHintAnswer() }</td>

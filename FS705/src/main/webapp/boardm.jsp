@@ -20,7 +20,7 @@ a:link, a:visited{text-decoration:none;color:#333;}
 #wrapper{width:1280px;margin:0 auto;}
 
 /*------------------------------- container css -------------------------------*/
-	#container{width:82%;float:left;height:100vh;}
+	#container{width:82%;float:left;}
 		.boardBox{width:46.3%;margin:1.7%;float:left;}
 			.boardBox h2{width:100%;height:18px;line-height:18px;font-size:18px;font-weight:300;border-bottom:1px solid #eee;padding-bottom:5px;}
 				.boardBox h2 img{display:inline-block;width:16px;height:16px;vertical-align:middle;}

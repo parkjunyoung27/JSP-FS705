@@ -31,10 +31,10 @@ public class Boardm extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		
-		//if((int) session.getAttribute("category") != 9) {
-		//	response.sendRedirect("./error");
-		//}
-	
+//		if((int) session.getAttribute("category") != 9) {
+//			response.sendRedirect("./index");
+//		}
+//	
 		//-----------------log남기기----------------------------------------
 		//Session 불러오기
 		

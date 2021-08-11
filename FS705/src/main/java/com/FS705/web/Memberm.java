@@ -29,10 +29,10 @@ public class Memberm extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		HttpSession session = request.getSession();
-//		if((int) session.getAttribute("grade") != 9) {
-//			response.sendRedirect("./error");
-//		}
-//		
+		if((int) session.getAttribute("grade") != 9 && session.getAttribute("grade") != null) {
+			response.sendRedirect("./index");
+		}
+		
 		//-----------------log남기기----------------------------------------
 		//Session 불러오기
 		
@@ -64,11 +64,11 @@ public class Memberm extends HttpServlet {
 		String searchText = request.getParameter("searchText");
 		
 		
-		request.setAttribute("order", request.getParameter("order")); // order 
-		request.setAttribute("grade", request.getParameter("grade")); // grade 
-		request.setAttribute("gender", request.getParameter("gender")); // gender
-		request.setAttribute("searchType", request.getParameter("searchType")); // searchName
-		request.setAttribute("searchText", request.getParameter("searchText")); // search
+		request.setAttribute("order", request.getParameter("order"));  
+		request.setAttribute("grade", request.getParameter("grade"));  
+		request.setAttribute("gender", request.getParameter("gender")); 
+		request.setAttribute("searchType", request.getParameter("searchType")); 
+		request.setAttribute("searchText", request.getParameter("searchText")); 
 		
 		//-------------------------등급 올리기------------------
 		String uno = request.getParameter("uno");	
@@ -76,17 +76,15 @@ public class Memberm extends HttpServlet {
 		String dno = request.getParameter("dno");	
 		System.out.println(dno);
 		int number = 0;
-		int result = 0;
 		
 		if(uno != null || dno != null) {
-			int grade1 = Util.str2Int(grade);
-			if(uno != null) {
+			if(uno != null){
 				number = Util.str2Int(uno);
-				result = MemberDAO.upGrade(number);
+				 MemberDAO.upGrade(number);
 				}
-			else if (dno != null) {
+			else if(dno != null){
 				number = Util.str2Int(dno);
-				result = MemberDAO.downGrade(number);
+				MemberDAO.downGrade(number);
 			}
 		}
 		

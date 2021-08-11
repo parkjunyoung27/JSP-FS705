@@ -30,9 +30,9 @@ public class Admin extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		//grade가 있어야 됨 grade=9 는 관리자 등급 
-//		if((int) session.getAttribute("grade") != 9) {
-//			response.sendRedirect("./error");
-//		}
+		if((int) session.getAttribute("grade") != 9) {
+			response.sendRedirect("./index");
+		}
 		
 		//-----------------log남기기----------------------------------------
 		String id = "";
