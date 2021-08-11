@@ -8,6 +8,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 <title>Admin Board</title>
 <style type="text/css">
 /*------------------------------- reset css -------------------------------*/
@@ -132,6 +134,21 @@ tr:hover{
 
 #searchBack{width:100%; height:100%; background-color:rgba(0,0,0,0.5); position:fixed; left:0; top:0;z-index:98;display:none;}
 
+    #my_modal {
+        display: none;
+        width: 300px;
+        padding: 20px 60px;
+        background-color: #fefefe;
+        border: 1px solid #888;
+        border-radius: 3px;
+    }
+
+    #my_modal .modal_close_btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
              
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -206,7 +223,18 @@ tr:hover{
 			return false;
 		}		
 	}
-
+	function detailShow(title, content){
+		$("#searchBack, #searchBox").show();
+		$("#searchBox").text(title + content);
+	     return false;
+	   
+	}
+	$(function(){
+	   $("#searchBack, #searchBox").click(function(){
+	      $("#searchBack, #searchBox").hide();
+	   });		
+	});
+	
 </script>
 </head>
 <body>
@@ -296,7 +324,7 @@ tr:hover{
 						<td>${l.getBno() }</td>
 						<td>${l.getBcategory() }</td>
 						<td>${l.getSubCategory() }</td>
-						<td>${l.getBtitle() }</td>
+						<td onclick="detailShow('${l.getBtitle() }','${l.getBcontent() }')">${l.getBtitle() }</td>
 						<td>${fn:substring(l.getBcontent(), 0, 15 )}</td>
 						<td>${fn:substring(l.getBdate(), 0, 19 )}</td>
 						<td>${l.getBcount() }</td>
@@ -352,6 +380,7 @@ tr:hover{
 		</div>
 		
 	</div>
+
 	
 	<c:import url="plusBar.jsp"/>
 	<c:import url="footer.jsp"/>
@@ -360,6 +389,7 @@ tr:hover{
 </div>
 <div id="searchBox">
 </div>
+
 </body>
 </html>
 
