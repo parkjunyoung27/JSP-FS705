@@ -17,27 +17,27 @@
 <div id="categoryBar">
  <ul>
             <li>
-                <a href=""  data-url="">
+                <a href="./foodBoard?category=1">
                     한식
                 </a>
             </li>
             <li>
-                <a href=""  data-url="">
+                <a href="./foodBoard?category=2">
                     중식
                 </a>
             </li>
             <li>
-                <a href=""  data-url="">
+                <a href="./foodBoard?category=3">
                     일식
                 </a>
             </li>
             <li>
-                <a href=""  data-url="">
+                <a href="./foodBoard?category=4">
                     카페·디저트
                 </a>
             </li>
             <li>
-                <a href=""  data-url="">
+                <a href="./foodBoard">
                 ...
                 </a>
             </li>

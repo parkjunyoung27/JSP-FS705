@@ -2,7 +2,6 @@ package com.FS705.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,9 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
+import com.FS705.dao.FoodBoardDAO;
 import com.FS705.dao.LogDAO;
+import com.FS705.dto.FoodBoardDTO;
 import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 
@@ -53,6 +53,10 @@ public class Index extends HttpServlet {
 
 	LogDAO.insertLog(logDto);
 	
+	//foodBoard 추천 게시글
+	ArrayList<FoodBoardDTO> list = null;
+	list = FoodBoardDAO.getInstance().foodBoardLike();
+	request.setAttribute("dto", list);
 	
 	//RD에 붙이기 
 	RequestDispatcher rd = request.getRequestDispatcher("./index.jsp"); // index.jsp가 열리면서 해당 내용이 뜸 
