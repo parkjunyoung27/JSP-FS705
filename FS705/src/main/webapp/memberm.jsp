@@ -63,18 +63,26 @@ table{ /* 테이블*/
 	background-color: #ffffff;
 	border-collapse: collapse;
 	text-align: center;
-	overflow: scroll;
+	display: block;
+	overflow: auto;
+}
+
+tbody {
+    min-width: 1000px;
+    display: inline-block;
+    padding: 5px;
 }
 
 table th{ /*메뉴 제목*/
 	font-size: 110%;
 	font-weight: bold;
 	border-bottom: 4px #2B55B1 solid;
-	height: 50px;
+	height: 75px;
 }
 
 table td{ /* 제목*/ 
 	border-bottom : 1px #2B55B1 solid;
+	height: 150px;
 }
 
 h1{ /* 제목*/
@@ -115,6 +123,10 @@ tr:hover{
     margin-bottom: 10px;
 }
 
+.gradeButton {
+    display: block;
+}
+
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript">
@@ -130,6 +142,20 @@ tr:hover{
 				+'&grade=' + grade + '&gender=' + gender + '&searchType=' + searchType
 				+'&searchText=' + searchText + '&page=' +1;
 		}
+	
+	function select2(){
+		var order = document.getElementById("order").value;
+		var grade = document.getElementById("grade").value;
+		var grade1 = parseInt(grade)+1;
+		var gender = document.getElementById("gender").value;
+		var searchType = document.getElementById("searchType").value;
+		var searchText = document.getElementById("searchText").value;
+		
+		location.href = 'memberm?order=' + order
+				+'&grade=' + grade1 + '&gender=' + gender + '&searchType=' + searchType
+				+'&searchText=' + searchText + '&page=' +1;
+		}
+	
 	function checkSelectAll()  {
 		  // 전체 체크박스
 		  const checkboxes //전체 갯수 선택했을때 갯수 세기 
@@ -182,6 +208,48 @@ tr:hover{
 		}		
 	}
 	
+	function upGrade(uno){
+		const url3 = window.location.href;
+		const url2 = url3.split("/");
+		const url = url2[4];
+		const divide = url.split("?");
+		const front = divide[0];
+		const back = divide[1];
+		//alert(divide);
+		if(confirm("등급을 올리시겠습니까?")){
+			if(!back){
+				location.href = front +'?uno=' + uno;
+				alert("등급을 올렸습니다.");		
+				return select2();				
+			}else{
+				location.href = front +'?uno=' + uno+'&'+back;				
+				alert("등급을 올렸습니다.");
+				return select2();
+			}
+			
+			//location.href = "/memberm?order"+${order}+"&grade="+${grade1}+"&gender=" +
+			//		 ${gender} + "&searchType="+${searchType}+"&searchText" +
+			//		${searchText}+"&page="+${page};
+		}
+	}
+	
+	function downGrade(dno){
+		const url3 = window.location.href;
+		const url2 = url3.split("/");
+		const url = url2[4];
+		const divide = url.split("?");
+		const front = divide[0];
+		const back = divide[1];
+		//alert(divide);
+		alert(${grade});
+		alert(${grade+1});
+		if(confirm("등급을 내리시겠습니까?")){
+			location.href = front +'?dno=' + dno + back;
+			alert("등급을 내렸습니다.");
+			location.href = url;				
+		}
+	}
+	
 	</script>
 </head>
 
@@ -221,7 +289,7 @@ tr:hover{
 						<th>이름</th>
 						<th>아이디</th>
 						<th>패스워드</th>
-						<th>성별
+						<th>
 						<select onchange="select()" id="gender">
 						<option value="" selected>성별 전체</option>
 							<c:forEach items="${genderList}" var="g">
@@ -237,7 +305,7 @@ tr:hover{
 						<th>이메일</th>
 						<th>가입일</th>
 						<th>생일</th>
-						<th>등급
+						<th>
 						<select onchange="select()" id="grade">
 						<option value="" selected>등급 전체</option>
 							<c:forEach items="${gradeList}" var="g">
@@ -267,9 +335,10 @@ tr:hover{
 						<td>${l.getEmail() }</td>
 						<td>${fn:substring(l.getJoindate(), 0, 19 )}</td>
 						<td>${l.getBirthdate() }</td>
-						<td>${l.getGrade() }
-						<button type="submit">▲</button>
-						 <button type="submit">▼</button>
+						<td>
+							<button type="button" onclick="upGrade(${l.getNo()})" class="gradeButton">▲</button>
+								${l.getGrade() }
+							<button type="button" onclick="downGrade(${l.getNo()})" class="gradeButton">▼</button>
 						</td>
 						<td>${l.getHint() }</td>
 						<td>${l.getHintAnswer() }</td>

@@ -711,4 +711,43 @@ public class MemberDAO {
 		}
 		return result;
 	}
+
+		public static int upGrade(int number) {
+			int result = 0;
+			Connection con = DBConnection.dbconn();
+			PreparedStatement pstmt = null;
+			String sql = "UPDATE member SET grade= grade+1 WHERE no=?";
+			
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, number);
+				result = pstmt.executeUpdate();
+				System.out.println("업그레이드가 완료됐습니다.");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally {
+				Util.closeAll(null, pstmt, con);
+			}
+			return result;
+		}
+
+		public static int downGrade(int number) {
+			int result = 0;
+			Connection con = DBConnection.dbconn();
+			PreparedStatement pstmt = null;
+			String sql = "UPDATE member SET grade = grade-1 WHERE no=?";
+			
+			try {
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, number);
+				result = pstmt.executeUpdate();
+				System.out.println("다운그레이드가 완료됐습니다.");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally {
+				Util.closeAll(null, pstmt, con);
+			}
+			return result;
+		}
+			
 }

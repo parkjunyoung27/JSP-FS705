@@ -63,12 +63,34 @@ public class Memberm extends HttpServlet {
 		String searchType = request.getParameter("searchType");
 		String searchText = request.getParameter("searchText");
 		
+		
 		request.setAttribute("order", request.getParameter("order")); // order 
 		request.setAttribute("grade", request.getParameter("grade")); // grade 
 		request.setAttribute("gender", request.getParameter("gender")); // gender
 		request.setAttribute("searchType", request.getParameter("searchType")); // searchName
 		request.setAttribute("searchText", request.getParameter("searchText")); // search
 		
+		//-------------------------등급 올리기------------------
+		String uno = request.getParameter("uno");	
+		System.out.println(uno);
+		String dno = request.getParameter("dno");	
+		System.out.println(dno);
+		int number = 0;
+		int result = 0;
+		
+		if(uno != null || dno != null) {
+			int grade1 = Util.str2Int(grade);
+			if(uno != null) {
+				number = Util.str2Int(uno);
+				result = MemberDAO.upGrade(number);
+				}
+			else if (dno != null) {
+				number = Util.str2Int(dno);
+				result = MemberDAO.downGrade(number);
+			}
+		}
+		
+		//정렬
 		String orderSql = "";
 		if(order != null) {
 			if(order.equals("DESC")) {
@@ -144,6 +166,7 @@ public class Memberm extends HttpServlet {
 		if(memberList != null && memberList.size() > 0) {
 			request.setAttribute("totalCount", memberList.get(0).getTotalCount());
 		}
+		
 		
 		//RD에 붙이기 
 		RequestDispatcher rd = request.getRequestDispatcher("./memberm.jsp"); // index.jsp가 열리면서 해당 내용이 뜸 	
