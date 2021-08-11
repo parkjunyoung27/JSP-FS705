@@ -51,6 +51,7 @@ public class Login extends HttpServlet {
 			session.setAttribute("id", result.getId());
 			session.setAttribute("name", result.getName());
 			session.setAttribute("grade", result.getGrade());
+			session.setAttribute("profile", result.getProfile());
 			
 			//성공시 -> 인덱스
 			response.sendRedirect("./index.jsp");

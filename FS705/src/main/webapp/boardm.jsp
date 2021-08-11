@@ -133,21 +133,9 @@ tr:hover{
 .searchResult{width:100%;height:34px;border-bottom:1px solid #eee;border-right:1px solid #eee;cursor:pointer;transition:0.3s;}
 
 #searchBack{width:100%; height:100%; background-color:rgba(0,0,0,0.5); position:fixed; left:0; top:0;z-index:98;display:none;}
-
-    #my_modal {
-        display: none;
-        width: 300px;
-        padding: 20px 60px;
-        background-color: #fefefe;
-        border: 1px solid #888;
-        border-radius: 3px;
-    }
-
-    #my_modal .modal_close_btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
+	
+	#sbTitle{width:100%;height:50px;line-height:50px;text-align:center;font-weight:600;font-size:20px;border-bottom:1px solid gray;}
+	#sbContent{width:100%;padding-top:5px;text-indent:10px;overflow:auto;}
 
              
 </style>
@@ -225,7 +213,8 @@ tr:hover{
 	}
 	function detailShow(title, content){
 		$("#searchBack, #searchBox").show();
-		$("#searchBox").text(title + content);
+		$("#sbTitle").text(title);
+		$("#sbContent").text(content);
 	     return false;
 	   
 	}
@@ -388,8 +377,9 @@ tr:hover{
 <div id="searchBack">
 </div>
 <div id="searchBox">
+	<div id="sbTitle"></div>
+	<div id="sbContent"></div>
 </div>
-
 </body>
 </html>
 
