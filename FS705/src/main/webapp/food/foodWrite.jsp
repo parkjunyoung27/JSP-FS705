@@ -71,10 +71,10 @@ $(document).ready(function(){
 				</select>
 				<select name="semiCate">
 				    <option value="">---</option>
-				    <option value="한식">한식</option>
-				    <option value="중식">중식</option>
-				    <option value="일식">일식</option>
-				    <option value="카페·디저트">카페·디저트</option>
+				    <option value="1">한식</option>
+				    <option value="2">중식</option>
+				    <option value="3">일식</option>
+				    <option value="4">카페·디저트</option>
 				</select>
 				<div id="writeArea">
 					<p id="title">
