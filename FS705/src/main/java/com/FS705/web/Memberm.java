@@ -29,7 +29,7 @@ public class Memberm extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		HttpSession session = request.getSession();
-		if((int) session.getAttribute("grade") != 9 && session.getAttribute("grade") != null) {
+		if((int) session.getAttribute("grade") != 9 || session.getAttribute("grade") == null) {
 			response.sendRedirect("./index");
 		}
 		
