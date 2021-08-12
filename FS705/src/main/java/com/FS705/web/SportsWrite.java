@@ -17,7 +17,10 @@ import javax.servlet.http.HttpSession;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.FS705.dao.LogDAO;
 import com.FS705.dao.SportsDAO;
+import com.FS705.dto.LogDTO;
+import com.FS705.util.Util;
 
 @WebServlet("/sportsWrite")
 public class SportsWrite extends HttpServlet {
@@ -28,6 +31,23 @@ public class SportsWrite extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+    	HttpSession session = request.getSession();
+
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("SportsWrite");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("get");
+		LogDAO.insertLog(logDto);
+    	
     	RequestDispatcher rd 
     			= request.getRequestDispatcher("sportsWrite.jsp");
     	rd.forward(request, response);
@@ -36,6 +56,23 @@ public class SportsWrite extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//한글처리
 		request.setCharacterEncoding("UTF-8");
+		
+		HttpSession session = request.getSession();
+
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("SportsWrite");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("post");
+		LogDAO.insertLog(logDto);
+		
 		//multipart
 		//경로 = webapp가 최상위 경로입니다 == /
 		String path = request.getSession().getServletContext().getRealPath("/");
@@ -100,7 +137,6 @@ public class SportsWrite extends HttpServlet {
 		map.put("thumbnail", saveFile);//썸네일입니다. 변경할겁니다.
 		
 		//ID값도 보내겠습니다 
-		HttpSession session = request.getSession();
 		map.put("id", session.getAttribute("id"));
 		
 		//DAO호출
