@@ -1,7 +1,21 @@
+<%@page import="com.FS705.dto.GameBoardDTO"%>
+<%@page import="com.FS705.dao.GameBoardDAO"%>
+<%@page import="com.FS705.dto.HumorBoardDTO"%>
+<%@page import="com.FS705.dao.HumorBoardDAO"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
+<%
+ArrayList<GameBoardDTO> glist = null;
+glist = GameBoardDAO.getInstance().gameBoardLike();
+request.setAttribute("gdto", glist);
+%>
+<%
+ArrayList<HumorBoardDTO> hlist = null;
+hlist = HumorBoardDAO.getInstance().humorBoardLike();
+request.setAttribute("hdto", hlist);
+%>	
 <html>
 <head>
 <meta charset="UTF-8">
@@ -72,31 +86,31 @@ $(function(){
 		<div id="food" class="boardBox">
 			<h2><img alt="맛집" src="./img/food.png"> 맛집</h2>
 			<!-- 구간반복지점 -->
-			<c:forEach items="${dto }" var="dto">
+			<c:forEach items="${fdto }" var="fdto">
 				<ul class="main" onclick="">
-					<li class="title"><a href="foodView?bno=${dto.bno }">[<c:choose>
-						<c:when test="${dto.subCategory eq 1 }">
+					<li class="title"><a href="foodView?bno=${fdto.bno }">[<c:choose>
+						<c:when test="${fdto.subCategory eq 1 }">
 						한식
 						</c:when>
-						<c:when test="${dto.subCategory eq 2 }">
+						<c:when test="${fdto.subCategory eq 2 }">
 						중식
 						</c:when>
-						<c:when test="${dto.subCategory eq 3 }">
+						<c:when test="${fdto.subCategory eq 3 }">
 						일식
 						</c:when>
-						<c:when test="${dto.subCategory eq 4 }">
+						<c:when test="${fto.subCategory eq 4 }">
 						카페·디저트
 						</c:when>
 						<c:otherwise>
 						기타
 						</c:otherwise>
 					</c:choose>]
-					 ${dto.btitle }</a></li>
-					<li>${dto.id }</li>
-					<li><img alt="좋아요" src="./img/like.png">${dto.blike }</li>
+					 ${fdto.btitle }</a></li>
+					<li>${fdto.id }</li>
+					<li><img alt="좋아요" src="./img/like.png">${fdto.blike }</li>
 					<li>
-					<c:if test="${dto.bdate eq 0}">오늘</c:if>
-					<c:if test="${dto.bdate ne 0}">${dto.bdate }일 전</c:if>
+					<c:if test="${fdto.bdate eq 0}">오늘</c:if>
+					<c:if test="${fdto.bdate ne 0}">${dto.bdate }일 전</c:if>
 					</li>
 				</ul>
 				</c:forEach>
@@ -116,23 +130,67 @@ $(function(){
 		<div id="game" class="boardBox">
 			<h2><img alt="게임" src="./img/game.png"> 게임</h2>
 			<!-- 구간반복지점 -->
-				<ul class="main" onclick="location.href=''">
-					<li class="title"><a href="">자바 웹 개발자를 위한 개발 가이드</a></li>
-					<li>아이디</li>
-					<li><img alt="좋아요" src="./img/like.png"> 54k</li>
-					<li>11일 전</li>
+			<c:forEach items="${gdto }" var="gdto">
+				<ul class="main" onclick="">
+					<li class="title"><a href="gameView?bno=${gdto.bno }">[<c:choose>
+						<c:when test="${gdto.subCategory eq 1 }">
+						리그오브레전드
+						</c:when>
+						<c:when test="${gdto.subCategory eq 2 }">
+						오버워치
+						</c:when>
+						<c:when test="${gdto.subCategory eq 3 }">
+						배틀그라운드
+						</c:when>
+						<c:when test="${gdto.subCategory eq 4 }">
+						모바일
+						</c:when>
+						<c:otherwise>
+						기타
+						</c:otherwise>
+					</c:choose>]
+					 ${gdto.btitle }</a></li>
+					<li>${gdto.id }</li>
+					<li><img alt="좋아요" src="./img/like.png">${gdto.blike }</li>
+					<li>
+					<c:if test="${gdto.bdate eq 0}">오늘</c:if>
+					<c:if test="${gdto.bdate ne 0}">${dto.bdate }일 전</c:if>
+					</li>
 				</ul>
+				</c:forEach>
 			<!-- 구간반복지점 -->
 		</div>
 		<div id="funny" class="boardBox">
 			<h2><img alt="유머" src="./img/fun.png"> 유머</h2>
 			<!-- 구간반복지점 -->
-				<ul class="main" onclick="location.href=''">
-					<li class="title"><a href="">자바 웹 개발자를 위한 개발 가이드</a></li>
-					<li>아이디</li>
-					<li><img alt="좋아요" src="./img/like.png"> 54k</li>
-					<li>11일 전</li>
+			<c:forEach items="${hdto }" var="i">
+				<ul class="main" onclick="">
+					<li class="title"><a href="humorView?bno=${i.bno }">[<c:choose>
+						<c:when test="${i.subCategory eq 1 }">
+						잡담
+						</c:when>
+						<c:when test="${i.subCategory eq 2 }">
+						이슈
+						</c:when>
+						<c:when test="${i.subCategory eq 3 }">
+						감동
+						</c:when>
+						<c:when test="${i.subCategory eq 4 }">
+						정치
+						</c:when>
+						<c:otherwise>
+						기타
+						</c:otherwise>
+					</c:choose>]
+					 ${i.btitle }</a></li>
+					<li>${i.id }</li>
+					<li><img alt="좋아요" src="./img/like.png">${i.blike }</li>
+					<li>
+					<c:if test="${i.bdate eq 0}">오늘</c:if>
+					<c:if test="${i.bdate ne 0}">${i.bdate }일 전</c:if>
+					</li>
 				</ul>
+				</c:forEach>
 			<!-- 구간반복지점 -->
 		</div>
 	</div>
