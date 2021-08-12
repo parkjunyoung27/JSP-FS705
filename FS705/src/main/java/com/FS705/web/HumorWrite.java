@@ -13,9 +13,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.HumorBoardDAO;
+import com.FS705.dao.LogDAO;
 import com.FS705.dto.HumorBoardDTO;
+import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -30,6 +33,23 @@ public class HumorWrite extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		HttpSession session = request.getSession();
+
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("HumorWrite");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("get");
+		LogDAO.insertLog(logDto);
+		
 		RequestDispatcher rd = request.getRequestDispatcher("./humor/humorWrite.jsp");
 		rd.forward(request, response);
 	}
@@ -37,6 +57,23 @@ public class HumorWrite extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		
+		HttpSession session = request.getSession();
+
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("HumorWrite");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("post");
+		LogDAO.insertLog(logDto);
+		
 		String path = request.getServletContext().getRealPath("/");
 		String savePath = path + "upload/humorUpload/"; // humor 파일 저장 경로
 		int maxSize = 1024 * 1024 * 10; // 파일 업로드 사이즈 설정
