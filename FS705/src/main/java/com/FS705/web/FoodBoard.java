@@ -9,9 +9,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.FoodBoardDAO;
+import com.FS705.dao.LogDAO;
 import com.FS705.dto.FoodBoardDTO;
+import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 
 @WebServlet("/foodBoard")
@@ -24,6 +27,22 @@ public class FoodBoard extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("FoodBoard");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("get");
+		LogDAO.insertLog(logDto);
+		
 		
 		int page = 1;
 		if (request.getParameter("page") != null) {
@@ -51,6 +70,23 @@ public class FoodBoard extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		
+		HttpSession session = request.getSession();
+
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("FoodBoard");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("post");
+		LogDAO.insertLog(logDto);
+		
 		String searchOption = request.getParameter("searchOption");
 		String search = request.getParameter("search");
 		int page = 1;

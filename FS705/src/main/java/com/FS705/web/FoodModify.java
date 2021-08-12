@@ -8,9 +8,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.FoodBoardDAO;
+import com.FS705.dao.LogDAO;
 import com.FS705.dto.FoodBoardDTO;
+import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -24,11 +27,28 @@ public class FoodModify extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		HttpSession session = request.getSession();
+
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("FoodModify");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("get");
+		LogDAO.insertLog(logDto);
+		
 	
 	if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0) {
 		//&& request.getSession().getAttribute("id")){
 		// id = (String) request.getSession().getAttribute("id");
-		String id = "an";
+		 id = "an";
 		FoodBoardDTO modifyImport = FoodBoardDAO.getInstance().boardModifyImport(Util.str2Int(request.getParameter("bno")), id);		
 		RequestDispatcher rd = request.getRequestDispatcher("./food/foodModify.jsp");
 		request.setAttribute("modifyImport", modifyImport);
@@ -41,6 +61,22 @@ public class FoodModify extends HttpServlet {
 	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("FoodModify");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("post");
+		LogDAO.insertLog(logDto);
+		
 		request.setCharacterEncoding("UTF-8");
 		String path = request.getServletContext().getRealPath("/");
 		String savePath = path + "upload/foodUpload/"; // food 파일 저장 경로
@@ -51,7 +87,7 @@ public class FoodModify extends HttpServlet {
 		if(multi.getParameter("bno") != null && Util.str2Int(multi.getParameter("bno")) != 0) {
 			//&& request.getSession().getAttribute("id")){
 			// id = (String) request.getSession().getAttribute("id");
-			String id = "an";
+			 id = "an";
 			int result = 0;
 			int bno = Util.str2Int(multi.getParameter("bno"));
 			String title = Util.replace(multi.getParameter("title"));
