@@ -12,8 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.FoodBoardDAO;
+import com.FS705.dao.GameBoardDAO;
+import com.FS705.dao.HumorBoardDAO;
 import com.FS705.dao.LogDAO;
 import com.FS705.dto.FoodBoardDTO;
+import com.FS705.dto.GameBoardDTO;
+import com.FS705.dto.HumorBoardDTO;
 import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 
@@ -54,9 +58,19 @@ public class Index extends HttpServlet {
 	LogDAO.insertLog(logDto);
 	
 	//foodBoard 추천 게시글
-	ArrayList<FoodBoardDTO> list = null;
-	list = FoodBoardDAO.getInstance().foodBoardLike();
-	request.setAttribute("dto", list);
+	ArrayList<FoodBoardDTO> flist = null;
+	flist = FoodBoardDAO.getInstance().foodBoardLike();
+	request.setAttribute("fdto", flist);
+	
+	//gameBoard 추천 게시글
+	ArrayList<GameBoardDTO> glist = null;
+	glist = GameBoardDAO.getInstance().gameBoardLike();
+	request.setAttribute("gdto", glist);
+	
+	//humorBoard 추천 게시글
+	ArrayList<HumorBoardDTO> hlist = null;
+	hlist = HumorBoardDAO.getInstance().humorBoardLike();
+	request.setAttribute("hdto", hlist);
 	
 	//RD에 붙이기 
 	RequestDispatcher rd = request.getRequestDispatcher("./index.jsp"); // index.jsp가 열리면서 해당 내용이 뜸 
