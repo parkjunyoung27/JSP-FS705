@@ -1,21 +1,9 @@
-<%@page import="com.FS705.dto.GameBoardDTO"%>
-<%@page import="com.FS705.dao.GameBoardDAO"%>
-<%@page import="com.FS705.dto.HumorBoardDTO"%>
-<%@page import="com.FS705.dao.HumorBoardDAO"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%
-ArrayList<GameBoardDTO> glist = null;
-glist = GameBoardDAO.getInstance().gameBoardLike();
-request.setAttribute("gdto", glist);
-%>
-<%
-ArrayList<HumorBoardDTO> hlist = null;
-hlist = HumorBoardDAO.getInstance().humorBoardLike();
-request.setAttribute("hdto", hlist);
-%>	
+<c:if test="${gdto eq null}">
+	<c:redirect url="./index"/>
+</c:if>
 <html>
 <head>
 <meta charset="UTF-8">
