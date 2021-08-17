@@ -2,9 +2,81 @@ package com.FS705.dto;
 
 public class BoardDTO {
 
-	private int bno, bcount, no, blike, bdislike, commentCount, totalCount;
+	private int cno, clike, cdislike, bno, bcount, no, blike, bdislike, commentCount, sportsCount;
 	
-	private String btitle, bcontent, bcategory, bdate, bthumbnail, subCategory, bfile;
+	private String id, name, btitle, bcontent, bcategory, bdate, bdate2, bthumbnail, subCategory, bfile, ccontent, cip;
+	
+	public int getSportsCount() {
+		return sportsCount;
+	}
+
+	public int getCno() {
+		return cno;
+	}
+
+	public void setCno(int cno) {
+		this.cno = cno;
+	}
+
+	public int getClike() {
+		return clike;
+	}
+
+	public void setClike(int clike) {
+		this.clike = clike;
+	}
+
+	public int getCdislike() {
+		return cdislike;
+	}
+
+	public void setCdislike(int cdislike) {
+		this.cdislike = cdislike;
+	}
+
+	public String getCcontent() {
+		return ccontent;
+	}
+
+	public void setCcontent(String ccontent) {
+		this.ccontent = ccontent;
+	}
+
+	public String getCip() {
+		return cip;
+	}
+
+	public void setCip(String cip) {
+		this.cip = cip;
+	}
+
+	public void setSportsCount(int sportsCount) {
+		this.sportsCount = sportsCount;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getBdate2() {
+		return bdate2;
+	}
+
+	public void setBdate2(String bdate2) {
+		this.bdate2 = bdate2;
+	}
 
 	public int getBno() {
 		return bno;
@@ -109,16 +181,5 @@ public class BoardDTO {
 	public void setBfile(String bfile) {
 		this.bfile = bfile;
 	}
-
-	public int getTotalCount() {
-		return totalCount;
-	}
-
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}
-
-	
-
 	
 }
