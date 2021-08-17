@@ -2,7 +2,6 @@ package com.FS705.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.LogDAO;
 import com.FS705.dao.SportsDAO;
+import com.FS705.dto.BoardDTO;
 import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 
@@ -25,6 +25,7 @@ public class Sports extends HttpServlet {
         super();
     }
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		HttpSession session = request.getSession();
 
 		String id = "";
@@ -41,31 +42,65 @@ public class Sports extends HttpServlet {
 		logDto.setLogMethod("get");
 		LogDAO.insertLog(logDto);
 		
-		//데이터 불러오기 galleryview에서 모든 데이터 가져오기
-		//GalleryDAO dao =  GalleryDAO.getInstance();
-		//ArrayList<HashMap<String, Object>> list = dao.galleryList();
-		//ArrayList<HashMap<String, Object>> list2  = GalleryDAO.getInstance().galleryList(); 
+		
 		int page = 1;
-		if(request.getParameter("page") != null) {
+		if (request.getParameter("page") != null) {
 			page = Util.str2Int(request.getParameter("page"));
 		}
-		//페이지 넘기기
-		RequestDispatcher rd 
-				= request.getRequestDispatcher("sports.jsp");
-		//request.setAttribute("list", list2);
-		ArrayList<HashMap<String, Object>> list =  SportsDAO.getInstance().sportsList((page - 1 ) * 5);
-		request.setAttribute("list", list);
 		
-		if(list != null && list.size() > 0) {
-			request.setAttribute("sportsCount", list.get(0).get("sportsCount"));
+		ArrayList<BoardDTO> list = null;
+		if(request.getParameter("category")==null) {
+			list = SportsDAO.getInstance().sportsList((page - 1) * 10);
+			request.setAttribute("dto", list);
+		} else {
+			int category = Util.str2Int(request.getParameter("category"));					
+			list = SportsDAO.getInstance().selectList((page - 1) * 10, category);
+			request.setAttribute("dto", list);
 		}
-		//page보내기
-		request.setAttribute("page", page);
 		
+		if (list.size() > 0) {
+			request.setAttribute("totalCount", list.get(0).getSportsCount());
+		}	
+		request.setAttribute("page", page);
+		RequestDispatcher rd = request.getRequestDispatcher("./sports/sports.jsp");
 		rd.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+		request.setCharacterEncoding("UTF-8");
+		
+		HttpSession session = request.getSession();
+
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("sports");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("post");
+		LogDAO.insertLog(logDto);
+		
+		String searchOption = request.getParameter("searchOption");
+		String search = request.getParameter("search");
+		int page = 1;
+		if(request.getParameter("page") != null) {
+			page = Util.str2Int(request.getParameter("page"));
+		}		
+		ArrayList<BoardDTO> list = SportsDAO.getInstance().searchList(searchOption, search, (page - 1) * 10);
+		if(list != null && list.size() > 0) {
+			request.setAttribute("totalCount", list.get(0).getSportsCount());
+		}
+		request.setAttribute("page", page);
+		request.setAttribute("dto", list);
+		RequestDispatcher rd = request.getRequestDispatcher("./sports/sports.jsp");
+		rd.forward(request, response);		
+		
 	}
 
 }

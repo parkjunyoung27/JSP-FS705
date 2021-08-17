@@ -1,7 +1,7 @@
 package com.FS705.web;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.LogDAO;
 import com.FS705.dao.SportsDAO;
+import com.FS705.dto.BoardDTO;
 import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 
@@ -25,40 +26,43 @@ public class SportsDetail extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		HttpSession session = request.getSession();
-
+		
 		String id = "";
 		if(session.getAttribute(id) != null) {
-			id = (String)session.getAttribute("id");
+			id = (String) session.getAttribute("id");
 		}
 		
 		LogDTO logDto = new LogDTO();
-				
+		
 		logDto.setLogIp(Util.getIP(request));
 		logDto.setLogTarget("SportsDetail");
-		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogdId((String) session.getAttribute(id));
 		logDto.setLogEtc(request.getHeader("User-Agent"));
 		logDto.setLogMethod("get");
 		LogDAO.insertLog(logDto);
 		
-		if(request.getParameter("sno") != null 
-				&& Util.str2Int2(request.getParameter("sno")) != 0
+		if(request.getParameter("bno") != null 
+				&& Util.str2Int2(request.getParameter("bno")) != 0
 				){
-			int sno = Util.str2Int(request.getParameter("sno"));
-			SportsDAO dao = SportsDAO.getInstance();
-			HashMap<String, Object> dto = dao.detail(sno);
-			//댓글은 갤러리 땐 하지 않겠습니다. 이미 자유게시판에 해서.
-			/*
-			 * if(((int)dto.get("commentcount")) > 0) { ArrayList<HashMap<String, Object>>
-			 * commentList = dao.commentList(gno); request.setAttribute("commentList",
-			 * commentList); }
-			 */
-			RequestDispatcher rd = request.getRequestDispatcher("./sportsDetail.jsp");
-			request.setAttribute("dto", dto);
-			rd.forward(request, response);			
+			
+		RequestDispatcher rd = request.getRequestDispatcher("./sports/sportsDetail.jsp");
+		
+		SportsDAO.getInstance().count(Util.str2Int(request.getParameter("bno")));
+		BoardDTO dto = SportsDAO.getInstance().detail
+				(Util.str2Int(request.getParameter("bno")));
+		request.setAttribute("dto", dto);
+		
+		if(dto.getCommentCount() > 0) {
+			ArrayList<BoardDTO> commentDto = 
+					SportsDAO.getInstance().sportsCommentList((dto.getBno()));
+			request.setAttribute("commentDto", commentDto);
+		}
+		
+		rd.forward(request, response);			
+			
 		} else {
-			response.sendRedirect("./sports");
+			response.sendRedirect("./error?code=sportsError");
 		}
 	}
 
