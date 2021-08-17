@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-08-17T12:30:16.026Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36" etag="iBq2NJbSSHlTl66sTS5A" version="14.9.7" type="github">
+<mxfile host="app.diagrams.net" modified="2021-08-17T12:31:34.074Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36" etag="wHw2TxKzBKAwaHe5fFO_" version="14.9.7" type="github">
   <diagram name="Page-1" id="2c0d36ab-eaac-3732-788b-9136903baeff">
     <mxGraphModel dx="2100" dy="1089" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1.5" pageWidth="1169" pageHeight="827" background="#FFFFFF" math="0" shadow="0">
       <root>
@@ -97,7 +97,7 @@
         <mxCell id="CkdO9dEeyM24k6zbKlpi-169" value="푸드   " style="rounded=1;fillColor=#23445D;gradientColor=none;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontFamily=Tahoma;fontSize=14" vertex="1" parent="1">
           <mxGeometry x="730" y="480" width="190" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="CkdO9dEeyM24k6zbKlpi-170" value="스포릋" style="rounded=1;fillColor=#23445D;gradientColor=none;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontFamily=Tahoma;fontSize=14" vertex="1" parent="1">
+        <mxCell id="CkdO9dEeyM24k6zbKlpi-170" value="스포츠" style="rounded=1;fillColor=#23445D;gradientColor=none;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontFamily=Tahoma;fontSize=14" vertex="1" parent="1">
           <mxGeometry x="1007" y="480" width="190" height="80" as="geometry" />
         </mxCell>
         <mxCell id="CkdO9dEeyM24k6zbKlpi-171" value="게임" style="rounded=1;fillColor=#23445D;gradientColor=none;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontFamily=Tahoma;fontSize=14" vertex="1" parent="1">
@@ -105,6 +105,9 @@
         </mxCell>
         <mxCell id="CkdO9dEeyM24k6zbKlpi-172" value="유머" style="rounded=1;fillColor=#23445D;gradientColor=none;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontFamily=Tahoma;fontSize=14" vertex="1" parent="1">
           <mxGeometry x="1520" y="480" width="190" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="CkdO9dEeyM24k6zbKlpi-173" value="상세보기" style="rounded=1;fillColor=#23445D;gradientColor=none;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontFamily=Tahoma;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="730" y="600" width="190" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
