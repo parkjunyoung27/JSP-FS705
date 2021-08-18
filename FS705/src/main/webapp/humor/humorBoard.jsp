@@ -71,7 +71,7 @@ function select(){
 	<c:import url="/humor/categoryBar.jsp"/>
 	<div id="container">	
 		<div id="humor" class="boardBox">		
-			<h2><img alt="유머" src="./img/humor.png"> 유머</h2>
+			<h2><img alt="유머" src="./img/fun.png"> 유머</h2>
 			<!-- 구간반복지점 -->
 			<c:forEach items="${dto }" var="dto">
 				<ul class="main" onclick="">
@@ -122,8 +122,8 @@ function select(){
 				</div>
 		</div>		
 	</div>	
+	<c:import url="/plusBar.jsp"/>
 	<c:import url="/footer.jsp"/>
 </div>
-<c:import url="/plusBar.jsp"/>
 </body>
 </html>

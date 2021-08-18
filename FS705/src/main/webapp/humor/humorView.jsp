@@ -182,14 +182,18 @@ function humorVote(bno, code){
 												<div class="modifyInputP">
 													<div class="modifyInput"> 
 													 	<div id="cbContent">${cmt.ccontent }</div>
+													 	<c:if test="${cmt.id eq sessionScope.id }">
 														<span id="reWrite" class="clear1">수정하기</span>
+														</c:if>
 													 	<div class="fno" style="display: none;">${cmt.bno }</div>
 													 	<div class="fcno" style="display: none;">${cmt.cno }</div>
 													</div>
 													<div class="commentDelete">
 														<form action="./humorCommentDelete" method="post">
 															<input type="hidden" name="bno" value="${cmt.bno }"><input type="hidden" name="cno" value="${cmt.cno }">
+															<c:if test="${cmt.id eq sessionScope.id }">
 															<button id="reWrite">삭제하기</button>
+															</c:if>
 														</form>
 													</div>
 													<div class="modifyWrite">
@@ -241,7 +245,7 @@ function humorVote(bno, code){
 	<div id="write"><a href="./humorBoard">게시판으로 이동</a></div>
 	</div>
 	<c:import url="/plusBar.jsp"/>
-	<c:import url="/footer.jsp"/>
 </div>
+	<c:import url="/footer.jsp"/>
 </body>
 </html>
