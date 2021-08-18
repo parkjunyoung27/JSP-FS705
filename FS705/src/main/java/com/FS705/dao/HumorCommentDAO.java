@@ -41,10 +41,8 @@ public class HumorCommentDAO {
 					dto.setNo(rs.getInt("no"));
 					dto.setClike(rs.getInt("clike"));
 					dto.setCdislike(rs.getInt("cdislike"));
-//					dto.setId(rs.getString("id"));
-//					dto.setName(rs.getString("name"));
-					dto.setId("kimkim");
-					dto.setName("김김");
+					dto.setId(rs.getString("id"));
+					dto.setName(rs.getString("name"));
 					cmt.add(dto);
 				}				
 			}

@@ -111,8 +111,7 @@ public class HumorBoardDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getBtitle());
 			pstmt.setString(2, dto.getBcontent());
-//			pstmt.setString(3, dto.getId());
-			pstmt.setString(3, "kimkim");
+			pstmt.setString(3, dto.getId());
 			pstmt.setString(4, dto.getSubCategory());
 			pstmt.setString(5, dto.getBfile());
 			result = pstmt.executeUpdate();
