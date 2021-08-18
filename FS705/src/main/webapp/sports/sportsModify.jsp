@@ -71,10 +71,10 @@ $(document).ready(function(){
 				</select>
 				<select name="semiCate">
 				    <option value="">---</option>
-				    <option value="야구">야구</option>
-				    <option value="배구">배구</option>
-				    <option value="축구">축구</option>
-				    <option value="농구">농구</option>
+				    <option value="1">야구</option>
+				    <option value="2">배구</option>
+				    <option value="3">축구</option>
+				    <option value="4">농구</option>
 				</select>
 				<div id="writeArea">
 					<p id="title">

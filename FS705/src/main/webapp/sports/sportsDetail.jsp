@@ -120,17 +120,22 @@ $(function(){
 	});
 });
 
+
+
 function sportsVote(bno, code){
 	if(code == 'blike'){
 		if(confirm("해당 글을 추천하시겠습니까?")){
-			location.href="./sportsDetailVote?vote="+ code + "&bno=" + bno;
+			location.href="./sportsVote?vote="+ code + "&bno=" + bno;
 		}
 	}else if(code == 'bdislike'){
 		if(confirm("해당 글을 싫어하시겠습니까?")){
-			location.href="./sportsDetailVote?vote="+ code + "&bno=" + bno;
+			location.href="./sportsVote?vote="+ code + "&bno=" + bno;
 		}			
 	}
 }
+
+
+
 </script>
 </head>
 <body>
@@ -151,7 +156,7 @@ function sportsVote(bno, code){
 				</div>
 				<div class="bbottom">					
 					<c:if test="${dto.bfile ne null}">
-						<img alt="${dto.bfile }" src="./sports/sportsFile/${dto.bfile }" width="60%">
+						<img alt="${dto.bfile }" src="./upload/sportsFile/${dto.bfile }" width="60%">
 					</c:if>
 					
 					<br>
@@ -230,7 +235,7 @@ function sportsVote(bno, code){
 				</ul>
 			</div>
 			<div class="writeBox">
-		<a href="./sportsWrite">글쓰기</a>	
+		<a href="./sportsWrite">글쓰기</a>
 		</div>
 		<div>
 		<a href="./sportsModify?bno=${dto.bno }">수정하기</a>	
