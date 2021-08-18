@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import com.FS705.dao.LogDAO;
 import com.FS705.dao.SportsDAO;
 import com.FS705.dto.BoardDTO;
+import com.FS705.dto.CommentDTO;
 import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
 
@@ -46,23 +47,24 @@ public class SportsDetail extends HttpServlet {
 				&& Util.str2Int2(request.getParameter("bno")) != 0
 				){
 			
-		RequestDispatcher rd = request.getRequestDispatcher("./sports/sportsDetail.jsp");
+		RequestDispatcher rd = 
+				request.getRequestDispatcher("./sports/sportsDetail.jsp");
 		
 		SportsDAO.getInstance().count(Util.str2Int(request.getParameter("bno")));
-		BoardDTO dto = SportsDAO.getInstance().detail
-				(Util.str2Int(request.getParameter("bno")));
+		BoardDTO dto = 
+				SportsDAO.getInstance().detail(Util.str2Int(request.getParameter("bno")));
 		request.setAttribute("dto", dto);
 		
 		if(dto.getCommentCount() > 0) {
-			ArrayList<BoardDTO> commentDto = 
+			ArrayList<CommentDTO> cmtdto = 
 					SportsDAO.getInstance().sportsCommentList((dto.getBno()));
-			request.setAttribute("commentDto", commentDto);
+			request.setAttribute("cmtdto", cmtdto);
 		}
 		
-		rd.forward(request, response);			
+		rd.forward(request, response);
 			
 		} else {
-			response.sendRedirect("./error?code=sportsError");
+			response.sendRedirect("./error?code=sportsDetailError");
 		}
 	}
 

@@ -52,14 +52,15 @@ public class SportsModify extends HttpServlet {
 		
 		if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0) {
 		
-		 id = "kwon";
-		BoardDTO modifyImport = SportsDAO.getInstance().modifyImport(Util.str2Int(request.getParameter("bno")), id);		
-		RequestDispatcher rd = request.getRequestDispatcher("./sports/sportsModify.jsp");
-		request.setAttribute("modifyImport", modifyImport);
-		rd.forward(request, response);
-	}else {
-		response.sendRedirect("./error?code=sportsModifyError1");
-	}
+			id = "kwon";
+			BoardDTO modifyImport = SportsDAO.getInstance().modifyImport(Util.str2Int(request.getParameter("bno")), id);		
+			RequestDispatcher rd = request.getRequestDispatcher("./sports/sportsModify.jsp");
+			request.setAttribute("modifyImport", modifyImport);
+			rd.forward(request, response);
+			
+		} else {
+			response.sendRedirect("./error?code=sportsModifyError1");
+		}
 	
 	}
 
@@ -106,15 +107,15 @@ public class SportsModify extends HttpServlet {
 			dto.setSubCategory(subCategory);
 			dto.setId(id);
 			
-			result = dao.sportsModify(dto);	
+			result = dao.sportsModify(dto);
 			
 			if(result == 1) {
-				response.sendRedirect("sportsDetail?bno=" + bno);
-			} else {
-				response.sendRedirect("error?code=sportsModifyError");
+				response.sendRedirect("./sportsDetail?bno=" + bno);
+			} else { 
+				response.sendRedirect("./error?code=sportsModifyError2");
 			}
 		} else {
-			response.sendRedirect("error?code=sportsModifyError");
+			response.sendRedirect("./error?code=sportsModifyError3");
 		}
 	}
 

@@ -1,4 +1,5 @@
 package com.FS705.web;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -48,7 +49,6 @@ public class SportsWrite extends HttpServlet {
 		logDto.setLogMethod("get");
 		LogDAO.insertLog(logDto);
     	
-    	
     	RequestDispatcher rd 
     			= request.getRequestDispatcher("./sports/sportsWrite.jsp");
     	rd.forward(request, response);
@@ -57,70 +57,86 @@ public class SportsWrite extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		request.setCharacterEncoding("UTF-8");
+			request.setCharacterEncoding("UTF-8");
+			HttpSession session = request.getSession();
+	
+			String id = "";
+			if(session.getAttribute(id) != null) {
+				id = (String)session.getAttribute("id");
+			}
+	
+			LogDTO logDto = new LogDTO();
+			
+			logDto.setLogIp(Util.getIP(request));
+			logDto.setLogTarget("SportsWrite");
+			logDto.setLogdId((String)session.getAttribute(id));
+			logDto.setLogEtc(request.getHeader("User-Agent"));
+			logDto.setLogMethod("post");
+			LogDAO.insertLog(logDto);
+			
+			String path = request.getServletContext().getRealPath("/");
+			String savePath = path + "upload" + File.separator + "sportsFile" + File.separator;
+			int size = 1024 * 1024 * 20;
+			
+			MultipartRequest multi = new MultipartRequest(
+								request, savePath, size, "UTF-8", new DefaultFileRenamePolicy());
+			
+			int test = 1;
+			if(test == 1) {
+				String title = Util.replace(multi.getParameter("title"));
+				String content = Util.replace(multi.getParameter("content"));
+				String subCategory = multi.getParameter("semiCate");
+				String saveFile = null;
+				String thumbnailPath = null;
+				if(multi.getOriginalFileName("file1") != null) {
+					saveFile = multi.getFilesystemName("file1");
+					
+					thumbnailPath = path + "upload" + File.separator + "sportsThumbnail" + File.separator;
+					BufferedImage inputImg 
+									= ImageIO.read(new File(savePath + saveFile));
+						
+					int width = 160;
+					int height = 160;
+						
+					String[] imgs = {"png", "gif", "jpg", "bmp"};
+					
+					for(String format : imgs) {
+						BufferedImage outputImg 
+								= new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+						
+						Graphics2D gr2d = outputImg.createGraphics();
+						gr2d.drawImage(inputImg, 0, 0, width, height, null);
+				
+						File thumb = new File(thumbnailPath + saveFile);
+						FileOutputStream fos = new FileOutputStream(thumb);
+						ImageIO.write(outputImg, format, thumb);
+						fos.close();
+						
+					}
+				}
+			
+			BoardDTO dto = new BoardDTO();
+			
+			dto.setBtitle(title);
+			dto.setBcontent(content);
+			dto.setBfile(saveFile);
+			dto.setBthumbnail(saveFile);
+			dto.setSubCategory(subCategory);
+			dto.setId((String) session.getAttribute("id"));
+			
+			SportsDAO dao = SportsDAO.getInstance();
+			int result = dao.sportsWrite(dto);
 		
-		HttpSession session = request.getSession();
-
-		String id = "";
-		if(session.getAttribute(id) != null) {
-			id = (String)session.getAttribute("id");
+			if (result == 1) {
+				response.sendRedirect("./sports");
+			} else {
+				response.sendRedirect("./error?code=sportsWriteError1");
+			}
+		
+		} else if (multi.getParameter("title") == null && multi.getParameter("content") == null) {
+			response.sendRedirect("./error?code=sportsWriteError2");
+		} else {
+			response.sendRedirect("./error?code=sportsWriteError3");
 		}
-
-		LogDTO logDto = new LogDTO();
-		
-		logDto.setLogIp(Util.getIP(request));
-		logDto.setLogTarget("SportsWrite");
-		logDto.setLogdId((String)session.getAttribute(id));
-		logDto.setLogEtc(request.getHeader("User-Agent"));
-		logDto.setLogMethod("post");
-		LogDAO.insertLog(logDto);
-		
-		String path = request.getServletContext().getRealPath("/");
-		String savePath = path + "upload" + File.separator + "sportsFile" + File.separator;
-		int size = 1024 * 1024 * 20;
-		
-		MultipartRequest multi = new MultipartRequest(
-							request, savePath, size, "UTF-8", new DefaultFileRenamePolicy());
-		
-		String title = multi.getParameter("title");
-		String content = multi.getParameter("content");
-		String subCategory = multi.getParameter("semiCate");
-		String saveFile = multi.getFilesystemName("file1");
-		String thumbnailPath = path + "upload" + File.separator + "sportsThumbnail" + File.separator;
-		BufferedImage inputImg 
-						= ImageIO.read(new File(savePath + saveFile));
-		
-		int width = 160;
-		int height = 160;
-		
-		String[] imgs = {"png", "gif", "jpg", "bmp"};
-		
-		for(String format : imgs) {
-			BufferedImage outputImg 
-							= new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-			Graphics2D gr2d = outputImg.createGraphics();
-			gr2d.drawImage(inputImg, 0, 0, width, height, null);
-
-			File thumb = new File(thumbnailPath + saveFile);
-			FileOutputStream fos = new FileOutputStream(thumb);
-			ImageIO.write(outputImg, format, thumb);
-			fos.close();
-		}
-		
-		BoardDTO dto = new BoardDTO();
-		
-		dto.setBtitle(title);
-		dto.setBcontent(content);
-		dto.setBfile(saveFile);
-		dto.setBthumbnail(saveFile);
-		dto.setSubCategory(subCategory);
-		dto.setId((String) session.getAttribute("id"));
-		
-		SportsDAO dao = SportsDAO.getInstance();
-		int result = dao.sportsWrite(dto);
-		
-		response.sendRedirect("sports");
-		
 	}
-
 }

@@ -42,7 +42,6 @@ public class Sports extends HttpServlet {
 		logDto.setLogMethod("get");
 		LogDAO.insertLog(logDto);
 		
-		
 		int page = 1;
 		if (request.getParameter("page") != null) {
 			page = Util.str2Int(request.getParameter("page"));
@@ -80,7 +79,7 @@ public class Sports extends HttpServlet {
 		LogDTO logDto = new LogDTO();
 				
 		logDto.setLogIp(Util.getIP(request));
-		logDto.setLogTarget("sports");
+		logDto.setLogTarget("Sports");
 		logDto.setLogdId((String)session.getAttribute(id));
 		logDto.setLogEtc(request.getHeader("User-Agent"));
 		logDto.setLogMethod("post");
