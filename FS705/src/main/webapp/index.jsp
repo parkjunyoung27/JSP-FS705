@@ -109,12 +109,34 @@ $(function(){
 		<div id="sports" class="boardBox">
 			<h2><img alt="스포츠" src="./img/sports.png"> 스포츠</h2>
 			<!-- 구간반복지점 -->
-				<ul class="main" onclick="location.href=''">
-					<li class="title"><a href="">자바 웹 개발자를 위한 개발 가이드</a></li>
-					<li>아이디</li>
-					<li><img alt="좋아요" src="./img/like.png"> 54k</li>
-					<li>11일 전</li>
+				<c:forEach items="${sdto }" var="sdto">
+				<ul class="main" onclick="">
+					<li class="title"><a href="sportsDetail?bno=${sdto.bno }">[<c:choose>
+						<c:when test="${sdto.subCategory eq 1 }">
+						야구
+						</c:when>
+						<c:when test="${sdto.subCategory eq 2 }">
+						배구
+						</c:when>
+						<c:when test="${sdto.subCategory eq 3 }">
+						축구
+						</c:when>
+						<c:when test="${sdto.subCategory eq 4 }">
+						농구
+						</c:when>
+						<c:otherwise>
+						기타
+						</c:otherwise>
+					</c:choose>]
+					 ${sdto.btitle }</a></li>
+					<li>${sdto.id }</li>
+					<li><img alt="좋아요" src="./img/like.png">${sdto.blike }</li>
+					<li>
+					<c:if test="${sdto.bdate eq null}">오늘</c:if>
+					<c:if test="${sdto.bdate ne null}">${dto.bdate }일 전</c:if>
+					</li>
 				</ul>
+				</c:forEach>
 			<!-- 구간반복지점 -->
 		</div>
 		<div id="game" class="boardBox">
