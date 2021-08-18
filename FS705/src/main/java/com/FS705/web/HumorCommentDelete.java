@@ -17,52 +17,51 @@ import com.FS705.util.Util;
 @WebServlet("/humorCommentDelete")
 public class HumorCommentDelete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public HumorCommentDelete() {
-        super();
-    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public HumorCommentDelete() {
+		super();
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 
 		String id = "";
-		if(session.getAttribute(id) != null) {
-			id = (String)session.getAttribute("id");
+		if (session.getAttribute(id) != null) {
+			id = (String) session.getAttribute("id");
 		}
-		
+
 		LogDTO logDto = new LogDTO();
-				
+
 		logDto.setLogIp(Util.getIP(request));
 		logDto.setLogTarget("HumorCommentDelete");
-		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogdId((String) session.getAttribute(id));
 		logDto.setLogEtc(request.getHeader("User-Agent"));
 		logDto.setLogMethod("post");
 		LogDAO.insertLog(logDto);
-		
-//		if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0
-//		&& request.getParameter("cno") != null && Util.str2Int(request.getParameter("cno")) != 0
-//		&& request.getSession().getAttribute("id") != null){
-		int test = 1;
-		if(test == 1) {
+
+		if (request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0
+				&& request.getParameter("cno") != null && Util.str2Int(request.getParameter("cno")) != 0
+				&& session.getAttribute("id") != null && session.getAttribute("name") != null) {
 			int result = 0;
 			HumorCommentDTO cmt = new HumorCommentDTO();
 			cmt.setBno(Util.str2Int(request.getParameter("bno")));
 			cmt.setCno(Util.str2Int(request.getParameter("cno")));
-//			cmt.setId((String) request.getSession().getAttribute("id"));
-			cmt.setId("kimkim");
-			
+			cmt.setId((String) request.getSession().getAttribute("id"));
+
 			result = HumorCommentDAO.getInstance().humorCommentDelete(cmt);
-			
-			if(result == 1) {
-				response.sendRedirect("./humorView?bno="+cmt.getBno());
+
+			if (result == 1) {
+				response.sendRedirect("./humorView?bno=" + cmt.getBno());
 			} else {
-				response.sendRedirect("./error?code=humorCommentDeleteError1");				
+				response.sendRedirect("./error?code=humorCommentDeleteError1");
 			}
 		} else {
 			response.sendRedirect("./error?code=humorCommentDeleteError2");
-		}		
+		}
 	}
 }

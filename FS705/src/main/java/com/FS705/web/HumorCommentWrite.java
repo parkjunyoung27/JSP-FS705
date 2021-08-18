@@ -45,18 +45,20 @@ public class HumorCommentWrite extends HttpServlet {
 		logDto.setLogMethod("post");
 		LogDAO.insertLog(logDto);
 		
-		int test = 1;
-//		if(request.getSession().getAttribute("id") != null && request.getSession().getAttribute("name") != null
-//				&& request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0 && request.getParameter("fccontent") != null) {
-	    if(test == 1 ) {	    	
-			int result = 0;
+		if(session.getAttribute("id") != null && session.getAttribute("name") != null
+				&& request.getParameter("bno") != null 
+				&& Util.str2Int(request.getParameter("bno")) != 0 
+				&& request.getParameter("ccontent") != null) {
+
 			HumorCommentDTO cmt = new HumorCommentDTO();
 			cmt.setBno(Util.str2Int(request.getParameter("bno")));
 			cmt.setCcontent(request.getParameter("ccontent"));
-//			cmt.setId((String) request.getSession().getAttribute("id"));
-			cmt.setId("kimkim");
+			cmt.setId((String) request.getSession().getAttribute("id"));
 			cmt.setCip(Util.getIP(request));
-			result = HumorCommentDAO.getInstance().humorCommentWrite(cmt);
+			
+			HumorCommentDAO dao = HumorCommentDAO.getInstance();
+			int result = dao.humorCommentWrite(cmt);
+			
 			if(result == 1){
 				response.sendRedirect("./humorView?bno="+cmt.getBno());
 			}else {
