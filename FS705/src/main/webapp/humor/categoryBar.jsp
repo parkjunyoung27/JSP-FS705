@@ -17,6 +17,11 @@
 <div id="categoryBar">
  <ul>
             <li>
+                <a href="./humorBoard">
+                	전체보기
+                </a>
+            </li>
+            <li>
                 <a href="./humorBoard?category=1">
                     잡담
                 </a>
@@ -34,11 +39,6 @@
             <li>
                 <a href="./humorBoard?category=4">
                     정치
-                </a>
-            </li>
-            <li>
-                <a href="./humorBoard">
-                ...
                 </a>
             </li>
 </ul>

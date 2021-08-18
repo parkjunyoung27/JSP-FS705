@@ -211,7 +211,7 @@ function humorVote(bno, code){
 							<li id="noComment">댓글이 없습니다. 댓글을 달아주세요.</li>
 						</c:otherwise>
 					</c:choose>
-					<c:if test="${sessionScope.id eq null }">
+					<c:if test="${sessionScope.id ne null }">
 						<li id="commentWrite">
 							<div id="cwArea">
 								<form action="./humorCommentWrite" method="post">
