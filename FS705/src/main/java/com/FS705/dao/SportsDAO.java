@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.FS705.db.DBConnection;
 import com.FS705.dto.BoardDTO;
+import com.FS705.dto.CommentDTO;
 import com.FS705.util.Util;
 
 public class SportsDAO {
@@ -38,7 +39,6 @@ public class SportsDAO {
 					dto.setBtitle(rs.getString("btitle"));
 					dto.setBcontent(rs.getString("bcontent"));
 					dto.setBdate(rs.getString("bdate"));
-					dto.setBdate2(rs.getString("bdate2"));
 					dto.setBcount(rs.getInt("bcount"));
 					dto.setBlike(rs.getInt("blike"));
 					dto.setBdislike(rs.getInt("bdislike"));
@@ -81,7 +81,6 @@ public class SportsDAO {
 					dto.setBtitle(rs.getString("btitle"));
 					dto.setBcontent(rs.getString("bcontent"));
 					dto.setBdate(rs.getString("bdate"));
-					dto.setBdate2(rs.getString("bdate2"));
 					dto.setBcount(rs.getInt("bcount"));
 					dto.setBthumbnail(rs.getString("bthumbnail"));
 					dto.setBcategory(rs.getString("bcategory"));
@@ -106,8 +105,8 @@ public class SportsDAO {
 		int result = 0;
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
-		String sql = "INSERT INTO board (bcategory, btitle, bcontent, bfile, bthumbnail, no, subCategory)"
-				+ " VALUES('sports', ?, ?, ?, ?, (SELECT no FROM member WHERE id=?), ?)";
+		String sql = "INSERT INTO board (bcategory, btitle, bcontent, bfile, bthumbnail, subCategory, no)"
+				+ " VALUES('sports', ?, ?, ?, ?, ?, (SELECT no FROM member WHERE id=?))";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -115,8 +114,8 @@ public class SportsDAO {
 			pstmt.setString(2, dto.getBcontent());
 			pstmt.setString(3, dto.getBfile());
 			pstmt.setString(4, dto.getBthumbnail());
-			pstmt.setString(5, dto.getId());
-			pstmt.setString(6, dto.getSubCategory());
+			pstmt.setString(5, dto.getSubCategory());
+			pstmt.setString(6, "kwon");
 			result = pstmt.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -426,8 +425,8 @@ public class SportsDAO {
 	}
 	
 	// 댓글
-	public ArrayList<BoardDTO> sportsCommentList(int bno) {
-		ArrayList<BoardDTO> commentList = new ArrayList<BoardDTO>();
+	public ArrayList<CommentDTO> sportsCommentList(int bno) {
+		ArrayList<CommentDTO> cmt = new ArrayList<CommentDTO>();
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -440,7 +439,7 @@ public class SportsDAO {
 			
 			if(rs != null) {
 				while(rs.next()) {
-					BoardDTO dto = new BoardDTO();
+					CommentDTO dto = new CommentDTO();
 					dto.setBno(rs.getInt("bno"));
 					dto.setCno(rs.getInt("cno"));			
 					dto.setCcontent(rs.getString("ccontent"));
@@ -449,7 +448,8 @@ public class SportsDAO {
 					dto.setClike(rs.getInt("clike"));
 					dto.setCdislike(rs.getInt("cdislike"));
 					dto.setId("kwon");
-					commentList.add(dto);
+					dto.setName("권지안");
+					cmt.add(dto);
 				}				
 			}
 			
@@ -459,23 +459,24 @@ public class SportsDAO {
 			Util.closeAll(rs, pstmt, conn);
 		}
 		
-		return commentList;
+		return cmt;
 		
 	}
 
-	public int commentInput(BoardDTO dto) {
+	public int commentInput(CommentDTO cmt) {
 		int result  = 0;
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
-		String sql = "INSERT INTO comment (bno, ccontent, no, cip) VALUES (?, ?, (SELECT no FROM member WHERE id=?), ?)";
+		String sql = "INSERT INTO comment (bno, ccontent, no, cip) "
+				+ "VALUES (?, ?, (SELECT no FROM member WHERE id=?), ?)";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, dto.getBno());
-			pstmt.setString(2, dto.getCcontent());
-			pstmt.setString(3, dto.getId());
-			pstmt.setString(4, dto.getCip());
-			result = pstmt.executeUpdate(); // 공부 필요
+			pstmt.setInt(1, cmt.getBno());
+			pstmt.setString(2, cmt.getCcontent());
+			pstmt.setString(3, cmt.getId());
+			pstmt.setString(4, cmt.getCip());
+			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -486,19 +487,20 @@ public class SportsDAO {
 				
 	}
 
-	public int commentModify(BoardDTO dto) {
+	public int commentModify(CommentDTO cmt) {
 		int result = 0;
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
-		String sql = "UPDATE comment SET ccontent=?, cip=? WHERE bno=? AND cno=? AND no=(SELECT no FROM member WHERE id=?)";
+		String sql = "UPDATE comment SET ccontent=?, cip=? "
+				+ "WHERE bno=? AND cno=? AND no=(SELECT no FROM member WHERE id=?)";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, dto.getCcontent());
-			pstmt.setString(2, dto.getCip());
-			pstmt.setInt(3, dto.getBno());
-			pstmt.setInt(4, dto.getCno());
-			pstmt.setString(5, dto.getId());
+			pstmt.setString(1, cmt.getCcontent());
+			pstmt.setString(2, cmt.getCip());
+			pstmt.setInt(3, cmt.getBno());
+			pstmt.setInt(4, cmt.getCno());
+			pstmt.setString(5, cmt.getId());
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -510,7 +512,7 @@ public class SportsDAO {
 		
 	}
 
-	public int commentDelete(BoardDTO dto) {
+	public int commentDelete(CommentDTO cmt) {
 		int result = 0;
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -518,9 +520,9 @@ public class SportsDAO {
 		
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, dto.getBno());
-			pstmt.setInt(2, dto.getCno());
-			pstmt.setString(3, dto.getId());
+			pstmt.setInt(1, cmt.getBno());
+			pstmt.setInt(2, cmt.getCno());
+			pstmt.setString(3, cmt.getId());
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
