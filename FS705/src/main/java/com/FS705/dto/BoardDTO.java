@@ -2,80 +2,32 @@ package com.FS705.dto;
 
 public class BoardDTO {
 
-	private int cno, clike, cdislike, bno, bcount, no, blike, bdislike, commentCount, sportsCount;
+	private int commentCount, sportsCount, bno, bcount, no, blike, bdislike;
 	
-	private String id, name, btitle, bcontent, bcategory, bdate, bdate2, bthumbnail, subCategory, bfile, ccontent, cip;
-	
+	private String id, name, btitle, bcontent, bcategory, bdate, bthumbnail, subCategory, bfile;
+
+	public String getBfile() {
+		return bfile;
+	}
+
+	public void setBfile(String bfile) {
+		this.bfile = bfile;
+	}
+
+	public int getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
+
 	public int getSportsCount() {
 		return sportsCount;
 	}
 
-	public int getCno() {
-		return cno;
-	}
-
-	public void setCno(int cno) {
-		this.cno = cno;
-	}
-
-	public int getClike() {
-		return clike;
-	}
-
-	public void setClike(int clike) {
-		this.clike = clike;
-	}
-
-	public int getCdislike() {
-		return cdislike;
-	}
-
-	public void setCdislike(int cdislike) {
-		this.cdislike = cdislike;
-	}
-
-	public String getCcontent() {
-		return ccontent;
-	}
-
-	public void setCcontent(String ccontent) {
-		this.ccontent = ccontent;
-	}
-
-	public String getCip() {
-		return cip;
-	}
-
-	public void setCip(String cip) {
-		this.cip = cip;
-	}
-
 	public void setSportsCount(int sportsCount) {
 		this.sportsCount = sportsCount;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getBdate2() {
-		return bdate2;
-	}
-
-	public void setBdate2(String bdate2) {
-		this.bdate2 = bdate2;
 	}
 
 	public int getBno() {
@@ -118,12 +70,20 @@ public class BoardDTO {
 		this.bdislike = bdislike;
 	}
 
-	public int getCommentCount() {
-		return commentCount;
+	public String getId() {
+		return id;
 	}
 
-	public void setCommentCount(int commentCount) {
-		this.commentCount = commentCount;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getBtitle() {
@@ -172,14 +132,6 @@ public class BoardDTO {
 
 	public void setSubCategory(String subCategory) {
 		this.subCategory = subCategory;
-	}
-
-	public String getBfile() {
-		return bfile;
-	}
-
-	public void setBfile(String bfile) {
-		this.bfile = bfile;
 	}
 	
 }
