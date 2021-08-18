@@ -20,13 +20,6 @@
 	
 	#goToTop{position:fixed;top:80%;right:20%;cursor:pointer;width:40px;height:40px;border-radius:20px;background-color:#eee;text-align:center;line-height:18px;box-shadow: 3px 3px 3px gray;}
 	
-	#userData{width:100%;}
-		#imgGrade{width:100%;}
-			.igFloat{float:left;}
-			.igFloat:first-child{padding-left:10px;}
-			.igFloat:nth-child(2){width:150px;padding-top:23px;}
-		#nameLv{clear:both;text-align:center;}
-		#userBye{width:100%;text-align:center;padding-top:10px;}
 @media all and (min-width:10px) and (max-width:1300px){
 	#goToTop{position:fixed;top:80%;right:50px;}
 }
@@ -45,47 +38,40 @@ $(function(){
 			$(this).children("span").css({"top":"13px", "font-size":"15px"});				
 		}
 	});
+	var url = window.location.pathname;
+    var url2 = url.substring(7,url.length);
+    var url3 = url2.split(".");
+    $("#submit").click(function(){
+    	$("#urlPost").val(url3[0]);
+    });
 });
+
 </script>
 </head>
 <body>
 <div id="plusBar">
 	<div id="login">
 		<c:choose>
-			<c:when test="${sessionScope.id ne null}">
-				<div id="userData">
-					<div id="imgGrade">
-						<c:choose>
-							<c:when test="${sessionScope.profile ne null }">
-								<p class="igFloat">
-									<img alt="그림" src="./upload/${sessionScope.profile }"/>
-								</p>							
-							</c:when>
-							<c:otherwise>
-								<p class="igFloat">
-									<img alt="사용자 이미지" src="./img/user.png"/>
-								</p>
-							</c:otherwise>
-						</c:choose>
-						<p class="igFloat">${sessionScope.name }<small>(${sessionScope.id })님 안뇽!</small></p>
-					</div>
-					<div id="nameLv">현재 나의 등급은 ${sessionScope.grade } 입니다.</div>
-					<div id="userBye"><button onclick="location='./logout'" name="logout" class="submit">로그아웃</button></div>
-				</div>
-			</c:when>
+		<c:when test="${sessionScope.id ne null}">
+		Lv. ${sessionScope.grade }
+		${sessionScope.name }<small>(${sessionScope.id })</small> 님<br> 
+		어서오세요.
+		<button onclick="location='./logout'" name="logout">로그아웃</button>
+		</c:when>
 		<c:otherwise>
-			<form action="./login" method="post">
-				<p class="your">
-					<span class="ye_span">아이디</span>			
-					<input type="text" name="id" id="id">
-				</p>
-				<p class="your">
-					<span class="ye_span">패스워드</span>			
-					<input type="password" name="pw" id="pw">
-				</p>
-				<button type="submit" class="submit">로그인</button>
-				<p class="newCrew"><a href="">ID/PW 찾기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="./join.jsp">회원가입</a></p>
-			</form>
+		<form action="./login" method="post">
+			<p class="your">
+				<span class="ye_span">아이디</span>			
+				<input type="text" name="id" id="id">
+			</p>
+			<p class="your">
+				<span class="ye_span">패스워드</span>			
+				<input type="password" name="pw" id="pw">
+			</p>
+			<input type="hidden" id="urlPost" name="url"/>
+			<button type="submit" class="submit" id="submit">로그인</button>
+			<p class="newCrew"><a href="">ID/PW 찾기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="./join.jsp">회원가입</a></p>
+		</form>
 		</c:otherwise>
 		</c:choose>
 	</div>
