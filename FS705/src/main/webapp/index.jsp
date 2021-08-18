@@ -44,6 +44,8 @@ $(function(){
 	});
 });
 </script>
+<link rel="icon" href="img/favi.png"/>
+
 </head>
 <body>
 <div id="wrapper">
@@ -97,8 +99,8 @@ $(function(){
 					<li>${fdto.id }</li>
 					<li><img alt="좋아요" src="./img/like.png">${fdto.blike }</li>
 					<li>
-					<c:if test="${fdto.bdate eq 0}">오늘</c:if>
-					<c:if test="${fdto.bdate ne 0}">${fdto.bdate }일 전</c:if>
+					<c:if test="${fdto.bdate eq null}">오늘</c:if>
+					<c:if test="${fdto.bdate ne null}">${fdto.bdate }일 전</c:if>
 					</li>
 				</ul>
 				</c:forEach>
@@ -141,8 +143,8 @@ $(function(){
 					<li>${gdto.id }</li>
 					<li><img alt="좋아요" src="./img/like.png">${gdto.blike }</li>
 					<li>
-					<c:if test="${gdto.bdate eq 0}">오늘</c:if>
-					<c:if test="${gdto.bdate ne 0}">${gdto.bdate }일 전</c:if>
+					<c:if test="${gdto.bdate eq null}">오늘</c:if>
+					<c:if test="${gdto.bdate ne null}">${gdto.bdate }일 전</c:if>
 					</li>
 				</ul>
 				</c:forEach>
@@ -174,8 +176,8 @@ $(function(){
 					<li>${hdto.id }</li>
 					<li><img alt="좋아요" src="./img/like.png">${hdto.blike }</li>
 					<li>
-					<c:if test="${hdto.bdate eq 0}">오늘</c:if>
-					<c:if test="${hdto.bdate ne 0}">${hdto.bdate }일 전</c:if>
+					<c:if test="${hdto.bdate eq null}">오늘</c:if>
+					<c:if test="${hdto.bdate ne null}">${hdto.bdate }일 전</c:if>
 					</li>
 				</ul>
 				</c:forEach>
