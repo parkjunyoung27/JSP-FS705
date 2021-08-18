@@ -15,6 +15,8 @@ import com.FS705.dao.FoodBoardDAO;
 import com.FS705.dao.GameBoardDAO;
 import com.FS705.dao.HumorBoardDAO;
 import com.FS705.dao.LogDAO;
+import com.FS705.dao.SportsDAO;
+import com.FS705.dto.BoardDTO;
 import com.FS705.dto.FoodBoardDTO;
 import com.FS705.dto.GameBoardDTO;
 import com.FS705.dto.HumorBoardDTO;
@@ -61,6 +63,11 @@ public class Index extends HttpServlet {
 	ArrayList<FoodBoardDTO> flist = null;
 	flist = FoodBoardDAO.getInstance().foodBoardLike();
 	request.setAttribute("fdto", flist);
+	
+	//sportsBoard 추천 게시글
+	ArrayList<BoardDTO> slist = null;
+	slist = SportsDAO.getInstance().sportsLike();
+	request.setAttribute("sdto", slist);
 	
 	//gameBoard 추천 게시글
 	ArrayList<GameBoardDTO> glist = null;
