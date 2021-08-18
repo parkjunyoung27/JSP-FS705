@@ -122,8 +122,8 @@ function select(){
 				</div>
 		</div>		
 	</div>	
+	<c:import url="/plusBar.jsp"/>
 	<c:import url="/footer.jsp"/>
 </div>
-<c:import url="/plusBar.jsp"/>
 </body>
 </html>

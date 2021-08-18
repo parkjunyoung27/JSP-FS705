@@ -182,14 +182,18 @@ function gameVote(bno, code){
 												<div class="modifyInputP">
 													<div class="modifyInput"> 
 													 	<div id="cbContent">${cmt.ccontent }</div>
+													 	<c:if test="${cmt.id eq sessionScope.id }">
 														<span id="reWrite" class="clear1">수정하기</span>
+														</c:if>
 													 	<div class="fno" style="display: none;">${cmt.bno }</div>
 													 	<div class="fcno" style="display: none;">${cmt.cno }</div>
 													</div>
 													<div class="commentDelete">
 														<form action="./gameCommentDelete" method="post">
 															<input type="hidden" name="bno" value="${cmt.bno }"><input type="hidden" name="cno" value="${cmt.cno }">
+															<c:if test="${cmt.id eq sessionScope.id }">
 															<button id="reWrite">삭제하기</button>
+															</c:if>
 														</form>
 													</div>
 													<div class="modifyWrite">
@@ -211,7 +215,7 @@ function gameVote(bno, code){
 							<li id="noComment">댓글이 없습니다. 댓글을 달아주세요.</li>
 						</c:otherwise>
 					</c:choose>
-					<c:if test="${sessionScope.id eq null }">
+					<c:if test="${sessionScope.id ne null }">
 						<li id="commentWrite">
 							<div id="cwArea">
 								<form action="./gameCommentWrite" method="post">
