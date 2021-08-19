@@ -52,9 +52,9 @@ $(function(){
 <div id="plusBar">
 	<div id="login">
 		<c:choose>
-		<c:when test="${sessionScope.id ne null}">
+		<c:when test="${sessionScope.idActivate ne null}">
 		Lv. ${sessionScope.grade }
-		${sessionScope.name }<small>(${sessionScope.id })</small> 님<br> 
+		${sessionScope.name }<small>(${sessionScope.idActivate })</small> 님<br> 
 		어서오세요.
 		<button onclick="location='./logout'" name="logout">로그아웃</button>
 		</c:when>
