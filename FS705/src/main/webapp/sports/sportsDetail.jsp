@@ -145,7 +145,7 @@ function sportsVote(bno, code){
 	<div id="container">
 		<div id="content">
 			<div id="boardlist">
-				<div class="btop"></div>
+				<div class="btop">${dto.btitle}<small id="ccount">(${dto.bno })</small></div>
 				<div class="bmiddle">
 					<ul class="bmfloat">
 						<li>${dto.name }<small id="ccount">${dto.id }</small></li>
