@@ -9,8 +9,7 @@ import com.FS705.db.DBConnection;
 import com.FS705.dto.LoginDTO;
 import com.FS705.util.Util;
 
-public class LoginDAO {
-	
+public class LoginDAO {	
 	//싱글턴
 	private LoginDAO(){}
 	
@@ -18,8 +17,7 @@ public class LoginDAO {
 	
 	public static LoginDAO getInstance() {
 		return instance;
-	}
-	
+	}	
 	//로그인 기능
 	public LoginDTO login(LoginDTO dto) {
 		LoginDTO login = new LoginDTO();
@@ -55,8 +53,7 @@ public class LoginDAO {
 			Util.closeAll(rs, pstmt, conn);
 		}		
 		return login;
-	}
-	
+	}	
 	//id 중복확인
 	public int idCheck(String id) {
 		int check = 0;
@@ -80,8 +77,7 @@ public class LoginDAO {
 			e.printStackTrace();
 		}
 		return check;
-	}
-	
+	}	
 	//가입하기
 	public int join(LoginDTO dto) {
 		int count = 0;
@@ -106,8 +102,7 @@ public class LoginDAO {
 			Util.closeAll(null, pstmt, conn);
 		}
 		return count;
-	}
-	
+	}	
 	//아이디 찾기
 	public LoginDTO idFind(LoginDTO dto) {
 		LoginDTO login = new LoginDTO(); 
@@ -135,7 +130,7 @@ public class LoginDAO {
 		}
 		return login;
 	}
-	//질문 출력
+	//질문 반환
 	public String pwQuestion(String id, String email) {
 		String question = "";
 		Connection conn = DBConnection.dbconn();
@@ -156,7 +151,7 @@ public class LoginDAO {
 		}
 		return question;
 	}
-
+	//비밀번호 유효성 검토
 	public int pwFind(String id, String email, String pwAnswer) {
 		int check = 0;
 		Connection conn = DBConnection.dbconn();
