@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.LogDAO;
+import com.FS705.dao.SportsCommentDAO;
 import com.FS705.dao.SportsDAO;
 import com.FS705.dto.BoardDTO;
 import com.FS705.dto.CommentDTO;
@@ -56,8 +57,8 @@ public class SportsDetail extends HttpServlet {
 		request.setAttribute("dto", dto);
 		
 		if(dto.getCommentCount() > 0) {
-			ArrayList<CommentDTO> cmtdto = 
-					SportsDAO.getInstance().sportsCommentList((dto.getBno()));
+			ArrayList<CommentDTO> cmtdto 
+							= SportsCommentDAO.getInstance().sportsCommentList((dto.getBno()));
 			request.setAttribute("cmtdto", cmtdto);
 		}
 		

@@ -3,7 +3,6 @@ package com.FS705.web;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.FS705.dao.LogDAO;
 import com.FS705.dao.SportsDAO;
+import com.FS705.dto.LogDTO;
 import com.FS705.util.FileThing;
 import com.FS705.util.Util;
 
@@ -28,11 +29,26 @@ public class SportsDelete extends HttpServlet {
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession();
+		
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
+		}
+		
+		LogDTO logDto = new LogDTO();
+				
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("SportsDelete");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("get");
+		LogDAO.insertLog(logDto);
+		
 		if (request.getParameter("bno") != null && Util.str2Int2(request.getParameter("bno")) != 0
 				&& session.getAttribute("id") != null) {
 			
 			int result = 0;
-			String id = "kwon";
+			id = "kwon";
 			SportsDAO dao = SportsDAO.getInstance();
 			int bno = Util.str2Int(request.getParameter("bno"));
 			ArrayList<String> fileName = dao.findFileName(bno, id);
@@ -48,7 +64,7 @@ public class SportsDelete extends HttpServlet {
 				}
 			}
 			
-			result = dao.del(bno, id);
+			result = dao.delete(bno, id);
 			
 			if(result == 1) {
 				response.sendRedirect("./sports");				

@@ -81,8 +81,9 @@ public class SportsWrite extends HttpServlet {
 			MultipartRequest multi = new MultipartRequest(
 								request, savePath, size, "UTF-8", new DefaultFileRenamePolicy());
 			
-			int test = 1;
-			if(test == 1) {
+			if(request.getSession().getAttribute("id") != null
+					&& request.getSession().getAttribute("name") != null) {
+			
 				String title = Util.replace(multi.getParameter("title"));
 				String content = Util.replace(multi.getParameter("content"));
 				String subCategory = multi.getParameter("semiCate");
@@ -113,7 +114,7 @@ public class SportsWrite extends HttpServlet {
 						fos.close();
 						
 					}
-				}
+			}
 			
 			BoardDTO dto = new BoardDTO();
 			

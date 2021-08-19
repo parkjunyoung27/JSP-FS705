@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.LogDAO;
-import com.FS705.dao.SportsDAO;
+import com.FS705.dao.SportsCommentDAO;
 import com.FS705.dto.CommentDTO;
 import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
@@ -28,43 +28,41 @@ public class CommentModify extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-			request.setCharacterEncoding("UTF-8");
-			HttpSession session = request.getSession();
+		request.setCharacterEncoding("UTF-8");
+		HttpSession session = request.getSession();
 			
-			String id = "";
-			if(session.getAttribute(id) != null) {
-				id = (String)session.getAttribute("id");
-			}
+		String id = "";
+		if(session.getAttribute(id) != null) {
+			id = (String)session.getAttribute("id");
 			
-			LogDTO logDto = new LogDTO();
+		}
+			
+		LogDTO logDto = new LogDTO();
 					
-			logDto.setLogIp(Util.getIP(request));
-			logDto.setLogTarget("CommentModify");
-			logDto.setLogdId((String)session.getAttribute(id));
-			logDto.setLogEtc(request.getHeader("User-Agent"));
-			logDto.setLogMethod("post");
-			LogDAO.insertLog(logDto);
+		logDto.setLogIp(Util.getIP(request));
+		logDto.setLogTarget("CommentModify");
+		logDto.setLogdId((String)session.getAttribute(id));
+		logDto.setLogEtc(request.getHeader("User-Agent"));
+		logDto.setLogMethod("post");
+		LogDAO.insertLog(logDto);
 			
-//			if(request.getParameter("bno") != null 
-//					&& Util.str2Int(request.getParameter("bno")) != 0
-//					&& request.getParameter("cno") != null 
-//					&& Util.str2Int(request.getParameter("cno")) != 0
-//					&& request.getParameter("ccontent") != null 
-//					&& session.getAttribute("id") != null){
-				
-		int test = 1;
-		if(test == 1) {
-				
+		if(request.getParameter("bno") != null 
+					&& (Util.str2Int2(request.getParameter("bno")) != 0)
+					&& request.getParameter("cno") != null 
+					&& (Util.str2Int2(request.getParameter("cno")) != 0)
+					&& request.getParameter("ccontent") != null 
+					&& session.getAttribute("id") != null){
+			
 			int result = 0;
-				
+			
 			CommentDTO cmt = new CommentDTO();
-			cmt.setBno(Util.str2Int(request.getParameter("bno")));
-			cmt.setCno(Util.str2Int(request.getParameter("cno")));
+			cmt.setBno(Util.str2Int2(request.getParameter("bno")));
+			cmt.setCno(Util.str2Int2(request.getParameter("cno")));
 			cmt.setCcontent(Util.replace(request.getParameter("ccontent")));
 			cmt.setCip(Util.getIP(request));
 			cmt.setId("kwon");
 				
-			SportsDAO dao = SportsDAO.getInstance();
+			SportsCommentDAO dao = SportsCommentDAO.getInstance();
 			result = dao.commentModify(cmt);
 			
 			if(result == 1) {

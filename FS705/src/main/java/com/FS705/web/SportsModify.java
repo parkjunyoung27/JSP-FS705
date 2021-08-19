@@ -50,9 +50,10 @@ public class SportsModify extends HttpServlet {
 		logDto.setLogMethod("get");
 		LogDAO.insertLog(logDto);
 		
-		if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0) {
-		
-			id = "kwon";
+		if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0
+			&& session.getAttribute("id") != null){
+			id = (String) session.getAttribute("id");
+			//id = "kwon";
 			BoardDTO modifyImport = SportsDAO.getInstance().modifyImport(Util.str2Int(request.getParameter("bno")), id);		
 			RequestDispatcher rd = request.getRequestDispatcher("./sports/sportsModify.jsp");
 			request.setAttribute("modifyImport", modifyImport);
@@ -91,9 +92,10 @@ public class SportsModify extends HttpServlet {
 				request, savePath, size, "UTF-8", new DefaultFileRenamePolicy());
 		
 		if(multi.getParameter("bno") != null 
-				&& Util.str2Int2(multi.getParameter("bno")) != 0) {
-			
-			id = "kwon";
+				&& Util.str2Int2(multi.getParameter("bno")) != 0
+				&& session.getAttribute("id") != null){
+			id = (String) session.getAttribute("id");
+			//id = "kwon";
 			int result = 0;
 			int bno = Util.str2Int(multi.getParameter("bno"));
 			String title = Util.replace(multi.getParameter("title"));

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.FS705.dao.LogDAO;
-import com.FS705.dao.SportsDAO;
+import com.FS705.dao.SportsCommentDAO;
 import com.FS705.dto.CommentDTO;
 import com.FS705.dto.LogDTO;
 import com.FS705.util.Util;
@@ -46,24 +46,21 @@ public class CommentInput extends HttpServlet {
 		logDto.setLogMethod("post");
 		LogDAO.insertLog(logDto);
 		
-//		if(request.getParameter("ccontent") != null
-//				&& request.getParameter("bno") != null
-//				&& (Util.str2Int2(request.getParameter("bno")) != 0)
-//				&& session.getAttribute("id") != null
-//				&& session.getAttribute("name") != null){
+		if(request.getParameter("ccontent") != null
+				&& request.getParameter("bno") != null
+				&& (Util.str2Int2(request.getParameter("bno")) != 0)
+				&& session.getAttribute("id") != null
+				&& session.getAttribute("name") != null){
 		
-		int test = 1;
-		if(test == 1) {
-			
 			int result = 0;
 			
 			CommentDTO cmt = new CommentDTO();
-			cmt.setBno(Util.str2Int(request.getParameter("bno")));
+			cmt.setBno(Util.str2Int2(request.getParameter("bno")));
 			cmt.setCcontent(request.getParameter("ccontent"));
 			cmt.setId("kwon");
 			cmt.setCip(Util.getIP(request));
 			
-			SportsDAO dao = SportsDAO.getInstance();
+			SportsCommentDAO dao = SportsCommentDAO.getInstance();
 			result = dao.commentInput(cmt);
 
 			if(result == 1) {
