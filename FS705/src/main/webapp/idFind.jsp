@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>join page</title>
+<title>ID Find</title>
 </head>
 <script type="text/javascript">
 </script>

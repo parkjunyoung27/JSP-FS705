@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title> Result</title>
+<title>Password Update Result</title>
 </head>
 <body>
 <div id="wrapper">

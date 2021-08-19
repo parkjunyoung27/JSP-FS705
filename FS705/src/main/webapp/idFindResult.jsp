@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Join Result</title>
+<title>ID Find Result</title>
 </head>
 <body>
 <div id="wrapper">
