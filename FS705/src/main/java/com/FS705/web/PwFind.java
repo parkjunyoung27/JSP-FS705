@@ -55,6 +55,9 @@ public class PwFind extends HttpServlet {
         	session.setAttribute("checkAnswer", checkAnswer);
         	session.setAttribute("id", id);
         	response.sendRedirect("./pwFindResult.jsp");
+		}  else {
+			//아닐시 5985에러페이지로
+			response.sendRedirect("error.jsp?error=5985");
 		}
 	}
 }

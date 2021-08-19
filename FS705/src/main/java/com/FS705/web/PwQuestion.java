@@ -44,6 +44,9 @@ public class PwQuestion extends HttpServlet {
         	//결과값 보내기 
     		PrintWriter pw = response.getWriter();
     		pw.println(hintResult);
-	    }
+	    }  else {
+			//아닐시 5985에러페이지로
+			response.sendRedirect("error.jsp?error=5985");
+		}
 	}
 }

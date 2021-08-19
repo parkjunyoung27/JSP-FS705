@@ -43,7 +43,7 @@ public class Login extends HttpServlet {
 		
 		//로그인 성공실패 비교하기
 		if(result == null || result.getName() == null) {
-			//실패시 -> 인덱스
+			//실패시 에러페이지로
 			response.sendRedirect("./error.jsp");			
 		}else {
 			//세션만들고 값 저장

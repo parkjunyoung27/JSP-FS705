@@ -52,7 +52,10 @@ public class IdFind extends HttpServlet {
         	HttpSession session = request.getSession();
         	session.setAttribute("id2", dto.getId());
         	response.sendRedirect("./idFindResult.jsp");
-        } 
+        }  else {
+			//아닐시 5985에러페이지로
+			response.sendRedirect("error.jsp?error=5985");
+		}
 
 	}
 
