@@ -25,15 +25,16 @@ a:link, a:visited{text-decoration:none;color:#333;}
 				.boardBox h2 img{display:inline-block;width:16px;height:16px;vertical-align:middle;}
 			.boardBox .main{width:100%;border-bottom:1px solid #eee;border-right:1px solid #eee;cursor:pointer;transition:0.3s;}
 			.boardBox .main:hover{background-color:#D6EAF8;}
-				.boardBox ul li{height:35px;line-height:42px;float:left;overflow:hidden;font-size:12px;}
-				.boardBox ul li:first-child{width:60%;text-indent:5px;border-left:5px solid #85C1E9;border-radius:5px 0 0 5px;font-size:16px;line-height:35px;}
+				.boardBox ul li{height:63px;line-height:70px;float:left;overflow:hidden;font-size:12px;}
+				.boardBox ul li:first-child{width:60%;text-indent:5px;border-left:5px solid #85C1E9;border-radius:5px 0 0 5px;font-size:14px;line-height:35px;}
 				.boardBox ul li:nth-child(2){width:17%;}
 				.boardBox ul li:nth-child(3){width:10%;}
 					.boardBox ul li:nth-child(3) img{height:15px;float:left;padding-top:12px;padding-right:1px;}
 				.boardBox ul li:last-child{width:10%;}
  		.writeBox{height:35px; wdith: 50px; line-height:42px;float:right;overflow:hidden;font-size:16px;border:1px solid #eee;c}
  		.paging{width:87%;margin:0 auto;float:center;}
- 		#divPaging {
+ 		
+ #divPaging {
 	clear: both;
 	margin: 0 auto;
 	width: 100%;
@@ -72,10 +73,18 @@ function select(){
 	<div id="container">	
 		<div id="sports" class="boardBox">
 			<h2><img alt="스포츠" src="./img/sports.png"> 스포츠</h2>
-			<!-- 구간반복지점 -->
 				<c:forEach items="${dto }" var="dto">
 				<ul class="main" onclick="">
-					<li class="title"><a href="sportsDetail?bno=${dto.bno }">[<c:choose>
+					<li class="title"><a href="sportsDetail?bno=${dto.bno }">
+					<c:choose>
+						<c:when test="${dto.bthumbnail eq null }">
+							<img alt="no image" src="img/noimage.jpg"  style="vertical-align: middle; height: 80px;">
+						</c:when>
+						<c:otherwise>
+							<img alt="thumb" src="./upload/sportsThumbnail/${dto.bthumbnail }" style="vertical-align: middle; height: 80px;">
+						</c:otherwise>
+					</c:choose>
+					[<c:choose>
 						<c:when test="${dto.subCategory eq 1 }">
 						야구
 						</c:when>
@@ -98,7 +107,6 @@ function select(){
 					<li>${dto.bdate }</li>
 				</ul>
 				</c:forEach>
-			<!-- 구간반복지점 -->
 		
 			<div id="divPaging">
 			<c:set var="pageName" value="sports" scope="request"/>

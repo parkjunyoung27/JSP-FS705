@@ -200,8 +200,8 @@ function sportsVote(bno, code){
 													</div>
 													<div class="modifyWrite">
 														<form action="./commentModify" method="post">
-															<textarea name="content" style="width:100%;height:100px;overflow:auto;resize: none;">${cmt.ccontent }</textarea>
-															<input type="hidden" name="fno" value="${cmt.bno }"><input type="hidden" name="fcno" value="${cmt.cno }">
+															<textarea name="ccontent" style="width:100%;height:100px;overflow:auto;resize: none;">${cmt.ccontent }</textarea>
+															<input type="hidden" name="bno" value="${cmt.bno }"><input type="hidden" name="cno" value="${cmt.cno }">
 															<button id="reWrite">수정하기</button>
 														</form>
 								 						<span id="reWrite" class="clear1">수정취소</span>
