@@ -1,13 +1,13 @@
 package com.FS705.dto;
 
-public class FoodBoardDTO {
-	private int foodboardcount,foodcommentcount, bno, bno2, bno3, bcount, no, blike, bdislike; 
+public class NoticeBoardDTO {
+	private int boardcount,commentcount, bno, bno2, bno3, bcount, no, blike, bdislike; 
 	private String btitle, bcontent, subCategory, bdate, bcategory, bthumbnail, id, name, bfile;
-	public int getFoodboardcount() {
-		return foodboardcount;
+	public int getBoardcount() {
+		return boardcount;
 	}
-	public void setFoodboardcount(int foodboardcount) {
-		this.foodboardcount = foodboardcount;
+	public void setBoardcount(int boardcount) {
+		this.boardcount = boardcount;
 	}
 	public int getBlike() {
 		return blike;
@@ -93,11 +93,11 @@ public class FoodBoardDTO {
 	public void setBfile(String bfile) {
 		this.bfile = bfile;
 	}
-	public int getFoodcommentcount() {
-		return foodcommentcount;
+	public int getCommentcount() {
+		return commentcount;
 	}
-	public void setFoodcommentcount(int foodcommentcount) {
-		this.foodcommentcount = foodcommentcount;
+	public void setCommentcount(int commentcount) {
+		this.commentcount = commentcount;
 	}
 	public int getBno2() {
 		return bno2;

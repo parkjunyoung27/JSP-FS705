@@ -1,6 +1,7 @@
 package com.FS705.web;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,18 +43,21 @@ public class FoodCommentDelete extends HttpServlet {
 		logDto.setLogMethod("post");
 		LogDAO.insertLog(logDto);
 		
-//		if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0
-//		&& request.getParameter("cno") != null && Util.str2Int(request.getParameter("cno")) != 0
-//		&& request.getSession().getAttribute("id") != null){
-		int test = 1;
-		if(test == 1) {
+		if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0
+		&& request.getParameter("cno") != null && Util.str2Int(request.getParameter("cno")) != 0
+		&& request.getSession().getAttribute("id") != null){	
 			int result = 0;
+			int bno = Util.str2Int(request.getParameter("bno"));
+			int cno = Util.str2Int(request.getParameter("cno"));
+			
 			FoodCommentDTO cmt = new FoodCommentDTO();
-			cmt.setBno(Util.str2Int(request.getParameter("bno")));
-			cmt.setCno(Util.str2Int(request.getParameter("cno")));
-			//cmt.setId((String) request.getSession().getAttribute("id"));
-			cmt.setId("an");
-			result = FoodCommentDAO.getInstance().foodCommentDelete(cmt);
+			cmt.setId((String) request.getSession().getAttribute("id"));
+			int check = FoodCommentDAO.getInstance().checkWriter(bno, cno, id);
+			//작성 글 & id 확인
+			if(check == 1 || Util.str2Int((String) request.getSession().getAttribute("grade"))==9) {
+				result = FoodCommentDAO.getInstance().foodCommentDelete(bno, cno);				
+			}
+			
 			
 			if(result == 1) {
 				response.sendRedirect("./foodView?bno="+cmt.getBno());

@@ -81,17 +81,15 @@ public class FoodWrite extends HttpServlet {
 		MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8",
 				new DefaultFileRenamePolicy());
 
-//		if (request.getSession().getAttribute("id") != null && request.getSession().getAttribute("name") != null) {
-		int test = 1;
-		if (test == 1) {
+		if (request.getSession().getAttribute("id") != null && request.getSession().getAttribute("name") != null){
 			String title = Util.replace(multi.getParameter("title"));
 			String content = Util.replace(multi.getParameter("content"));
 			String subCategory = multi.getParameter("semiCate");
 			String saveFile = null;
 			String thumbnail = null;
-			if (multi.getOriginalFileName("file1") != null) {
-				saveFile = multi.getFilesystemName("file1"); // 파일 저장 이름
-
+			if (multi.getOriginalFileName("file") != null) {
+				saveFile = multi.getFilesystemName("file"); // 파일 저장 이름
+				
 				thumbnail = path + "upload/foodThumbnail/";
 				BufferedImage inputImg = ImageIO.read(new File(savePath + saveFile));
 
@@ -118,7 +116,7 @@ public class FoodWrite extends HttpServlet {
 			dto.setBcontent(content);
 			dto.setSubCategory(subCategory);
 			dto.setBfile(saveFile);
-
+			dto.setBthumbnail(saveFile);
 			int result = FoodBoardDAO.getInstance().boardWrite(dto);
 
 			if (result == 1) {

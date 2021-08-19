@@ -1,7 +1,12 @@
 package com.FS705.web;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,10 +50,9 @@ public class FoodModify extends HttpServlet {
 		LogDAO.insertLog(logDto);
 		
 	
-	if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0) {
-		//&& request.getSession().getAttribute("id")){
-		// id = (String) request.getSession().getAttribute("id");
-		 id = "an";
+	if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0
+			&& request.getSession().getAttribute("id") != null ){
+		 id = (String) request.getSession().getAttribute("id");
 		FoodBoardDTO modifyImport = FoodBoardDAO.getInstance().boardModifyImport(Util.str2Int(request.getParameter("bno")), id);		
 		RequestDispatcher rd = request.getRequestDispatcher("./food/foodModify.jsp");
 		request.setAttribute("modifyImport", modifyImport);
@@ -84,40 +88,39 @@ public class FoodModify extends HttpServlet {
 		
 		MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8", new DefaultFileRenamePolicy());
 		
-		if(multi.getParameter("bno") != null && Util.str2Int(multi.getParameter("bno")) != 0) {
-			//&& request.getSession().getAttribute("id")){
-			// id = (String) request.getSession().getAttribute("id");
-			 id = "an";
+		if(multi.getParameter("bno") != null && Util.str2Int(multi.getParameter("bno")) != 0
+			&& request.getSession().getAttribute("id") != null){
+			id = (String) request.getSession().getAttribute("id");
 			int result = 0;
 			int bno = Util.str2Int(multi.getParameter("bno"));
 			String title = Util.replace(multi.getParameter("title"));
 			String content = Util.replace(multi.getParameter("content"));
 			String subCategory = multi.getParameter("semiCate");
-//			String saveFile = null;
-//			String thumbnail = null;
-//			if(multi.getOriginalFileName("file1") != null && multi.getOriginalFileName("file1") != multi.getOriginalFileName("file2")) {
-//				saveFile = multi.getFilesystemName("file1"); // 파일 저장 이름
-//				
-//				thumbnail = path + "foodThumbnail/";
-//				BufferedImage inputImg = ImageIO.read(new File(savePath + saveFile));
-//				
-//				int width = 240;
-//				int height = 180;
-//				
-//				String[] imgs = {"png", "gif", "jpg", "jpeg"};
-//				for (String format : imgs) {
-//					BufferedImage outputImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-//					
-//					Graphics2D gr2d = outputImg.createGraphics();
-//					gr2d.drawImage(inputImg, 0, 0, width, height, null);
-//					
-//					//파일쓰기
-//					File thumb = new File(thumbnail + saveFile);
-//					FileOutputStream fos = new FileOutputStream(thumb);
-//					ImageIO.write(outputImg, format, thumb);
-//					fos.close();					
-//				}
-//			}
+			String saveFile = null;
+			String thumbnail = null;
+			if(multi.getOriginalFileName("file1") != null && multi.getOriginalFileName("file1") != multi.getOriginalFileName("file2")) {
+				saveFile = multi.getFilesystemName("file1"); // 파일 저장 이름
+				
+				thumbnail = path + "foodThumbnail/";
+				BufferedImage inputImg = ImageIO.read(new File(savePath + saveFile));
+				
+				int width = 240;
+				int height = 180;
+				
+				String[] imgs = {"png", "gif", "jpg", "jpeg"};
+				for (String format : imgs) {
+					BufferedImage outputImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+					
+					Graphics2D gr2d = outputImg.createGraphics();
+					gr2d.drawImage(inputImg, 0, 0, width, height, null);
+					
+					//파일쓰기
+					File thumb = new File(thumbnail + saveFile);
+					FileOutputStream fos = new FileOutputStream(thumb);
+					ImageIO.write(outputImg, format, thumb);
+					fos.close();					
+				}
+			}
 			FoodBoardDTO dto = new FoodBoardDTO();
 			dto.setBno(bno);
 			dto.setBtitle(title);
@@ -127,9 +130,7 @@ public class FoodModify extends HttpServlet {
 			
 			result = FoodBoardDAO.getInstance().boardModifyContent(dto);
 			if(result == 1) {
-//			RequestDispatcher rd = request.getRequestDispatcher("./foodDetail?bno="+bno);
-//			rd.forward(request, response);
-				response.sendRedirect("./foodDetail?bno="+bno);
+				response.sendRedirect("./foodView?bno="+bno);
 			}else {
 				response.sendRedirect("./error?code=foodModifyError2");
 			}

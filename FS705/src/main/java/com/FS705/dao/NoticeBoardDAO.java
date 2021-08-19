@@ -7,36 +7,36 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.FS705.db.DBConnection;
-import com.FS705.dto.FoodBoardDTO;
+import com.FS705.dto.NoticeBoardDTO;
 import com.FS705.util.Util;
 
-public class FoodBoardDAO {
-	private FoodBoardDAO() {
+public class NoticeBoardDAO {
+	private NoticeBoardDAO() {
 	}
 
-	private static FoodBoardDAO instance = new FoodBoardDAO();
+	private static NoticeBoardDAO instance = new NoticeBoardDAO();
 
-	public static FoodBoardDAO getInstance() {
+	public static NoticeBoardDAO getInstance() {
 		return instance;
 	}
 
-	public ArrayList<FoodBoardDTO> boardList(int page) {
-		ArrayList<FoodBoardDTO> boardList = null;
+	public ArrayList<NoticeBoardDTO> boardList(int page) {
+		ArrayList<NoticeBoardDTO> boardList = null;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM foodboardview LIMIT ?, 10";
+		String sql = "SELECT * FROM noticeboardview LIMIT ?, 10";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, page);
 			rs = pstmt.executeQuery();
 
 			if (rs != null) {
-				boardList = new ArrayList<FoodBoardDTO>();
+				boardList = new ArrayList<NoticeBoardDTO>();
 				while (rs.next()) {
-					FoodBoardDTO dto = new FoodBoardDTO();
-					dto.setFoodboardcount(rs.getInt("foodboardcount"));
-					dto.setFoodcommentcount(rs.getInt("foodcommentcount"));
+					NoticeBoardDTO dto = new NoticeBoardDTO();
+					dto.setBoardcount(rs.getInt("boardcount"));
+					dto.setCommentcount(rs.getInt("commentcount"));
 					dto.setBno(rs.getInt("bno"));
 					dto.setBtitle(rs.getString("btitle"));
 					dto.setSubCategory(rs.getString("subCategory"));
@@ -61,22 +61,22 @@ public class FoodBoardDAO {
 		return boardList;
 	}
 
-	public FoodBoardDTO boardView(int bno) {
-		FoodBoardDTO view = null;
+	public NoticeBoardDTO boardView(int bno) {
+		NoticeBoardDTO view = null;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM foodboardview WHERE bno=?";
+		String sql = "SELECT * FROM noticeboardview WHERE bno=?";
 
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, bno);
 			rs = pstmt.executeQuery();
 			if (rs != null) {
-				view = new FoodBoardDTO();
+				view = new NoticeBoardDTO();
 				if (rs.next()) {
-					view.setFoodboardcount(rs.getInt("foodboardcount"));
-					view.setFoodcommentcount(rs.getInt("foodcommentcount"));
+					view.setBoardcount(rs.getInt("boardcount"));
+					view.setCommentcount(rs.getInt("commentcount"));
 					view.setBno(rs.getInt("bno"));
 					view.setBno2(rs.getInt("bno2"));
 					view.setBno3(rs.getInt("bno3"));
@@ -100,13 +100,12 @@ public class FoodBoardDAO {
 		return view;
 	}
 
-	public int boardWrite(FoodBoardDTO dto) {
+	public int boardWrite(NoticeBoardDTO dto) {
 		int result = 0;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		String sql = "INSERT INTO board (bcategory, btitle, bcontent, no, subCategory, bfile, bthumbnail)"
-				+ "VALUES ('food', ?, ?,(SELECT no FROM member WHERE id=?), ?, ?, ?)";
-
+				+ "VALUES ('notice', ?, ?,(SELECT no FROM member WHERE id=?), ?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getBtitle());
@@ -124,8 +123,8 @@ public class FoodBoardDAO {
 		return result;
 	}
 
-	public FoodBoardDTO boardModifyImport(int bno, String id) {
-		FoodBoardDTO modifyImport = null;
+	public NoticeBoardDTO boardModifyImport(int bno, String id) {
+		NoticeBoardDTO modifyImport = null;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -139,7 +138,7 @@ public class FoodBoardDAO {
 			rs = pstmt.executeQuery();
 			if (rs != null) {
 				if (rs.next()) {
-					modifyImport = new FoodBoardDTO();
+					modifyImport = new NoticeBoardDTO();
 					modifyImport.setBno(rs.getInt("bno"));
 					modifyImport.setBtitle(rs.getString("btitle"));
 					modifyImport.setBcontent(rs.getString("bcontent"));
@@ -154,7 +153,7 @@ public class FoodBoardDAO {
 		return modifyImport;
 	}
 
-	public int boardModifyContent(FoodBoardDTO dto) {
+	public int boardModifyContent(NoticeBoardDTO dto) {
 		int result = 0;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
@@ -228,12 +227,12 @@ public class FoodBoardDAO {
 		return result;
 	}
 
-	public ArrayList<FoodBoardDTO> selectList(int page, int category) {
-		ArrayList<FoodBoardDTO> boardList = new ArrayList<FoodBoardDTO>();
+	public ArrayList<NoticeBoardDTO> selectList(int page, int category) {
+		ArrayList<NoticeBoardDTO> boardList = new ArrayList<NoticeBoardDTO>();
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT *,(SELECT COUNT(*) FROM foodboardview WHERE subCategory=?) AS searchCount FROM foodboardview WHERE subCategory=? LIMIT ?, 10";
+		String sql = "SELECT *,(SELECT COUNT(*) FROM noticeboardview WHERE subCategory=?) AS searchCount FROM noticeboardview WHERE subCategory=? LIMIT ?, 10";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, category);
@@ -243,9 +242,9 @@ public class FoodBoardDAO {
 
 			if (rs != null) {
 				while (rs.next()) {
-					FoodBoardDTO dto = new FoodBoardDTO();
-					dto.setFoodboardcount(rs.getInt("searchCount"));
-					dto.setFoodcommentcount(rs.getInt("foodcommentcount"));
+					NoticeBoardDTO dto = new NoticeBoardDTO();
+					dto.setBoardcount(rs.getInt("searchCount"));
+					dto.setCommentcount(rs.getInt("commentcount"));
 					dto.setBno(rs.getInt("bno"));
 					dto.setBtitle(rs.getString("btitle"));
 					dto.setSubCategory(rs.getString("subCategory"));
@@ -272,21 +271,21 @@ public class FoodBoardDAO {
 		return boardList;
 	}
 
-	public ArrayList<FoodBoardDTO> foodBoardLike() {
-		ArrayList<FoodBoardDTO> boardList = null;
+	public ArrayList<NoticeBoardDTO> noticeBoardLike() {
+		ArrayList<NoticeBoardDTO> boardList = null;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = "SELECT bno, btitle, subCategory, DATEDIFF(NOW(),`bdate`) as bdate, blike, "
-				+ "bcount, bcategory, id, name FROM foodboardview ORDER BY blike DESC LIMIT 0, 5";
+				+ "bcount, bcategory, id, name FROM noticeboardview ORDER BY blike DESC LIMIT 0, 3";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
 			if (rs != null) {
-				boardList = new ArrayList<FoodBoardDTO>();
+				boardList = new ArrayList<NoticeBoardDTO>();
 				while (rs.next()) {
-					FoodBoardDTO dto = new FoodBoardDTO();
+					NoticeBoardDTO dto = new NoticeBoardDTO();
 					dto.setBno(rs.getInt("bno"));
 					dto.setBtitle(rs.getString("btitle"));
 					dto.setSubCategory(rs.getString("subCategory"));
@@ -307,23 +306,23 @@ public class FoodBoardDAO {
 		return boardList;
 	}
 
-	public ArrayList<FoodBoardDTO> searchList(String searchOption, String search, int page) {
-		ArrayList<FoodBoardDTO> searchList = null;
+	public ArrayList<NoticeBoardDTO> searchList(String searchOption, String search, int page) {
+		ArrayList<NoticeBoardDTO> searchList = null;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = null;
 		try {
 			if (searchOption.equals("btitle") || searchOption.equals("bcontent")) { // 제목 or 내용
-				sql = "SELECT *,(SELECT COUNT(*) FROM foodboardview WHERE "+ searchOption +" LIKE '%"+search+"%') AS searchcount "
-						+ "FROM foodboardview WHERE " + searchOption + " LIKE '%"+search+"%' LIMIT ?, 10";
+				sql = "SELECT *,(SELECT COUNT(*) FROM noticeboardview WHERE "+ searchOption +" LIKE '%"+search+"%') AS searchcount "
+						+ "FROM noticeboardview WHERE " + searchOption + " LIKE '%"+search+"%' LIMIT ?, 10";
 
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, page);
 
 			} else { // 제목 + 내용
-				sql = "SELECT *,(SELECT COUNT(*) FROM foodboardview WHERE btitle LIKE CONCAT('%',?,'%') OR bcontent LIKE CONCAT('%',?,'%')) AS searchcount "
-						+ "FROM foodboardview WHERE btitle LIKE CONCAT('%',?,'%') OR bcontent LIKE CONCAT('%',?,'%') LIMIT ?, 10";
+				sql = "SELECT *,(SELECT COUNT(*) FROM noticeboardview WHERE btitle LIKE CONCAT('%',?,'%') OR bcontent LIKE CONCAT('%',?,'%')) AS searchcount "
+						+ "FROM noticeboardview WHERE btitle LIKE CONCAT('%',?,'%') OR bcontent LIKE CONCAT('%',?,'%') LIMIT ?, 10";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, search);
 				pstmt.setString(2, search);
@@ -333,11 +332,11 @@ public class FoodBoardDAO {
 			}
 			rs = pstmt.executeQuery();
 			if(rs != null) {
-				searchList = new ArrayList<FoodBoardDTO>();
+				searchList = new ArrayList<NoticeBoardDTO>();
 				while(rs.next()) {
-					FoodBoardDTO dto = new FoodBoardDTO();
-					dto.setFoodboardcount(rs.getInt("searchcount"));
-					dto.setFoodcommentcount(rs.getInt("foodcommentcount"));
+					NoticeBoardDTO dto = new NoticeBoardDTO();
+					dto.setBoardcount(rs.getInt("searchcount"));
+					dto.setCommentcount(rs.getInt("commentcount"));
 					dto.setBno(rs.getInt("bno"));
 					dto.setBtitle(rs.getString("btitle"));
 					dto.setSubCategory(rs.getString("subCategory"));
@@ -362,30 +361,6 @@ public class FoodBoardDAO {
 		return searchList;
 	}
 
-	public int checkWriter(int bno, String id) {
-		int result = 0;
-		Connection conn = DBConnection.dbconn();
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String sql = "SELECT id FROM foodboardview WHERE bno=?";
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, bno);
-			rs = pstmt.executeQuery();
-			if(rs != null) {				
-				if(rs.next()) {
-					if(id.equals(rs.getString("id"))) {
-						result = 1;
-					}
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			Util.closeAll(null, pstmt, conn);			
-		}		
-		return result;
-	}
 
 	public int nextPrev(int bno, int nextPrev) {
 		int bno2 = 0;
@@ -397,7 +372,7 @@ public class FoodBoardDAO {
 		String sql ="";
 		if(nextPrev == 1) {
 			// 이전글
-			sql = "SELECT bno FROM foodboardview WHERE bno=(SELECT MAX(bno) FROM foodboardview WHERE bno < ?)";
+			sql = "SELECT bno FROM noticeboardview WHERE bno=(SELECT MAX(bno) FROM noticeboardview WHERE bno < ?)";
 			try {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, bno);
@@ -414,7 +389,7 @@ public class FoodBoardDAO {
 			bno2 = preSeq;
 		}else if(nextPrev == 2) {
 			// 다음글
-			sql = "SELECT bno FROM foodboardview WHERE bno=(SELECT MIN(bno) FROM foodboardview WHERE bno > ?)";
+			sql = "SELECT bno FROM noticeboardview WHERE bno=(SELECT MIN(bno) FROM noticeboardview WHERE bno > ?)";
 			try {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, bno);
@@ -434,20 +409,20 @@ public class FoodBoardDAO {
 		return bno2;
 	}
 
-	public ArrayList<FoodBoardDTO> sortList(int page, int sort) {
-		ArrayList<FoodBoardDTO> boardList = new ArrayList<FoodBoardDTO>();
+	public ArrayList<NoticeBoardDTO> sortList(int page, int sort) {
+		ArrayList<NoticeBoardDTO> boardList = new ArrayList<NoticeBoardDTO>();
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String sql = "";
 		if(sort == 1) {
-			sql = "SELECT * FROM foodboardview LIMIT ?, 10";
+			sql = "SELECT * FROM noticeboardview LIMIT ?, 10";
 		} else if(sort == 2) {
-			sql = "SELECT * FROM foodboardview ORDER BY bno LIMIT ?, 10";
+			sql = "SELECT * FROM noticeboardview ORDER BY bno LIMIT ?, 10";
 		} else if (sort == 3) {
-			sql = "SELECT * FROM foodboardview ORDER BY blike DESC LIMIT ?, 10";
+			sql = "SELECT * FROM noticeboardview ORDER BY blike DESC LIMIT ?, 10";
 		} else if (sort == 4) {
-			sql = "SELECT * FROM foodboardview ORDER BY bcount DESC LIMIT ?, 10";
+			sql = "SELECT * FROM noticeboardview ORDER BY bcount DESC LIMIT ?, 10";
 		}
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -456,9 +431,9 @@ public class FoodBoardDAO {
 
 			if (rs != null) {
 				while (rs.next()) {
-					FoodBoardDTO dto = new FoodBoardDTO();
-					dto.setFoodboardcount(rs.getInt("foodboardcount"));
-					dto.setFoodcommentcount(rs.getInt("foodcommentcount"));
+					NoticeBoardDTO dto = new NoticeBoardDTO();
+					dto.setBoardcount(rs.getInt("boardcount"));
+					dto.setCommentcount(rs.getInt("commentcount"));
 					dto.setBno(rs.getInt("bno"));
 					dto.setBtitle(rs.getString("btitle"));
 					dto.setSubCategory(rs.getString("subCategory"));

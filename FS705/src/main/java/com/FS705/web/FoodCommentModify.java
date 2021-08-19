@@ -45,19 +45,17 @@ public class FoodCommentModify extends HttpServlet {
 		logDto.setLogMethod("post");
 		LogDAO.insertLog(logDto);
 		
-//		if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0
-//			&& request.getParameter("cno") != null && Util.str2Int(request.getParameter("cno")) != 0
-//			&& request.getParameter("ccontent") != null && request.getSession().getAttribute("id") != null){
-		int test = 1;
-		if(test == 1) {
+		if(request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0
+			&& request.getParameter("cno") != null && Util.str2Int(request.getParameter("cno")) != 0
+			&& request.getParameter("ccontent") != null && request.getSession().getAttribute("id") != null){
+		
 			int result = 0;
 			FoodCommentDTO cmt = new FoodCommentDTO();
 			cmt.setBno(Util.str2Int(request.getParameter("bno")));
 			cmt.setCno(Util.str2Int(request.getParameter("cno")));
 			cmt.setCcontent(Util.replace(request.getParameter("ccontent")));
 			cmt.setCip(Util.getIP(request));
-			//cmt.setId((String) request.getSession().getAttribute("id"));
-			cmt.setId("an");
+			cmt.setId((String) request.getSession().getAttribute("id"));
 			result = FoodCommentDAO.getInstance().foodCommentModify(cmt);
 			
 			if(result == 1) {

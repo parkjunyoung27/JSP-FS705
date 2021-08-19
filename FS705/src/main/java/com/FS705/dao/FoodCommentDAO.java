@@ -41,10 +41,8 @@ public class FoodCommentDAO {
 					dto.setNo(rs.getInt("no"));
 					dto.setClike(rs.getInt("clike"));
 					dto.setCdislike(rs.getInt("cdislike"));
-					//dto.setId(rs.getString("id"));
-					//dto.setName(rs.getString("name"));
-					dto.setId("an");
-					dto.setName("안다훈");
+					dto.setId(rs.getString("id"));
+					dto.setName(rs.getString("name"));
 					cmt.add(dto);
 				}				
 			}
@@ -97,17 +95,16 @@ public class FoodCommentDAO {
 		}				
 		return result;
 	}
-	public int foodCommentDelete(FoodCommentDTO cmt) {
+	public int foodCommentDelete(int bno, int cno) {
 		int result = 0;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
-		String sql = "DELETE FROM comment WHERE bno=? AND cno=? AND no=(SELECT no FROM member WHERE id=?)";
+		String sql = "DELETE FROM comment WHERE bno=? AND cno=?";
 		
 		try {
 			pstmt = conn.prepareStatement(sql);			
-			pstmt.setInt(1, cmt.getBno());
-			pstmt.setInt(2, cmt.getCno());
-			pstmt.setString(3, cmt.getId());
+			pstmt.setInt(1, bno);
+			pstmt.setInt(2, cno);
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -115,5 +112,40 @@ public class FoodCommentDAO {
 			Util.closeAll(null, pstmt, conn);			
 		}		
 		return result;
+	}
+	public int checkWriter(int bno, int cno, String id) {
+		int result = 0;
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		String sql = "SELECT ctitle FROM comment WHERE bno=? AND con=? AND no=(SELECT no FROM member WHERE id=?)";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			pstmt.setInt(2, cno);
+			pstmt.setString(3, id);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Util.closeAll(null, pstmt, conn);			
+		}		
+		return result;
+	}
+	public int foodCommentLike(int cno) {
+			int result = 0;
+			Connection conn = DBConnection.dbconn();
+			PreparedStatement pstmt = null;
+			String sql = "UPDATE comment SET clike=clike+1 WHERE cno=?";
+
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, cno);
+				result = pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				Util.closeAll(null, pstmt, conn);
+			}
+			return result;	
 	}	
 }

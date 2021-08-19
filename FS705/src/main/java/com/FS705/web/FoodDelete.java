@@ -39,15 +39,15 @@ public class FoodDelete extends HttpServlet {
 		logDto.setLogMethod("get");
 		LogDAO.insertLog(logDto);
 		
-
-//		if(request.getSession().getAttribute("id") != null && request.getSession().getAttribute("name") != null
-//		&& request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0 ) {
-		int test = 1;
-		if(test==1) {
+		if(request.getSession().getAttribute("id") != null && request.getSession().getAttribute("name") != null
+		&& request.getParameter("bno") != null && Util.str2Int(request.getParameter("bno")) != 0 ) {
 			int result = 0;
-			id = "an";
 			int bno = Util.str2Int(request.getParameter("bno"));
-			result = FoodBoardDAO.getInstance().boardDelete(bno, id);
+			int check = FoodBoardDAO.getInstance().checkWriter(bno, (String)request.getSession().getAttribute("id"));
+			//작성 글 & id 확인
+			if(check == 1 || (int)request.getSession().getAttribute("grade") == 9) {
+				result = FoodBoardDAO.getInstance().boardDelete(bno);				
+			}
 			if(result == 1) {
 				response.sendRedirect("./foodBoard");
 			} else {

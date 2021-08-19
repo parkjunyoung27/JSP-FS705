@@ -50,12 +50,16 @@ public class FoodBoard extends HttpServlet {
 		}
 		
 		ArrayList<FoodBoardDTO> list = null;
-		if(request.getParameter("category")==null) {
+		if(request.getParameter("category") == null && request.getParameter("sort") == null) {
 			list = FoodBoardDAO.getInstance().boardList((page - 1) * 10);
 			request.setAttribute("dto", list);
-		} else {
+		} else if(request.getParameter("category") != null || request.getParameter("sort") == null) {
 			int category = Util.str2Int(request.getParameter("category"));					
 			list = FoodBoardDAO.getInstance().selectList((page - 1) * 10, category);
+			request.setAttribute("dto", list);
+		} else if(request.getParameter("sort") != null) {
+			int sort = Util.str2Int(request.getParameter("sort"));					
+			list = FoodBoardDAO.getInstance().sortList((page - 1) * 10, sort);
 			request.setAttribute("dto", list);
 		}
 		

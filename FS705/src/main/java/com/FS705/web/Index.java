@@ -15,12 +15,14 @@ import com.FS705.dao.FoodBoardDAO;
 import com.FS705.dao.GameBoardDAO;
 import com.FS705.dao.HumorBoardDAO;
 import com.FS705.dao.LogDAO;
+import com.FS705.dao.NoticeBoardDAO;
 import com.FS705.dao.SportsDAO;
 import com.FS705.dto.BoardDTO;
 import com.FS705.dto.FoodBoardDTO;
 import com.FS705.dto.GameBoardDTO;
 import com.FS705.dto.HumorBoardDTO;
 import com.FS705.dto.LogDTO;
+import com.FS705.dto.NoticeBoardDTO;
 import com.FS705.util.Util;
 
 @WebServlet("/index")
@@ -58,6 +60,10 @@ public class Index extends HttpServlet {
 	logDto.setLogMethod("get");
 
 	LogDAO.insertLog(logDto);
+	//공지사항 게시글
+	ArrayList<NoticeBoardDTO> nlist = null;
+	nlist = NoticeBoardDAO.getInstance().noticeBoardLike();
+	request.setAttribute("ndto", nlist);
 	
 	//foodBoard 추천 게시글
 	ArrayList<FoodBoardDTO> flist = null;
