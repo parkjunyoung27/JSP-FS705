@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:if test="${dto eq null }">
-	<c:redirect url="foodBoard"/>
+	<c:redirect url="sports"/>
 </c:if>
 <!DOCTYPE html>
 <html>
@@ -73,6 +73,12 @@ function select(){
 	<div id="container">	
 		<div id="sports" class="boardBox">
 			<h2><img alt="스포츠" src="./img/sports.png"> 스포츠</h2>
+				<ul>
+					<li>제목</li>
+					<li>작성자</li>
+					<li>좋아요</li>
+					<li>날짜</li>
+				</ul>
 				<c:forEach items="${dto }" var="dto">
 				<ul class="main" onclick="">
 					<li class="title"><a href="sportsDetail?bno=${dto.bno }">
