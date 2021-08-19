@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:if test="${dto eq null }">
-	<c:redirect url="foodBoard"/>
+<c:if test="${dto eq null}">
+	<c:redirect url="./notice"/>
 </c:if>
-<!DOCTYPE html>
 <html>
-<link rel="icon" href="img/favi.png"/>
 <head>
 <meta charset="UTF-8">
 <title>welcome</title>
@@ -20,8 +18,8 @@ a:link, a:visited{text-decoration:none;color:#333;}
 #wrapper{width:1280px;margin:0 auto;}
 
 /*------------------------------- container css -------------------------------*/
-	#container{width:72%;float:left;height:100vh;}
-		.boardBox{width:87%;margin:1.7%;float:left;}
+	#container{width:82%;float:left;height:100vh;}
+		.boardBox{width:90%;margin:1.7%;float:left;}
 			.boardBox h2{width:100%;height:18px;line-height:18px;font-size:18px;font-weight:300;border-bottom:1px solid #eee;padding-bottom:5px;}
 				.boardBox h2 img{display:inline-block;width:16px;height:16px;vertical-align:middle;}
 			.boardBox ul{width:100%;height:34px;border-bottom:1px solid #eee;border-right:1px solid #eee;cursor:pointer;transition:0.3s;}
@@ -43,10 +41,8 @@ a:link, a:visited{text-decoration:none;color:#333;}
 	margin: 0 auto;
 	text-align: center;
 }
-#sortBox{
-	text-align: right;
-}
 </style>
+
 <script>
 $(function(){
 	//a태그 hover이벤트 tab키 먹히게 하는 기능
@@ -58,26 +54,14 @@ $(function(){
 		$(this).parents(".main").css({"background-color":"transparent"});
 	});
 });
-function select(){
-	var ip = document.getElementById("ip").value;
-	var target = document.getElementById("target").value;
-	location.href='admin?ip='+ip+'&target='+target;
-}
 </script>
 </head>
 <body>
 <div id="wrapper">
-	<c:import url="/header.jsp"/>
-	<c:import url="/food/categoryBar.jsp"/>
-	<div id="container">	
-		<div id="food" class="boardBox">		
-			<h2><img alt="맛집" src="./img/food.png"> 맛집</h2>
-			  <div id = "sortBox">
-			 <a href="./foodBoard?sort=1">최신순</a>
-			 <a href="./foodBoard?sort=3">&nbsp;&nbsp;&nbsp;&nbsp;좋아요순</a>
-			 <a href="./foodBoard?sort=4">&nbsp;&nbsp;&nbsp;&nbsp;조회수순</a>
-			 <a href="./foodBoard?sort=2">&nbsp;&nbsp;&nbsp;&nbsp;오래된순&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-			 </div>
+	<c:import url="header.jsp"/>
+	<div id="container">
+		<div id="editorChoice" class="boardBox">
+			<h2><img alt="에디터 초이스" src="./img/best.png"> 공지사항</h2>
 			 <div id = "menuTable">
 			 <ul style = "background-color: #c9c9c9" >
 					<li style= "text-align: center;">제목</li>
@@ -89,46 +73,23 @@ function select(){
 			</div>
 			<!-- 구간반복지점 -->
 			<c:forEach items="${dto }" var="dto">
-				<ul class="main" onclick="">
-					<li class="title"><a href="foodView?bno=${dto.bno }">
-					[<c:choose>
-						<c:when test="${dto.subCategory eq 1 }">
-						한식
-						</c:when>
-						<c:when test="${dto.subCategory eq 2 }">
-						중식
-						</c:when>
-						<c:when test="${dto.subCategory eq 3 }">
-						일식
-						</c:when>
-						<c:when test="${dto.subCategory eq 4 }">
-						카페·디저트
-						</c:when>
-						<c:otherwise>
-						기타
-						</c:otherwise>
-					</c:choose>]
-					 ${dto.btitle }  <c:if test="${dto.foodcommentcount gt 0}"><small>[${dto.foodcommentcount }]</small></c:if>
+			
+				<ul>
+					<li class="title"><a href="detail?bno=${dto.bno }">				
+					 ${dto.btitle }  <c:if test="${dto.commentcount gt 0}"><small>[${dto.commentcount }]</small></c:if>
 					 </a></li>
-					<li>${dto.id }(${dto.name })</li>
+					<li>${dto.name }</li>
 					<li><img alt="좋아요" src="./img/like.png"> ${dto.blike }</li>
 					<li>${dto.bcount }</li>					
 					<li>${dto.bdate }</li>
 				</ul>
 			</c:forEach>
 			<!-- 구간반복지점 -->
-		
-			
 			<div id="divPaging" align="center">
-			<c:set var="pageName" value="foodBoard" scope="request"/>
+			<c:set var="pageName" value="notice" scope="request"/>
 			<c:set var="PAGENUMBER" value="10" scope="request"/>
-			<c:import url="/food/foodpaging.jsp"/>														
+			<c:import url="/noticepaging.jsp"/>														
 			</div>
-			<c:if test="${sessionScope.id ne null }">
-			<div class="writeBox" align="right">
-			<a href="foodWrite">글쓰기</a>	
-			</div>
-			</c:if>
 			<!-- 검색 폼 -->
 				<div id="liSearchOption">
 				<form action="./foodBoard" method="post">
@@ -139,10 +100,10 @@ function select(){
 					</select> <input name="search" /> <button type="submit">검색</button>
 				</form>
 				</div>
-		</div>		
-	</div>	
-	<c:import url="/plusBar.jsp"/>
-	<c:import url="/footer.jsp"/>
+		</div>
+	</div>
+	<c:import url="plusBar.jsp"/>
+	<c:import url="footer.jsp"/>
 </div>
 </body>
 </html>

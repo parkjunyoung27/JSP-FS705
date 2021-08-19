@@ -48,7 +48,7 @@ $(function(){
 			<li><a href="./sports" title="스포츠">스포츠</a><span class="line">|</span></li>
 			<li><a href="./gameBoard" title="게임">게임</a><span class="line">|</span></li>
 			<li><a href="./humorBoard" title="유머">유머</a><span class="line">|</span></li>
-			<li><a href="" title="전체게시판">전체 게시판</a></li>
+			<li><a href="./notice" title="공지사항">공지사항</a></li>
 			<li>
 				<span class="line">|</span>
 				<c:if test="${sessionScope.grade eq 9 }">

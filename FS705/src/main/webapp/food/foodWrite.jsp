@@ -3,9 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
+<link rel="icon" href="img/favi.png"/>
 <head>
 <meta charset="UTF-8">
-<title>welcome</title>
+<title>FoodWrite</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <style type="text/css">
@@ -63,14 +64,10 @@ $(document).ready(function(){
 		<div id="FS705Write">
 			<form action="./foodWrite" method="post" enctype="multipart/form-data">
 				<select name="category">
-				    <option value="">카테고리</option>
 				    <option value="맛집">맛집</option>
-				    <option value="스포츠">스포츠</option>
-				    <option value="게임">게임</option>
-				    <option value="유머">유머</option>
 				</select>
 				<select name="semiCate">
-				    <option value="">---</option>
+				    <option value="5">---</option>
 				    <option value="1">한식</option>
 				    <option value="2">중식</option>
 				    <option value="3">일식</option>

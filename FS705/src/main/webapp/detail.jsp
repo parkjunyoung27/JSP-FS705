@@ -25,8 +25,8 @@ a:link, a:visited{text-decoration:none;color:#333;}
 			#boardlist .bmiddle{border-bottom:1px solid gray;line-height:20px;}
 				#boardlist .bmiddle .bmfloat{width:100%;height:30px;clear:both;overflow:hidden;}
 					#boardlist .bmiddle .bmfloat li{float:left;}
-					#boardlist .bmiddle .bmfloat li:first-child{width:70%;text-align:left;text-indent:10px;}
-					#boardlist .bmiddle .bmfloat li:nth-child(2){width:14%;text-align:right;}
+					#boardlist .bmiddle .bmfloat li:first-child{width:60%;text-align:left;text-indent:10px;}
+					#boardlist .bmiddle .bmfloat li:nth-child(2){width:24%;text-align:right;}
 					#boardlist .bmiddle .bmfloat li:nth-child(3){width:9%;}
 					#boardlist .bmiddle .bmfloat li:last-child{width:7%;}	
 						#boardlist .bmiddle .bmfloat .line{height:15px;background-color:gray;border:1px solid gray;display:inline-block;float:right;margin-top:1px;overflow:hidden;clear:both;}
@@ -126,6 +126,22 @@ $(function(){
 		}
 	});
 });  
+function foodVote(bno, code){
+	if(code == 'blike'){
+		if(confirm("해당 글을 추천하시겠습니까?")){
+			location.href="./noticeViewVote?vote=" + code + "&bno=" + bno;
+		}
+	}else if(code == 'bdislike'){
+		if(confirm("해당 글을 싫어하시겠습니까?")){
+			location.href="./noticeViewVote?vote=" + code + "&bno=" + bno;
+		}			
+	}
+}
+function foodcVote(cno, bno){
+	if(confirm("해당 댓글을 추천하시겠습니까?")){
+			location.href="./noticeViewVote?bno=" + bno + "&cno=" + cno;	
+	}
+}
 </script>
 </head>
 <body>
@@ -134,20 +150,24 @@ $(function(){
 	<div id="container">
 		<div id="content">
 			<div id="boardlist">
-				<div class="btop">제목입니다.<small id="ccount">(글번호)</small></div>
+
+				<div class="btop">${dto.btitle }<small id="ccount">(${dto.bno })</small></div>
 				<div class="bmiddle">
 					<ul class="bmfloat">
-						<li>닉네임입니다.<small id="ccount">(ID입니다.)</small></li>
-						<li>2021-08-03&nbsp;&nbsp;&nbsp;<span class="line"></span></li>
-						<li>&nbsp;조회수: 30<span class="line"></span></li>
-						<li>&nbsp;댓글: 30</li>
+						<li>${dto.name }</li>
+						<li>${dto.bdate }&nbsp;&nbsp;&nbsp;<span class="line"></span></li>
+						<li>&nbsp;조회수: ${dto.bcount }<span class="line"></span></li>
+						<li>&nbsp;댓글: ${dto.commentcount }</li>
 					</ul>
 				</div>
 				<div class="bbottom">
-					내용내용글 내용내용<br>
-					<c:if test="${dto.ffilename ne null}">
-						<img alt="그림" src="./upload/${dto.ffilename }" width="100%">
+					<br>
+					<c:if test="${dto.bfile ne null}">
+						<img alt="${dto.bfile }" src="./upload/foodUpload/${dto.bfile }" width="60%">
 					</c:if>
+					<br>
+					${dto.bcontent }
+					<br>
 				</div>
 				<div id="likeDislike">
 					<button id="likeBtn"><img src="./img/like2.png" alt="좋아요">좋아요</button>
@@ -162,8 +182,8 @@ $(function(){
 							<li id="commentSee">▼</li>
 							<li id="commentContainer">
 								<c:choose>
-									<c:when test="${fn:length(commentList) > 0 }">
-										<c:forEach items="${commentList }" var="cl">
+									<c:when test="${fn:length(cmtdto) > 0 }">
+										<c:forEach items="${cmtdto }" var="cl">
 											<div id="commentbox">
 												<div id="cbPlus">
 													<p>${cl.name }</p>
@@ -196,13 +216,13 @@ $(function(){
 							<li id="noComment">댓글이 없습니다. 댓글을 달아주세요.</li>
 						</c:otherwise>
 					</c:choose>
-					<c:if test="${sessionScope.id eq null }">
+					<c:if test="${sessionScope.id ne null }">
 						<li id="commentWrite">
 							<div id="cwArea">
-								<form action="./commentInput" method="post">
+								<form action="" method="post">
 									<p id="cwText">
 										<textarea name="content"></textarea>
-										<input type="hidden" name="fno" value="${dto.fno }">
+										<input type="hidden" name="bno" value="${dto.bno }">
 									</p>
 									<p id="cwTSend">
 										<button id="cwTSBtn">댓글 보내기</button>
@@ -214,7 +234,7 @@ $(function(){
 				</ul>
 			</div>
 		</div>
-	<div id="write"><a href="./board.jsp">게시판으로 이동</a></div>
+	<div id="write"><a href="./notice">공지사항으로 이동</a></div>
 	</div>
 	<c:import url="plusBar.jsp"/>
 	<c:import url="footer.jsp"/>

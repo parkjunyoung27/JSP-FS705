@@ -4,18 +4,17 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
+<link rel="icon" href="img/favi.png"/>
 <head>
 <meta charset="UTF-8">
-<title>detail</title>
+<title>view</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style type="text/css">
 /*------------------------------- reset css -------------------------------*/
 *{padding:0; margin:0;list-style:none;font-family:'빙그레 메로나체';}
 a:link, a:visited{text-decoration:none;color:#333;}
-
 /*------------------------------- wrapper css -------------------------------*/
 #wrapper{width:1280px;margin:0 auto;}
-
 /*------------------------------- container css -------------------------------*/
 	#container{width:82%;float:left;padding-bottom:100px;}
 		#content{width:100%;min-height:600px;padding-bottom:10px;border-bottom:1px solid gray;}
@@ -33,9 +32,7 @@ a:link, a:visited{text-decoration:none;color:#333;}
 			#boardlist .bbottom{width:990px;min-height:500px;padding:10px;margin-bottom:0px;text-align:left;}
 			#likeDislike{width:100%;text-align:center;}
 					#likeDislike img{width:40px;}
-
 #ccount{display:inline-block;height:16px;line-height:16px;font-weight:300;}	
-
 /* ---------------------------------------------e댓글 화면 구현--------------------------------------------- */
 	#comment{width:100%;padding-top:10px;}		
 		#comment ul{width:100%;}
@@ -69,9 +66,7 @@ textarea:focus {
 button:focus, button:hover {
   outline: none;
 }
-
-
-	#write{width:100%;height:35px;line-height:35px;margin-top:20px;background-color:#668D67;border-radius:5px;cursor:pointer;transition:0.3s;}
+	#write{width:82%;height:35px;line-height:35px;margin-top:20px;background-color:#668D67;border-radius:5px;cursor:pointer;transition:0.3s;}
 		#write a{display:block;width:100%;height:100%;color:white;text-align:center;}
 		#write:hover, #write:focus{background-color:#5296D5;}
 		
@@ -82,7 +77,9 @@ button:focus, button:hover {
 				#cwTSend2{width:15%;height:80px;font-size:12px;}
 					#cwTSend2 button{width:100%;height:100%;line-height:80px;cursor:pointer;transition:0.3s;}
 						#cwTSend2 button:hover, #cwTSend2 button:focus{background-color:#6FB3A3;}
-
+#nextPrev{
+	text-align:center;
+}
 </style>
 <script>
 $(function(){
@@ -129,17 +126,17 @@ $(function(){
 function foodVote(bno, code){
 	if(code == 'blike'){
 		if(confirm("해당 글을 추천하시겠습니까?")){
-			location.href="./noticeViewVote?vote=" + code + "&bno=" + bno;
+			location.href="./foodViewVote?vote=" + code + "&bno=" + bno;
 		}
 	}else if(code == 'bdislike'){
 		if(confirm("해당 글을 싫어하시겠습니까?")){
-			location.href="./noticeViewVote?vote=" + code + "&bno=" + bno;
+			location.href="./foodViewVote?vote=" + code + "&bno=" + bno;
 		}			
 	}
 }
 function foodcVote(cno, bno){
 	if(confirm("해당 댓글을 추천하시겠습니까?")){
-			location.href="./noticeViewVote?bno=" + bno + "&cno=" + cno;	
+			location.href="./foodViewVote?bno=" + bno + "&cno=" + cno;	
 	}
 }
 </script>
@@ -161,27 +158,27 @@ function foodcVote(cno, bno){
 				<div class="btop">${dto.btitle }<small id="ccount">(${dto.bno })</small></div>
 				<div class="bmiddle">
 					<ul class="bmfloat">
-						<li>${dto.name }</li>
+						<li>${dto.name }<small id="ccount">${dto.id }</small></li>
 						<li>${dto.bdate }&nbsp;&nbsp;&nbsp;<span class="line"></span></li>
 						<li>&nbsp;조회수: ${dto.bcount }<span class="line"></span></li>
 						<li>&nbsp;댓글: ${dto.foodcommentcount }</li>
 					</ul>
 				</div>
-				<div class="bbottom">
-					<br>
+				<div class="bbottom">					
 					<c:if test="${dto.bfile ne null}">
 						<img alt="${dto.bfile }" src="./upload/foodUpload/${dto.bfile }" width="60%">
 					</c:if>
+					
 					<br>
-					${dto.bcontent }
-					<br>
+					${dto.bcontent }<br>
 				</div>
 				<div id="likeDislike">
-					<button id="likeBtn"><img src="./img/like2.png" alt="좋아요">좋아요</button>
-					<button id="disLikeBtn"><img src="./img/dislike.png" alt="싫어요">싫어요</button>
+					<button onclick="foodVote(${dto.bno}, 'blike');" id="likeBtn"><img src="./img/like2.png" alt="좋아요">좋아요</button>
+					<button onclick="foodVote(${dto.bno}, 'bdislike');" id="disLikeBtn"><img src="./img/dislike.png" alt="싫어요">싫어요</button>
 				</div>
 			</div>
-				<div id="comment">
+			
+			<div id="comment">
 				<ul>
 					<c:choose>
 						<c:when test="${dto.foodcommentcount > 0 }">
@@ -254,7 +251,7 @@ function foodcVote(cno, bno){
 					</c:if>
 				</ul>
 			</div>
-			<c:if test="${sessionScope.id ne null }">
+		<c:if test="${sessionScope.id ne null }">
 		<div class="writeBox" align="right">
 		<a href="./foodWrite">글쓰기</a>	
 		</div>

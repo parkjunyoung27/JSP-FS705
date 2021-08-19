@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
+<link rel="icon" href="img/favi.png"/>
 <head>
 <meta charset="UTF-8">
 <title>plusBar</title>
@@ -16,6 +17,11 @@
 <body>
 <div id="categoryBar">
  <ul>
+ 			<li>
+                <a href="./foodBoard">
+                    전체보기
+                </a>
+            </li>
             <li>
                 <a href="./foodBoard?category=1">
                     한식
@@ -37,8 +43,8 @@
                 </a>
             </li>
             <li>
-                <a href="./foodBoard">
-                ...
+                <a href="./foodBoard?category=5">
+               	기타
                 </a>
             </li>
 </ul>
