@@ -70,7 +70,7 @@ $(function(){
 			</p>
 			<input type="hidden" id="urlPost" name="url"/>
 			<button type="submit" class="submit" id="submit">로그인</button>
-			<p class="newCrew"><a href="">ID/PW 찾기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="./join.jsp">회원가입</a></p>
+			<p class="newCrew"><a href="./idFind.jsp">ID찾기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="./pwFind.jsp">PW 찾기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="./join.jsp">회원가입</a></p>
 		</form>
 		</c:otherwise>
 		</c:choose>

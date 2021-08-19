@@ -6,20 +6,20 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Join Result</title>
+<title> Result</title>
 </head>
 <body>
 <div id="wrapper">
 	<c:import url="header.jsp"/>
 	<div id="container">
 	<c:choose>
-		<c:when test="${!empty id2}">
-			회원님의 아이디는 [ ${id2} ] 입니다.<br>
+		<c:when test="${updateResult eq 1}">
+			패스워드 변경에 성공했습니다.
 			<button type="button" onclick="location.href='./index.jsp'">로그인하러 가기</button>
 		</c:when>
 		<c:otherwise>
-			존재하지 않는 정보입니다. 다시 시도해주세요.<br>
-			<button type="button" onclick="location.href='./idFind.jsp'">돌아가기</button>
+			변경에 실패했습니다. 다시 시도해주세요.<br>
+			<button type="button" onclick="location.href='./pwFind.jsp'">돌아가기</button>
 		</c:otherwise>
 	</c:choose>
 	</div>
