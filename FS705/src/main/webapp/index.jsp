@@ -139,7 +139,7 @@ $(function(){
 					<li><img alt="좋아요" src="./img/like.png">${sdto.blike }</li>
 					<li>
 					<c:if test="${sdto.bdate eq null}">오늘</c:if>
-					<c:if test="${sdto.bdate ne null}">${dto.bdate }일 전</c:if>
+					<c:if test="${sdto.bdate ne null}">${sdto.bdate }일 전</c:if>
 					</li>
 				</ul>
 				</c:forEach>
