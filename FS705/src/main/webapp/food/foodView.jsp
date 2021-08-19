@@ -82,7 +82,9 @@ button:focus, button:hover {
 				#cwTSend2{width:15%;height:80px;font-size:12px;}
 					#cwTSend2 button{width:100%;height:100%;line-height:80px;cursor:pointer;transition:0.3s;}
 						#cwTSend2 button:hover, #cwTSend2 button:focus{background-color:#6FB3A3;}
-
+#nextPrev{
+	text-align:center;
+}
 </style>
 <script>
 $(function(){
