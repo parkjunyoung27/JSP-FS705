@@ -24,7 +24,7 @@
 		<ul class="sitemap">
 			<li><a href="" title="포텐터짐">포텐터짐</a></li>
 			<li><a href="" title="맛집">맛집</a></li>
-			<li><a href="" title="스포츠">스포츠</a></li>
+			<li><a href="./sports" title="스포츠">스포츠</a></li>
 			<li><a href="" title="게임">게임</a></li>
 			<li><a href="" title="유머">유머</a></li>
 		</ul>
