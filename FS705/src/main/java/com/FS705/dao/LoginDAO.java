@@ -10,6 +10,7 @@ import com.FS705.dto.LoginDTO;
 import com.FS705.util.Util;
 
 public class LoginDAO {
+	
 	//싱글턴
 	private LoginDAO(){}
 	
@@ -18,6 +19,7 @@ public class LoginDAO {
 	public static LoginDAO getInstance() {
 		return instance;
 	}
+	
 	//로그인 기능
 	public LoginDTO login(LoginDTO dto) {
 		LoginDTO login = new LoginDTO();
@@ -54,6 +56,7 @@ public class LoginDAO {
 		}		
 		return login;
 	}
+	
 	//id 중복확인
 	public int idCheck(String id) {
 		int check = 0;
@@ -78,6 +81,7 @@ public class LoginDAO {
 		}
 		return check;
 	}
+	
 	//가입하기
 	public int join(LoginDTO dto) {
 		int count = 0;
@@ -102,5 +106,99 @@ public class LoginDAO {
 			Util.closeAll(null, pstmt, conn);
 		}
 		return count;
+	}
+	
+	//아이디 찾기
+	public LoginDTO idFind(LoginDTO dto) {
+		LoginDTO login = new LoginDTO(); 
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT id FROM member WHERE name=? AND sex=? AND birthdate=?";
+			
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getName());
+			pstmt.setString(2, dto.getSex());
+			pstmt.setString(3, dto.getBirthdate());
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				login.setId(rs.getString("id"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Util.closeAll(rs, pstmt, conn);
+		}
+		return login;
+	}
+	//질문 출력
+	public String pwQuestion(String id, String email) {
+		String question = "";
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql= "SELECT * FROM member WHERE id=? AND email=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, email);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				question = rs.getString("hint");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return question;
+	}
+
+	public int pwFind(String id, String email, String pwAnswer) {
+		int check = 0;
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql= "SELECT COUNT(*) FROM member WHERE id=? AND email=? AND hintAnswer=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, email);
+			pstmt.setString(3, pwAnswer);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				if(rs.getInt("count(*)") == 1) {
+					check = 1;
+				} else {
+					check = 0;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return check;
+	}
+	//패스워드 변경
+	public int pwUpdate(LoginDTO dto) {
+		int check = 0;
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		String sql = "UPDATE member SET pw=? WHERE id=?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getPw());
+			pstmt.setString(2, dto.getId());
+			check = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Util.closeAll(null, pstmt, conn);
+		}
+		return check;
 	}
 }
