@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:if test="${gdto eq null}">
+<c:if test="${ndto eq null}">
 	<c:redirect url="./index"/>
 </c:if>
 <html>
@@ -54,12 +54,18 @@ $(function(){
 		<div id="editorChoice" class="boardBox">
 			<h2><img alt="에디터 초이스" src="./img/best.png"> 공지사항</h2>
 			<!-- 구간반복지점 -->
-				<ul class="main" onclick="location.href=''">
-					<li class="title"><a href="">자바 웹 개발자를 위한 개발 가이드</a></li>
-					<li>아이디</li>
-					<li><img alt="좋아요" src="./img/like.png"> 54k</li>
-					<li>11일 전</li>
+				<c:forEach items="${ndto }" var="ndto">
+				<ul class="main" onclick="">
+					<li class="title"><a href="detail?bno=${ndto.bno }">
+					 ${ndto.btitle }</a></li>
+					<li>${ndto.name }</li>
+					<li><img alt="좋아요" src="./img/like.png">${ndto.blike }</li>
+					<li>
+					<c:if test="${ndto.bdate eq null}">오늘</c:if>
+					<c:if test="${ndto.bdate ne null}">${ndto.bdate }일 전</c:if>
+					</li>
 				</ul>
+				</c:forEach>
 			<!-- 구간반복지점 -->
 		</div>
 		<div id="weeklyBest" class="boardBox">
