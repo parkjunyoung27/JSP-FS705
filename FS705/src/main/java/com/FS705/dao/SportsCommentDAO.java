@@ -33,6 +33,7 @@ public class SportsCommentDAO {
 			if(rs != null) {
 				while(rs.next()) {
 					CommentDTO dto = new CommentDTO();
+					dto.setCdate(rs.getString("cdate"));
 					dto.setBno(rs.getInt("bno"));
 					dto.setCno(rs.getInt("cno"));			
 					dto.setCcontent(rs.getString("ccontent"));
