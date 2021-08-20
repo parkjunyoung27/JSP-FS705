@@ -1,6 +1,7 @@
 package com.FS705.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.FS705.dao.FoodBoardDAO;
 import com.FS705.dao.LogDAO;
 import com.FS705.dto.LogDTO;
+import com.FS705.util.FileThing;
 import com.FS705.util.Util;
 
 @WebServlet("/foodDelete")
@@ -46,6 +48,18 @@ public class FoodDelete extends HttpServlet {
 			int check = FoodBoardDAO.getInstance().checkWriter(bno, (String)request.getSession().getAttribute("id"));
 			//작성 글 & id 확인
 			if(check == 1 || (int)request.getSession().getAttribute("grade") == 9) {
+				//파일 확인
+				ArrayList<String> fileName=FoodBoardDAO.getInstance().findFileName((String)request.getSession().getAttribute("id"), bno);
+				System.out.println(fileName);
+				if(fileName != null) {//파일 삭제
+					String path = request.getSession().getServletContext().getRealPath("/");
+					if(fileName.get(0) != null) {
+						FileThing.fileDelete2(path + "upload/foodUpload/", fileName.get(0));				
+						}
+						if(fileName.get(1) !=null) {
+							FileThing.fileDelete2(path + "upload/foodThumbnail/", fileName.get(1));								
+						}
+				}
 				result = FoodBoardDAO.getInstance().boardDelete(bno);				
 			}
 			if(result == 1) {

@@ -77,7 +77,6 @@ public class FoodWrite extends HttpServlet {
 		String path = request.getServletContext().getRealPath("/");
 		String savePath = path + "upload/foodUpload/"; // food 파일 저장 경로
 		int maxSize = 1024 * 1024 * 10; // 파일 업로드 사이즈 설정
-
 		MultipartRequest multi = new MultipartRequest(request, savePath, maxSize, "UTF-8",
 				new DefaultFileRenamePolicy());
 
@@ -93,8 +92,8 @@ public class FoodWrite extends HttpServlet {
 				thumbnail = path + "upload/foodThumbnail/";
 				BufferedImage inputImg = ImageIO.read(new File(savePath + saveFile));
 
-				int width = 240;
-				int height = 180;
+				int width = 48;
+				int height = 48;
 
 				String[] imgs = { "png", "gif", "jpg", "jpeg" };
 				for (String format : imgs) {

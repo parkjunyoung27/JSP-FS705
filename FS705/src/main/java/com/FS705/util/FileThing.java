@@ -20,4 +20,19 @@ public class FileThing {
 			System.out.println("파일이 없음.");
 		}
 	}
+	public static int fileDelete2(String path, String fileName) {
+		int result = 0;
+		File file = new File(path + fileName);
+		
+		if(file.exists()) {	//파일 확인			
+			if(file.delete()) { // 파일 삭제
+				result = 1;
+			} else {	// 실패
+				result = 0;
+			}
+		} else { //파일 없음
+			result = 0;
+		}
+		return result;
+	}
 }

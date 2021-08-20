@@ -483,4 +483,43 @@ public class FoodBoardDAO {
 		}
 		return boardList;
 	}
+
+	public ArrayList<String> findFileName(String id, int bno) {
+		ArrayList<String> filename = null;
+		Connection conn = DBConnection.dbconn();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT bfile, bthumbnail FROM foodboardview WHERE no = (SELECT no FROM member WHERE id = ?) AND bno = ?";
+		try {			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setInt(2, bno);
+			rs = pstmt.executeQuery();
+			
+			if(rs != null) {
+				if(rs.next()) {
+					filename = new ArrayList<String>();
+					
+					String bfile = rs.getString("bfile");	//0
+					if(bfile != null && bfile.contains(".")) {
+						filename.add(bfile);						
+					} else {
+						filename.add(null);
+					}
+					String bthumbnail = rs.getString("bthumbnail");
+					if(bthumbnail != null && bthumbnail.contains(".")) {
+						filename.add(bthumbnail);						
+					} else {
+						filename.add(null);
+					}
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			Util.closeAll(rs, pstmt, conn);
+		}		
+		return filename;
+	}
 }
