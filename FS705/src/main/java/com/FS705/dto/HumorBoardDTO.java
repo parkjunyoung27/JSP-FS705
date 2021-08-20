@@ -1,7 +1,7 @@
 package com.FS705.dto;
 
 public class HumorBoardDTO {
-	private int bno, bcount, no, blike, bdislike; 
+	private int bno, bcount, no, blike, bdislike, humorboardcount, humorcommentcount; 
 	private String btitle, bcontent, bdate, bcategory, bthumbnail, subCategory, bfile, id, name;
 	public int getBno() {
 		return bno;
@@ -11,6 +11,18 @@ public class HumorBoardDTO {
 	}
 	public int getBcount() {
 		return bcount;
+	}
+	public int getHumorboardcount() {
+		return humorboardcount;
+	}
+	public void setHumorboardcount(int humorboardcount) {
+		this.humorboardcount = humorboardcount;
+	}
+	public int getHumorcommentcount() {
+		return humorcommentcount;
+	}
+	public void setHumorcommentcount(int humorcommentcount) {
+		this.humorcommentcount = humorcommentcount;
 	}
 	public void setBcount(int bcount) {
 		this.bcount = bcount;
