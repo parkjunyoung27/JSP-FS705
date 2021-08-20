@@ -100,13 +100,11 @@ public class FoodModify extends HttpServlet {
 			String thumbnail = null;
 			if(multi.getOriginalFileName("file") != null) {
 				saveFile = multi.getFilesystemName("file"); // 파일 저장 이름
-				System.out.println(multi.getFilesystemName("file"));
 				thumbnail = path + "upload/foodThumbnail/";
 				BufferedImage inputImg = ImageIO.read(new File(savePath + saveFile));
 				
 				int width = 48;
 				int height = 48;
-				System.out.println(path);
 				String[] imgs = {"png", "gif", "jpg", "jpeg"};
 				for (String format : imgs) {
 					BufferedImage outputImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -121,7 +119,6 @@ public class FoodModify extends HttpServlet {
 					fos.close();					
 				}
 			}
-			System.out.println(saveFile);
 			FoodBoardDTO dto = new FoodBoardDTO();
 			dto.setBno(bno);
 			dto.setBtitle(title);
