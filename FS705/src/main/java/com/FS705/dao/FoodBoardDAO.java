@@ -158,15 +158,17 @@ public class FoodBoardDAO {
 		int result = 0;
 		Connection conn = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
-		String sql = "UPDATE board SET subCategory=?, btitle=?, bcontent=?WHERE bno=? AND no=(SELECT no FROM member WHERE id=?)";
+		String sql = "UPDATE board SET subCategory=?, btitle=?, bcontent=?, bfile=?, bthumbnail=? WHERE bno=? AND no=(SELECT no FROM member WHERE id=?)";
 
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getSubCategory());
 			pstmt.setString(2, dto.getBtitle());
 			pstmt.setString(3, dto.getBcontent());
-			pstmt.setInt(4, dto.getBno());
-			pstmt.setString(5, dto.getId());
+			pstmt.setString(4, dto.getBfile());
+			pstmt.setString(5, dto.getBthumbnail());
+			pstmt.setInt(6, dto.getBno());
+			pstmt.setString(7, dto.getId());
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
