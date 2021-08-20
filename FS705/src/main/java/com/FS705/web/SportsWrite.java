@@ -26,7 +26,7 @@ import com.FS705.util.Util;
 @WebServlet("/sportsWrite")
 public class SportsWrite extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
     public SportsWrite() {
         super();
     }
