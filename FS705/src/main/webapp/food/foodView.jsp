@@ -163,7 +163,7 @@ function foodcVote(cno, bno){
 				<div class="btop">${dto.btitle }<small id="ccount">(${dto.bno })</small></div>
 				<div class="bmiddle">
 					<ul class="bmfloat">
-						<li>${dto.name }</li>
+						<li>${dto.name } (${dto.id })</li>
 						<li>${dto.bdate }&nbsp;&nbsp;&nbsp;<span class="line"></span></li>
 						<li>&nbsp;조회수: ${dto.bcount }<span class="line"></span></li>
 						<li>&nbsp;댓글: ${dto.foodcommentcount }</li>

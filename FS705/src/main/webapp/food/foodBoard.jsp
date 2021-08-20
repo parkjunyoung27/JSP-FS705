@@ -89,8 +89,16 @@ function select(){
 			</div>
 			<!-- 구간반복지점 -->
 			<c:forEach items="${dto }" var="dto">
-				<ul class="main" onclick="">
+				<ul class="main">
 					<li class="title"><a href="foodView?bno=${dto.bno }">
+					<c:choose>
+						<c:when test="${dto.bthumbnail eq null }">
+							<img alt="food" src="./img/noimg.jpg"  style="vertical-align: middle; width: 40px; height: 40px;">
+						</c:when>
+						<c:otherwise>
+							<img alt="thumbnail" src="./upload/foodThumbnail/${dto.bthumbnail }" style="vertical-align: middle; width: 40px; height: 40px;">
+						</c:otherwise>
+					</c:choose>
 					[<c:choose>
 						<c:when test="${dto.subCategory eq 1 }">
 						한식
