@@ -94,7 +94,7 @@ $(function(){
 						<c:when test="${fdto.subCategory eq 3 }">
 						일식
 						</c:when>
-						<c:when test="${fto.subCategory eq 4 }">
+						<c:when test="${fdto.subCategory eq 4 }">
 						카페·디저트
 						</c:when>
 						<c:otherwise>
