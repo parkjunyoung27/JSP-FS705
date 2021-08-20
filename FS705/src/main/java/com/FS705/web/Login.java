@@ -48,7 +48,7 @@ public class Login extends HttpServlet {
 		}else {
 			//세션만들고 값 저장
 			HttpSession session = request.getSession();
-			session.setAttribute("id", result.getId());
+			session.setAttribute("idActivate", result.getId());
 			session.setAttribute("name", result.getName());
 			session.setAttribute("grade", result.getGrade());
 			
