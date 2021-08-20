@@ -84,7 +84,7 @@ $(document).ready(function(){
 						<div class="filebox"> 
 							<label for="file">업로드</label> 
 							<input type="file" id="file" name="file" accept=".gif, .png, .jpg, .jpeg" value="./upload/foodUpload/${modifyImport.bfile }"> 
-							<input type="hidden" name="file2" value="${modifyImport.bfile }">
+							<%-- <input type="hidden" name="file2" value="${modifyImport.bfile }"> --%>
 							<input class="upload" value="파일을 선택해주세요." disabled="disabled">
 						</div>
 					</div>
