@@ -52,7 +52,7 @@ $(function(){
 <div id="plusBar">
 	<div id="login">
 		<c:choose>
-		<c:when test="${sessionScope.idActivate ne null}">
+		<c:when test="${sessionScope.id ne null}">
 		Lv. ${sessionScope.grade }
 		${sessionScope.name }<small>(${sessionScope.idActivate })</small> 님<br> 
 		어서오세요.
