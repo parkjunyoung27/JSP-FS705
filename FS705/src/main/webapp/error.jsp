@@ -19,6 +19,14 @@ a:link, a:visited{text-decoration:none;color:#333;}
 	#error{padding-top:200px;color:black;text-align:center;}
 
 	#goToTop{display:none;}
+	
+	#goHome{
+	text-align: center;
+	margin-top: 100px;
+	font-size: x-large;
+	font-weight: bold;
+	}
+	
 </style>
 </head>
 <body>
@@ -49,6 +57,9 @@ a:link, a:visited{text-decoration:none;color:#333;}
 					<h2>관리자에게 분의하세요.</h2>
 				</c:otherwise>
 			</c:choose>
+		</div>
+		<div id="goHome">
+		<a href="index" target="_bank">홈으로</a>		
 		</div>
 	</div>
 	<c:import url="plusBar.jsp"/>
