@@ -86,7 +86,7 @@ public class SportsCommentDAO {
 		Connection con = DBConnection.dbconn();
 		PreparedStatement pstmt = null;
 		String sql = "UPDATE comment SET ccontent=?, cip=? WHERE bno=? "
-				+ "AND cno=? AND no=(SELECT no FROM member WHERE id=?)";
+				+ "AND cno=? AND no=(SELECT no FROM member WHERE id=?) ";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
